@@ -2,11 +2,11 @@ name: IterationTimer
 options:
   bundleIdPrefix: com.hal1437
   groupSortPosition: top
+  deploymentTarget: 14.0
 targets:
   IterationTimer:
     type: application
     platform: iOS
-    deploymentTarget: 13.0
     sources: [IterationTimer]
     settings:
       configs:
@@ -14,3 +14,15 @@ targets:
           CUSTOM_BUILD_SETTING: my_debug_value
         release:
           CUSTOM_BUILD_SETTING: my_release_value
+
+  IterationTimerModel:
+    platform: iOS
+    type: framework
+    sources: IterationTimerModel
+
+  IterationTimerModelTests:
+    platform: iOS
+    type: bundle.unit-test
+    sources: IterationTimerModelTests
+    dependencies:
+      - target: IterationTimerModel
