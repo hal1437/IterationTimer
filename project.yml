@@ -26,3 +26,15 @@ targets:
     sources: IterationTimerModelTests
     dependencies:
       - target: IterationTimerModel
+
+  IterationTimerUI:
+    platform: iOS
+    type: framework
+    sources: IterationTimerUI
+
+  IterationTimerUITests:
+    platform: iOS
+    type: bundle.unit-test
+    sources: IterationTimerUITests
+    dependencies:
+      - target: IterationTimerUI
