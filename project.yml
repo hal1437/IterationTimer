@@ -14,6 +14,9 @@ targets:
           CUSTOM_BUILD_SETTING: my_debug_value
         release:
           CUSTOM_BUILD_SETTING: my_release_value
+    dependencies:
+      - target: "IterationTimerModel"
+      - target: "IterationTimerUI"
 
   IterationTimerModel:
     platform: iOS
