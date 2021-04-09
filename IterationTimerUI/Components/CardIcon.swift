@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct CardIcon: View {
-    let systemName: String
+    let category: CardCategory
     var body: some View {
-        Image(systemName: systemName)
+        Image(uiImage: category.image)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 30, height: 30, alignment: .center)
@@ -22,7 +22,7 @@ struct CardIcon: View {
 
 struct CardIcon_Previews: PreviewProvider {
     static var previews: some View {
-        CardIcon(systemName: "gamecontroller")
+        CardIcon(category: .game)
             .previewLayout(.sizeThatFits)
     }
 }
