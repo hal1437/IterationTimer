@@ -8,21 +8,17 @@
 import SwiftUI
 
 public struct TimerCard: View {
-    let category: CardCategory
-    let title: String
     let drawable: TimerDrawable
     
-    public init(category: CardCategory, title: String, drawable: TimerDrawable) {
-        self.category = category
-        self.title = title
+    public init(drawable: TimerDrawable) {
         self.drawable = drawable
     }
     
     public var body: some View {
         HStack(alignment: .top, spacing: 4) {
-            CardIcon(category: category)
+            CardIcon(category: drawable.category)
             VStack(alignment: .leading, spacing: 8) {
-                Text(title)
+                Text(drawable.title)
                     .font(.largeTitle)
                 VStack(alignment: .leading, spacing: 4) {
                     ProgressView(value: drawable.progress)
@@ -74,7 +70,7 @@ extension TimerDrawable {
 
 struct TimerCard_Previews: PreviewProvider {
     static var previews: some View {
-        TimerCard(category: .game, title: "SampleTitle", drawable: Drawable())
+        TimerCard(drawable: Drawable())
             .frame(width: nil, height: nil, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
             .padding()
             .previewLayout(.sizeThatFits)
@@ -82,6 +78,8 @@ struct TimerCard_Previews: PreviewProvider {
 }
 
 private struct Drawable: TimerDrawable {
+    var category: CardCategory = .game
+    var title = "SampleTitle"
     var startTime = Date(timeIntervalSinceNow: TimeInterval(0))
     var currentTime = Date(timeIntervalSinceNow: TimeInterval(31))
     var endTime = Date(timeIntervalSinceNow: TimeInterval(60))

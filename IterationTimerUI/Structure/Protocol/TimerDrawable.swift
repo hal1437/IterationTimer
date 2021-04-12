@@ -8,6 +8,8 @@
 import Foundation
 
 public protocol TimerDrawable {
+    var category: CardCategory { get }
+    var title: String { get }
     var startTime: Date { get }
     var currentTime: Date { get }
     var endTime: Date { get }
