@@ -25,7 +25,7 @@ public struct TimerCard: View {
                     HStack(alignment: .bottom) {
                         Spacer()
                         HStack(alignment: .top, spacing: 16) {
-                            Text(drawable.remainingUnit)
+                            Text(drawable.remainingNext)
                                 .font(.body)
                             Text(drawable.remainingFull)
                                 .font(.body)
@@ -44,20 +44,23 @@ public struct TimerCard: View {
 }
 
 extension TimerDrawable {
-    var remainingUnit: String {
+    var currentUnitCount: Int {
+        return Int(currentTime.timeIntervalSince(startTime) / duration)
+    }
+    
+    var fullUnitCount: Int {
+        return Int(endTime.timeIntervalSince(startTime) / duration)
+    }
+    
+    var remainingNext: String {
         let delta = endTime.timeIntervalSince(startTime)
-        return TimeInterval(Int(delta) % Int(duration)).toFormatString()
+        let perTime = Int(delta) / fullUnitCount
+        let currentInterval = endTime.timeIntervalSince(currentTime)
+        return TimeInterval(Int(currentInterval) % perTime).toFormatString()
     }
 
     var remainingFull: String {
         return endTime.timeIntervalSince(currentTime).toFormatString()
-    }
-
-    var currentUnitCount: Int {
-        return Int(currentTime.timeIntervalSince(startTime) / duration)
-    }
-    var fullUnitCount: Int {
-        return Int(endTime.timeIntervalSince(startTime) / duration)
     }
 
     var progress: Double {
