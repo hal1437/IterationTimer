@@ -14,20 +14,33 @@ struct TimerListsView: View {
     @State var currentTime = Date()
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))]) {
-                ForEach(viewModel.timers, id: \.uuid) {
-                    
-                    let drawable = TimerCardDrawable(timer: $0, currentTime: currentTime)
-                    
-                    TimerCard(drawable: drawable)
-                        .padding()
-                        .onReceive(viewModel.currentTime) { _ in
-                            self.currentTime = Date()
-                        }
+        NavigationView {
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))]) {
+                    ForEach(viewModel.timers, id: \.uuid) {
+                        
+                        let drawable = TimerCardDrawable(timer: $0, currentTime: currentTime)
+                        
+                        TimerCard(drawable: drawable)
+                            .padding()
+                            .onReceive(viewModel.currentTime) { _ in
+                                self.currentTime = Date()
+                            }
+                    }
+                }
+            }
+            .navigationTitle("Timers")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        
+                    }) {
+                        Image(systemName: "plus")
+                    }
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
@@ -48,15 +61,3 @@ private struct TimerCardDrawable: TimerDrawable {
         self.duration = timer.duration
     }
 }
-
-private struct TimerListsView_Previews: PreviewProvider {
-    static var previews: some View {
-        let devices = ["iPhone 8", "iPad Air (4th generation)"]
-        ForEach(devices, id: \.self) { device in
-            TimerListsView()
-                .previewDevice(.init(rawValue: device))
-                .previewDisplayName(device)
-        }
-    }
-}
-
