@@ -11,7 +11,10 @@ import Foundation
 class TimerListsViewModel: ObservableObject {
     
     @Published var timers: [IterationTimerUnit]
-    @Published var currentTime = Timer.publish(every: 1, on: .main, in: .common).autoconnect().map { _ in Date() }
+    @Published var isTransitionAddTimer = false
+    @Published var currentTime = Date()
+    
+    private var timerCancellable: AnyCancellable?
 
     init() {
         timers = [IterationTimerUnit(uuid: UUID(), title: "Sample Title", category: .game,
@@ -22,6 +25,16 @@ class TimerListsViewModel: ObservableObject {
                                      startTime: Date(),
                                      endTime: Date().advanced(by: TimeInterval(180)),
                                      duration: TimeInterval(6))]
+        
+        timerCancellable = Timer
+            .publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .filter { _ in !self.isTransitionAddTimer }
+            .sink { _ in self.currentTime = Date() }
+        
     }
     
+    func transitonAddView() {
+        isTransitionAddTimer = true
+    }
 }

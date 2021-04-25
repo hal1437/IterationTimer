@@ -53,6 +53,7 @@ extension TimerDrawable {
     }
     
     var remainingNext: String {
+        if fullUnitCount == 0 { return "" }
         let delta = endTime.timeIntervalSince(startTime)
         let perTime = Int(delta) / fullUnitCount
         let currentInterval = endTime.timeIntervalSince(currentTime)

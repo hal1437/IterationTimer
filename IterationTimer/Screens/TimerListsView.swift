@@ -11,7 +11,6 @@ import IterationTimerUI
 struct TimerListsView: View {
     
     @ObservedObject var viewModel = TimerListsViewModel()
-    @State var currentTime = Date()
     
     var body: some View {
         NavigationView {
@@ -19,28 +18,26 @@ struct TimerListsView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))]) {
                     ForEach(viewModel.timers, id: \.uuid) {
                         
-                        let drawable = TimerCardDrawable(timer: $0, currentTime: currentTime)
+                        let drawable = TimerCardDrawable(timer: $0, currentTime: viewModel.currentTime)
                         
                         TimerCard(drawable: drawable)
                             .padding()
-                            .onReceive(viewModel.currentTime) { _ in
-                                self.currentTime = Date()
-                            }
                     }
                 }
             }
             .navigationTitle("Timers")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        
-                    }) {
+                    Button(action: viewModel.transitonAddView) {
                         Image(systemName: "plus")
                     }
                 }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .sheet(isPresented: $viewModel.isTransitionAddTimer) {
+            AddTimerView()
+        }
     }
 }
 
