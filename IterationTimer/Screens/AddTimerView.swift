@@ -7,14 +7,15 @@
 
 import SwiftUI
 import IterationTimerUI
+import IterationTimerModel
 
 struct AddTimerView: View {
-    @ObservedObject var viewModel = AddTimerViewModel()
+    @ObservedObject var viewModel = AddTimerViewModel(repository: IterationTimerRepository(userDefaults: .standard))
 
     var body: some View {
         NavigationView {
             VStack {
-                let drawable = TimerCardDrawable(timer: viewModel.timer, currentTime: Date(timeIntervalSince1970: 0))
+                let drawable = TimerCardDrawable(timer: viewModel.timer, currentTime: Date())
                 TimerCard(drawable: drawable)
                     .padding()
 

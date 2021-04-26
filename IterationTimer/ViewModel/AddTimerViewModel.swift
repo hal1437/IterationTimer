@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import IterationTimerModel
 
 class AddTimerViewModel: ObservableObject {
     
@@ -18,13 +19,15 @@ class AddTimerViewModel: ObservableObject {
     @Published var isCompleteNotification = false
 
     private var cancellable: AnyCancellable?
+    private var repository: IterationTimerRepositoryProtocol
 
-    init() {
+    init(repository: IterationTimerRepositoryProtocol) {
+        self.repository = repository
         timer = IterationTimerUnit(uuid: UUID(),
                                    title: "NO NAME",
                                    category: .game,
-                                   startTime: Date(timeIntervalSince1970: 0),
-                                   endTime: Date(timeIntervalSince1970: 600),
+                                   startTime: Date(timeIntervalSinceNow: 0),
+                                   endTime: Date(timeIntervalSinceNow: 600),
                                    duration: TimeInterval(60))
         
         cancellable = $name
@@ -33,13 +36,15 @@ class AddTimerViewModel: ObservableObject {
                 self.timer = IterationTimerUnit(uuid: UUID(),
                                                 title: name,
                                                 category: .game,
-                                                startTime: Date(timeIntervalSince1970: 0),
-                                                endTime: Date(timeIntervalSince1970: TimeInterval(maxValue * duration)),
+                                                startTime: Date(timeIntervalSinceNow: 0),
+                                                endTime: Date(timeIntervalSinceNow: TimeInterval(maxValue * duration)),
                                                 duration: TimeInterval(duration))
             }
     }
     
     func addTimer() {
+        let count = repository.getTimers.count
+        repository.insertTimer(index: count, timer: timer)
     }
 
 }

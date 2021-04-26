@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import IterationTimerModel
 
 class TimerListsViewModel: ObservableObject {
     
@@ -16,15 +17,8 @@ class TimerListsViewModel: ObservableObject {
     
     private var timerCancellable: AnyCancellable?
 
-    init() {
-        timers = [IterationTimerUnit(uuid: UUID(), title: "Sample Title", category: .game,
-                                     startTime: Date(),
-                                     endTime: Date().advanced(by: TimeInterval(60)),
-                                     duration: TimeInterval(10)),
-                  IterationTimerUnit(uuid: UUID(), title: "Sample Title2", category: .game,
-                                     startTime: Date(),
-                                     endTime: Date().advanced(by: TimeInterval(180)),
-                                     duration: TimeInterval(6))]
+    init(repository: IterationTimerRepositoryProtocol) {
+        timers = repository.getTimers
         
         timerCancellable = Timer
             .publish(every: 1, on: .main, in: .common)

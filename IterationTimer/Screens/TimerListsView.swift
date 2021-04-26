@@ -7,10 +7,11 @@
 
 import SwiftUI
 import IterationTimerUI
+import IterationTimerModel
 
 struct TimerListsView: View {
     
-    @ObservedObject var viewModel = TimerListsViewModel()
+    @ObservedObject var viewModel = TimerListsViewModel(repository: IterationTimerRepository(userDefaults: .standard))
     
     var body: some View {
         NavigationView {

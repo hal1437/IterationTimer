@@ -45,10 +45,12 @@ public struct TimerCard: View {
 
 extension TimerDrawable {
     var currentUnitCount: Int {
+        if duration == 0 { return 0 }
         return Int(currentTime.timeIntervalSince(startTime) / duration)
     }
     
     var fullUnitCount: Int {
+        if duration == 0 { return 0 }
         return Int(endTime.timeIntervalSince(startTime) / duration)
     }
     

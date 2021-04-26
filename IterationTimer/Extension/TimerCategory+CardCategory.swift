@@ -7,6 +7,7 @@
 
 import Foundation
 import IterationTimerUI
+import IterationTimerModel
 
 extension TimerCategory {
     var cardCategory: CardCategory {

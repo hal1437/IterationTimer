@@ -7,6 +7,6 @@
 
 import Foundation
 
-enum TimerCategory: String, Codable {
+public enum TimerCategory: String, Codable {
     case game
 }
