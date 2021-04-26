@@ -15,9 +15,11 @@ class TimerListsViewModel: ObservableObject {
     @Published var isTransitionAddTimer = false
     @Published var currentTime = Date()
     
+    private var repository: IterationTimerRepositoryProtocol
     private var timerCancellable: AnyCancellable?
 
     init(repository: IterationTimerRepositoryProtocol) {
+        self.repository = repository
         timers = repository.getTimers
         
         timerCancellable = Timer
@@ -30,5 +32,9 @@ class TimerListsViewModel: ObservableObject {
     
     func transitonAddView() {
         isTransitionAddTimer = true
+    }
+    
+    func refreshTimers() {
+        timers = repository.getTimers
     }
 }

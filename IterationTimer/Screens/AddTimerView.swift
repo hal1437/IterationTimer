@@ -10,6 +10,7 @@ import IterationTimerUI
 import IterationTimerModel
 
 struct AddTimerView: View {
+    @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var viewModel = AddTimerViewModel(repository: IterationTimerRepository(userDefaults: .standard))
 
     var body: some View {
@@ -65,7 +66,10 @@ struct AddTimerView: View {
             .navigationBarTitle("タイマーの追加", displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: viewModel.addTimer) {
+                    Button(action: {
+                        viewModel.addTimer()
+                        self.presentationMode.wrappedValue.dismiss()
+                    }) {
                         Text("追加")
                     }
                 }
