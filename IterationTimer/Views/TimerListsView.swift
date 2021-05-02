@@ -21,8 +21,8 @@ struct TimerListsView: View {
                         
                         let drawable = TimerCardDrawable(timer: $0, currentTime: viewModel.currentTime)
                         
-                        TimerCard(drawable: drawable)
-                            .padding()
+                        EmptyNavigator(contents: TimerCard(drawable: drawable).padding(),
+                                       destination: Text("a").navigationTitle("TT"))
                     }
                 }
             }
