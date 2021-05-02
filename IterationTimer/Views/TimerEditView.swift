@@ -1,5 +1,5 @@
 //
-//  AddTimerView.swift
+//  TimerEditView.swift
 //  IterationTimer
 //
 //  Created by hal1437 on 2021/04/26.
@@ -9,9 +9,9 @@ import SwiftUI
 import IterationTimerUI
 import IterationTimerModel
 
-struct AddTimerView: View {
+struct TimerEditView: View {
     @Environment(\.presentationMode) private var presentationMode
-    @ObservedObject var viewModel = AddTimerViewModel(repository: IterationTimerRepository(userDefaults: .standard))
+    @ObservedObject var viewModel = TimerEditViewModel(repository: IterationTimerRepository(userDefaults: .standard))
 
     var body: some View {
         NavigationView {
@@ -96,8 +96,8 @@ private struct TimerCardDrawable: TimerDrawable {
     }
 }
 
-struct AddTimerView_Previews: PreviewProvider {
+struct TimerEditView_Previews: PreviewProvider {
     static var previews: some View {
-        AddTimerView()
+        TimerEditView()
     }
 }

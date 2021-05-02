@@ -37,7 +37,7 @@ struct TimerListsView: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $viewModel.isTransitionAddTimer, onDismiss: viewModel.refreshTimers) {
-            AddTimerView()
+            TimerEditView()
         }
     }
 }

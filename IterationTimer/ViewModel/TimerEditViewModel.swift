@@ -1,5 +1,5 @@
 //
-//  AddTimerViewModel.swift
+//  TimerEditViewModel.swift
 //  IterationTimer
 //
 //  Created by hal1437 on 2021/04/26.
