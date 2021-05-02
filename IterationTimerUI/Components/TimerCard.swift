@@ -21,15 +21,19 @@ public struct TimerCard: View {
                 Text(drawable.title)
                     .font(.largeTitle)
                 VStack(alignment: .leading, spacing: 4) {
-                    ProgressView(value: drawable.progress)
+                    ProgressView(value: min(drawable.progress, 1))
                     HStack(alignment: .bottom) {
                         Spacer()
                         HStack(alignment: .top, spacing: 16) {
-                            Text(drawable.remainingNext)
-                                .font(.body)
-                            Text(drawable.remainingFull)
-                                .font(.body)
-                            Text("\(drawable.currentUnitCount)/\(drawable.fullUnitCount)")
+                            if drawable.currentUnitCount >= drawable.fullUnitCount {
+                                Text("回復済み")
+                            } else {
+                                Text(drawable.remainingNext)
+                                    .font(.body)
+                                Text(drawable.remainingFull)
+                                    .font(.body)
+                            }
+                            Text("\(min(drawable.currentUnitCount, drawable.fullUnitCount))/\(drawable.fullUnitCount)")
                                 .font(.body)
                         }
                     }
