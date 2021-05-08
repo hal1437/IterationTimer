@@ -24,56 +24,23 @@ struct TimerEditView: View {
                 
                 ScrollView {
                     VStack {
-                        HStack {
-                            Text("名前")
-                            Spacer()
-                            TextField("名前", text: $viewModel.name)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .frame(width: 200)
-                        }.padding()
-                        
+                        HorizontalInput(title: "名前", contents: TextInput(placeholder: "名前", text: $viewModel.name))
                         Divider()
-                        HStack {
-                            Text("最大値")
-                            Spacer()
-                            TextField("0", text: $viewModel.maxValue)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .frame(width: 50)
-                        }.padding()
-                        
+                        HorizontalInput(title: "現在値", contents: NumberInput(text: $viewModel.currentValue))
                         Divider()
-
-                        HStack {
-                            Text("1単位が回復するまでの秒数")
-                            Spacer()
-                            TextField("0", text: $viewModel.duration)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .frame(width: 50)
-                        }.padding()
-
+                        HorizontalInput(title: "最大値", contents: NumberInput(text: $viewModel.maxValue))
                         Divider()
-
-                        DisclosureGroup("詳細な設定") {
-                            Toggle(isOn: $viewModel.isCompleteNotification) {
-                                Text("回復時に通知する")
-                            }
-                            .padding()
-
-                        }.padding()
+                        HorizontalInput(title: "1単位が回復するまでの秒数", contents: NumberInput(text: $viewModel.duration))
+                        Divider()
                     }
                 }
             }
             .navigationBarTitle("タイマーの追加", displayMode: .inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        viewModel.addTimer()
-                        self.presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Text("追加")
-                    }
-                }
-            }
+            .navigationBarItems(leading: Button("キャンセル") { self.presentationMode.wrappedValue.dismiss() },
+                                trailing: Button("追加") {
+                                    viewModel.addTimer()
+                                    self.presentationMode.wrappedValue.dismiss()
+                                })
         }
     }
 }

@@ -14,6 +14,7 @@ class TimerEditViewModel: ObservableObject {
     @Published var timer: IterationTimerUnit
     @Published var category = TimerCategory.game
     @Published var name = "name"
+    @Published var currentValue = "10"
     @Published var maxValue = "10"
     @Published var duration = "10"
     @Published var isCompleteNotification = false
