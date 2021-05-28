@@ -25,30 +25,68 @@ targets:
           CUSTOM_BUILD_SETTING: my_debug_value
         release:
           CUSTOM_BUILD_SETTING: my_release_value
+    scheme:
+      testTargets:
+        - IterationTimerTests
+        - IterationTimerCoreTests
+        - IterationTimerModelTests
+        - IterationTimerUITests
+      gatherCoverageData: true
     dependencies:
       - target: "IterationTimerModel"
       - target: "IterationTimerUI"
+
+  IterationTimerCore:
+    platform: iOS
+    type: framework
+    sources: IterationTimerCore
+    scheme:
+      testTargets:
+        - IterationTimerCoreTests
+      gatherCoverageData: true
 
   IterationTimerModel:
     platform: iOS
     type: framework
     sources: IterationTimerModel
-
-  IterationTimerModelTests:
-    platform: iOS
-    type: bundle.unit-test
-    sources: IterationTimerModelTests
-    dependencies:
-      - target: IterationTimerModel
+    scheme:
+      testTargets:
+        - IterationTimerModelTests
+      gatherCoverageData: true
 
   IterationTimerUI:
     platform: iOS
     type: framework
     sources: IterationTimerUI
+    scheme:
+      testTargets:
+        - IterationTimerUITests
+      gatherCoverageData: true
+
+  IterationTimerTests:
+    platform: iOS
+    type: bundle.unit-test
+    sources: Test/IterationTimerTests
+    dependencies:
+      - target: IterationTimer
+
+  IterationTimerCoreTests:
+    platform: iOS
+    type: bundle.unit-test
+    sources: Test/IterationTimerCoreTests
+    dependencies:
+      - target: IterationTimerCore
+
+  IterationTimerModelTests:
+    platform: iOS
+    type: bundle.unit-test
+    sources: Test/IterationTimerModelTests
+    dependencies:
+      - target: IterationTimerModel
 
   IterationTimerUITests:
     platform: iOS
     type: bundle.unit-test
-    sources: IterationTimerUITests
+    sources: Test/IterationTimerUITests
     dependencies:
       - target: IterationTimerUI
