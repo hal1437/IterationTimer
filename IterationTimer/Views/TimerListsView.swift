@@ -17,12 +17,17 @@ struct TimerListsView: View {
         NavigationView {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))]) {
-                    ForEach(viewModel.timers, id: \.uuid) {
+                    ForEach(viewModel.timers, id: \.uuid) { unit in
                         
-                        let drawable = TimerCardDrawable(timer: $0, currentTime: viewModel.currentTime)
+                        let drawable = TimerCardDrawable(timer: unit, currentTime: viewModel.currentTime)
                         
-                        EmptyNavigator(contents: TimerCard(drawable: drawable).padding(),
-                                       destination: Text("a").navigationTitle("TT"))
+                        TimerCard(drawable: drawable).padding()
+                            .onTapGesture {
+                                viewModel.isTransitionEditTimer = true
+                            }
+                            .sheet(isPresented: $viewModel.isTransitionEditTimer, onDismiss: viewModel.refreshTimers) {
+                                TimerEditView(mode: .edit(timer: unit))
+                            }
                     }
                 }
             }
@@ -37,7 +42,7 @@ struct TimerListsView: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $viewModel.isTransitionAddTimer, onDismiss: viewModel.refreshTimers) {
-            TimerEditView()
+            TimerEditView(mode: .add)
         }
     }
 }

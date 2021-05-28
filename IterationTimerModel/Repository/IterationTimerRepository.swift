@@ -10,8 +10,9 @@ import Foundation
 public protocol IterationTimerRepositoryProtocol {
     var getTimers: [IterationTimerUnit] { get }
     func insertTimer(index: Int, timer: IterationTimerUnit)
+    func updateTimer(uuid: UUID, timer: IterationTimerUnit)
+    func deleteTimer(uuid: UUID)
 }
-
 
 public struct IterationTimerRepository: IterationTimerRepositoryProtocol {
     let userDefaults: UserDefaults
@@ -31,11 +32,21 @@ public struct IterationTimerRepository: IterationTimerRepositoryProtocol {
     public func insertTimer(index: Int, timer: IterationTimerUnit) {
         var array = getTimers
         array.insert(timer, at: index)
-        
+        update(array)
+    }
+
+    public func updateTimer(uuid: UUID, timer: IterationTimerUnit) {
+        update(getTimers.map { $0.uuid == uuid ? timer : $0 })
+    }
+
+    public func deleteTimer(uuid: UUID) {
+        update(getTimers.filter { $0.uuid != uuid })
+    }
+    
+    private func update(_ array: [IterationTimerUnit]) {
         let json = try! JSONEncoder().encode(array)
         let string = String(data: json, encoding: .utf8)!
         
         userDefaults.setValue(string, forKeyPath: UserDefaultsKey.iterationTimer.rawValue)
     }
-    
 }

@@ -25,7 +25,7 @@ public struct TimerCard: View {
                     HStack(alignment: .bottom) {
                         Spacer()
                         HStack(alignment: .top, spacing: 16) {
-                            if drawable.currentUnitCount >= drawable.fullUnitCount {
+                            if drawable.currentUnitCount >= drawable.maxUnitCount {
                                 Text("回復済み")
                             } else {
                                 Text(drawable.remainingNext)
@@ -33,7 +33,7 @@ public struct TimerCard: View {
                                 Text(drawable.remainingFull)
                                     .font(.body)
                             }
-                            Text("\(min(drawable.currentUnitCount, drawable.fullUnitCount))/\(drawable.fullUnitCount)")
+                            Text("\(min(drawable.currentUnitCount, drawable.maxUnitCount))/\(drawable.maxUnitCount)")
                                 .font(.body)
                         }
                     }
@@ -53,15 +53,15 @@ extension TimerDrawable {
         return Int(currentTime.timeIntervalSince(startTime) / duration)
     }
     
-    var fullUnitCount: Int {
+    var maxUnitCount: Int {
         if duration == 0 { return 0 }
         return Int(endTime.timeIntervalSince(startTime) / duration)
     }
     
     var remainingNext: String {
-        if fullUnitCount == 0 { return "" }
+        if maxUnitCount == 0 { return "" }
         let delta = endTime.timeIntervalSince(startTime)
-        let perTime = Int(delta) / fullUnitCount
+        let perTime = Int(delta) / maxUnitCount
         let currentInterval = endTime.timeIntervalSince(currentTime)
         return TimeInterval(Int(currentInterval) % perTime).toFormatString()
     }

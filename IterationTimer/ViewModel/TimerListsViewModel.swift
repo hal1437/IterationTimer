@@ -13,6 +13,7 @@ class TimerListsViewModel: ObservableObject {
     
     @Published var timers: [IterationTimerUnit]
     @Published var isTransitionAddTimer = false
+    @Published var isTransitionEditTimer = false
     @Published var currentTime = Date()
     
     private var repository: IterationTimerRepositoryProtocol
@@ -25,13 +26,17 @@ class TimerListsViewModel: ObservableObject {
         timerCancellable = Timer
             .publish(every: 1, on: .main, in: .common)
             .autoconnect()
-            .filter { _ in !self.isTransitionAddTimer }
+            .filter { _ in !self.isTransitionAddTimer && !self.isTransitionEditTimer }
             .sink { _ in self.currentTime = Date() }
         
     }
     
     func transitonAddView() {
         isTransitionAddTimer = true
+    }
+
+    func transitonEditView() {
+        isTransitionEditTimer = true
     }
     
     func refreshTimers() {

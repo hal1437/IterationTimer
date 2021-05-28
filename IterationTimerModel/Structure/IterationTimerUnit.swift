@@ -24,3 +24,15 @@ public struct IterationTimerUnit: Codable {
         self.duration = duration
     }
 }
+
+public extension IterationTimerUnit {
+    func currentUnitCount(date: Date) -> Int {
+        if duration == 0 { return 0 }
+        return Int(date.timeIntervalSince(startTime) / duration)
+    }
+
+    var maxUnitCount: Int {
+        if duration == 0 { return 0 }
+        return Int(endTime.timeIntervalSince(startTime) / duration)
+    }
+}
