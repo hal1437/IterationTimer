@@ -3,6 +3,17 @@ options:
   bundleIdPrefix: com.hal1437
   groupSortPosition: top
   deploymentTarget: 14.0
+  developmentLanguage: ja
+  xcodeVersion: "12.5"
+  
+settings:
+  base:
+    MARKETING_VERSION: 1.0.0
+    CURRENT_PROJECT_VERSION: 1
+  config:
+    debug:
+      DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
+
 targets:
   IterationTimer:
     type: application

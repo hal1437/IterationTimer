@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import IterationTimerModel
 
-class TimerEditViewModel: ObservableObject {
+class AddTimerViewModel: ObservableObject {
     
     @Published var timer: IterationTimerUnit
     @Published var category = TimerCategory.game

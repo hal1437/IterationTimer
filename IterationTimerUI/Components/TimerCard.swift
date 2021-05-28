@@ -19,7 +19,7 @@ public struct TimerCard: View {
             CardIcon(category: drawable.category)
             VStack(alignment: .leading, spacing: 8) {
                 Text(drawable.title)
-                    .font(.largeTitle)
+                    .font(.headline)
                 VStack(alignment: .leading, spacing: 4) {
                     ProgressView(value: min(drawable.progress, 1))
                     HStack(alignment: .bottom) {
