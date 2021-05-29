@@ -8,10 +8,10 @@
 import Foundation
 
 public protocol TimerDrawable {
-    var category: CardCategory { get }
+    var category: TimerCategory { get }
     var title: String { get }
-    var startTime: Date { get }
-    var currentTime: Date { get }
-    var endTime: Date { get }
-    var duration: TimeInterval { get }
+    var currentStamina: Int { get }
+    var maxStamina: Int { get }
+    var remainingOne: TimeInterval { get }
+    var remainingFull: TimeInterval { get }
 }

@@ -21,20 +21,17 @@ public struct TimerCard: View {
                 Text(drawable.title)
                     .font(.headline)
                 VStack(alignment: .leading, spacing: 4) {
-                    ProgressView(value: min(drawable.progress, 1))
+                    ProgressView(value: Double(drawable.currentStamina), total: Double(drawable.maxStamina))
                     HStack(alignment: .bottom) {
                         Spacer()
                         HStack(alignment: .top, spacing: 16) {
-                            if drawable.currentUnitCount >= drawable.maxUnitCount {
-                                Text("回復済み")
+                            if drawable.currentStamina >= drawable.maxStamina {
+                                Text("回復済み").font(.body)
                             } else {
-                                Text(drawable.remainingNext)
-                                    .font(.body)
-                                Text(drawable.remainingFull)
-                                    .font(.body)
+                                Text("\(drawable.remainingOne)秒").font(.body)
+                                Text("\(drawable.remainingFull)秒").font(.body)
                             }
-                            Text("\(min(drawable.currentUnitCount, drawable.maxUnitCount))/\(drawable.maxUnitCount)")
-                                .font(.body)
+                            Text("\(min(drawable.currentStamina, drawable.maxStamina))/\(drawable.maxStamina)").font(.body)
                         }
                     }
                 }
@@ -47,37 +44,6 @@ public struct TimerCard: View {
     }
 }
 
-extension TimerDrawable {
-    var currentUnitCount: Int {
-        if duration == 0 { return 0 }
-        return Int(currentTime.timeIntervalSince(startTime) / duration)
-    }
-    
-    var maxUnitCount: Int {
-        if duration == 0 { return 0 }
-        return Int(endTime.timeIntervalSince(startTime) / duration)
-    }
-    
-    var remainingNext: String {
-        if maxUnitCount == 0 { return "" }
-        let delta = endTime.timeIntervalSince(startTime)
-        let perTime = Int(delta) / maxUnitCount
-        let currentInterval = endTime.timeIntervalSince(currentTime)
-        return TimeInterval(Int(currentInterval) % perTime).toFormatString()
-    }
-
-    var remainingFull: String {
-        return endTime.timeIntervalSince(currentTime).toFormatString()
-    }
-
-    var progress: Double {
-        let delta1 = endTime.timeIntervalSince(startTime)
-        let delta2 = endTime.timeIntervalSince(currentTime)
-        return 1 - (delta2 / delta1)
-    }
-}
-
-
 struct TimerCard_Previews: PreviewProvider {
     static var previews: some View {
         TimerCard(drawable: Drawable())
@@ -88,10 +54,10 @@ struct TimerCard_Previews: PreviewProvider {
 }
 
 private struct Drawable: TimerDrawable {
-    var category: CardCategory = .game
+    var category: TimerCategory = .game
     var title = "SampleTitle"
-    var startTime = Date(timeIntervalSinceNow: TimeInterval(0))
-    var currentTime = Date(timeIntervalSinceNow: TimeInterval(31))
-    var endTime = Date(timeIntervalSinceNow: TimeInterval(60))
-    var duration = TimeInterval(10)
+    var currentStamina = 50
+    var maxStamina = 100
+    var remainingOne = TimeInterval(10)
+    var remainingFull = TimeInterval(500)
 }

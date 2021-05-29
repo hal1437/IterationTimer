@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CardIcon: View {
-    let category: CardCategory
+    let category: TimerCategory
     var body: some View {
         Image(uiImage: category.image)
             .resizable()
