@@ -33,8 +33,8 @@ targets:
         - IterationTimerUITests
       gatherCoverageData: true
     dependencies:
-      - target: "IterationTimerModel"
-      - target: "IterationTimerUI"
+      - target: IterationTimerModel
+      - target: IterationTimerUI
 
   IterationTimerCore:
     platform: iOS
@@ -53,6 +53,8 @@ targets:
       testTargets:
         - IterationTimerModelTests
       gatherCoverageData: true
+    dependencies:
+      - target: IterationTimerCore
 
   IterationTimerUI:
     platform: iOS
@@ -62,6 +64,8 @@ targets:
       testTargets:
         - IterationTimerUITests
       gatherCoverageData: true
+    dependencies:
+      - target: IterationTimerCore
 
   IterationTimerTests:
     platform: iOS
