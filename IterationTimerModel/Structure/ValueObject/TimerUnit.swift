@@ -7,15 +7,15 @@
 
 import Foundation
 
-public struct IterationTimer: Codable {
-    var uuid: UUID
+public struct IterationTimer: Codable, Identifiable {
+    private (set) public var id: UUID
     public var settings: IterationTimerSettings
     
     private var startTime: Date
     private var endTime: Date
 
     public init(currentStamina: Int, settings: IterationTimerSettings, since date: Date) {
-        self.uuid = UUID()
+        self.id = UUID()
         self.settings = settings
         self.startTime = Date(timeInterval: TimeInterval(Double(-currentStamina) * settings.duration), since: date)
         self.endTime = Date(timeInterval: TimeInterval(Double(settings.maxStamina) * settings.duration), since: startTime)

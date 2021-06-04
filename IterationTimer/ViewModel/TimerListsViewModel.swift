@@ -11,7 +11,7 @@ import IterationTimerModel
 
 class TimerListsViewModel: ObservableObject {
     
-    @Published var timers: [IterationTimerUnit]
+    @Published var timers: [IterationTimer]
     @Published var isTransitionAddTimer = false
     @Published var isTransitionEditTimer = false
     @Published var currentTime = Date()

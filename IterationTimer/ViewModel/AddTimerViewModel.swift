@@ -11,7 +11,7 @@ import IterationTimerModel
 
 class AddTimerViewModel: ObservableObject {
     
-    @Published var timer: IterationTimerUnit
+    @Published var timer: IterationTimer
     @Published var category = TimerCategory.game
     @Published var name = "name"
     @Published var maxValue = "10"
@@ -23,22 +23,22 @@ class AddTimerViewModel: ObservableObject {
 
     init(repository: IterationTimerRepositoryProtocol) {
         self.repository = repository
-        timer = IterationTimerUnit(uuid: UUID(),
-                                   title: "NO NAME",
-                                   category: .game,
-                                   startTime: Date(timeIntervalSinceNow: 0),
-                                   endTime: Date(timeIntervalSinceNow: 600),
-                                   duration: TimeInterval(60))
+        timer = IterationTimer(currentStamina: 0,
+                               settings: try! .init(title: "NO NAME",
+                                                    category: .game,
+                                                    maxStamina: 10,
+                                                    duration: 60),
+                               since: Date())
         
         cancellable = $name
-            .combineLatest($maxValue.compactMap { Int($0) }, $duration.compactMap { Int($0) })
+            .combineLatest($maxValue.compactMap { Int($0) }, $duration.compactMap { TimeInterval($0) })
             .sink { name, maxValue, duration in
-                self.timer = IterationTimerUnit(uuid: UUID(),
-                                                title: name,
-                                                category: .game,
-                                                startTime: Date(timeIntervalSinceNow: 0),
-                                                endTime: Date(timeIntervalSinceNow: TimeInterval(maxValue * duration)),
-                                                duration: TimeInterval(duration))
+                self.timer = IterationTimer(currentStamina: 0,
+                                            settings: try! .init(title: name,
+                                                                 category: .game,
+                                                                 maxStamina: maxValue,
+                                                                 duration: duration),
+                                            since: Date())
             }
     }
     

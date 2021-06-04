@@ -11,7 +11,7 @@ import IterationTimerModel
 
 class TimerEditViewModel: ObservableObject {
     
-    @Published var timer: IterationTimerUnit
+    @Published var timer: IterationTimer
     @Published var category = TimerCategory.game
     @Published var name = "name"
     @Published var currentValue = "10"
@@ -26,22 +26,18 @@ class TimerEditViewModel: ObservableObject {
         self.repository = repository
         self.mode = mode
                 
-        timer = IterationTimerUnit(uuid: UUID(),
-                                   title: "NO NAME",
-                                   category: .game,
-                                   startTime: Date(timeIntervalSinceNow: 0),
-                                   endTime: Date(timeIntervalSinceNow: 600),
-                                   duration: TimeInterval(60))
+        timer = IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, duration: 10), since: Date())
         
         cancellable = $name
-            .combineLatest($maxValue.compactMap { Int($0) }, $duration.compactMap { Int($0) })
+            .combineLatest($maxValue.compactMap { Int($0) }, $duration.compactMap { TimeInterval($0) })
             .sink { name, maxValue, duration in
-                self.timer = IterationTimerUnit(uuid: UUID(),
-                                                title: name,
-                                                category: .game,
-                                                startTime: Date(timeIntervalSinceNow: 0),
-                                                endTime: Date(timeIntervalSinceNow: TimeInterval(maxValue * duration)),
-                                                duration: TimeInterval(duration))
+                
+                self.timer = IterationTimer(currentStamina: 10,
+                                            settings: try! .init(title: name,
+                                                                 category: .game,
+                                                                 maxStamina: maxValue,
+                                                                 duration: duration),
+                                            since: Date())
             }
         
         if case .edit(let unit) = mode {
@@ -50,11 +46,11 @@ class TimerEditViewModel: ObservableObject {
 
     }
 
-    func setDetaultValue(timer: IterationTimerUnit) {
-        name = timer.title
-        currentValue = "\(timer.currentUnitCount(date: Date()))"
-        maxValue = "\(timer.maxUnitCount)"
-        duration = "\(timer.duration)"
+    func setDetaultValue(timer: IterationTimer) {
+        name = timer.settings.title
+        currentValue = "\(timer.currentStamina(date: Date()))"
+        maxValue = "\(timer.settings.maxStamina)"
+        duration = "\(timer.settings)"
     }
 
     func done() {
@@ -63,13 +59,13 @@ class TimerEditViewModel: ObservableObject {
             let count = repository.getTimers.count
             repository.insertTimer(index: count, timer: timer)
         case .edit(let unit):
-            repository.updateTimer(uuid: unit.uuid, timer: timer)
+            repository.updateTimer(id: unit.id, timer: timer)
         }
     }
 
     func delete() {
         if case .edit(let unit) = mode {
-            repository.deleteTimer(uuid: unit.uuid)
+            repository.deleteTimer(id: unit.id)
         }
     }
 

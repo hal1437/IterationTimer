@@ -12,7 +12,7 @@ import IterationTimerModel
 struct TimerEditView: View {
     enum Mode {
         case add
-        case edit(timer: IterationTimerUnit)
+        case edit(timer: IterationTimer)
     }
     
     @Environment(\.presentationMode) private var presentationMode
@@ -28,8 +28,7 @@ struct TimerEditView: View {
     var body: some View {
         NavigationView {
             VStack {
-                let drawable = TimerCardDrawable(timer: viewModel.timer, currentTime: Date())
-                TimerCard(drawable: drawable)
+                TimerCard(drawable: IterationTimerDrawable(timer: viewModel.timer, date: Date()))
                     .padding()
 
                 Divider()
@@ -98,34 +97,11 @@ extension TimerEditView.Mode {
     }
 }
 
-private struct TimerCardDrawable: TimerDrawable {
-    var category: CardCategory
-    var title: String
-    var startTime: Date
-    var currentTime: Date
-    var endTime: Date
-    var duration: TimeInterval
-    
-    init(timer: IterationTimerUnit, currentTime: Date) {
-        self.category = timer.category.cardCategory
-        self.title = timer.title
-        self.startTime = timer.startTime
-        self.currentTime = currentTime
-        self.endTime = timer.endTime
-        self.duration = timer.duration
-    }
-}
-
 struct TimerEditView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             TimerEditView(mode: .add)
-            TimerEditView(mode: .edit(timer: IterationTimerUnit(uuid: UUID(),
-                                                                title: "title",
-                                                                category: .game,
-                                                                startTime: Date(timeIntervalSince1970: 0),
-                                                                endTime: Date(timeIntervalSince1970: 100),
-                                                                duration: 10)))
+            TimerEditView(mode: .edit(timer: IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, duration: 10), since: Date())))
         }
     }
 }

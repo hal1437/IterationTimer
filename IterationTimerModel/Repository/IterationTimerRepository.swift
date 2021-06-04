@@ -10,8 +10,8 @@ import Foundation
 public protocol IterationTimerRepositoryProtocol {
     var getTimers: [IterationTimer] { get }
     func insertTimer(index: Int, timer: IterationTimer)
-    func updateTimer(uuid: UUID, timer: IterationTimer)
-    func deleteTimer(uuid: UUID)
+    func updateTimer(id: UUID, timer: IterationTimer)
+    func deleteTimer(id: UUID)
 }
 
 public struct IterationTimerRepository: IterationTimerRepositoryProtocol {
@@ -35,12 +35,12 @@ public struct IterationTimerRepository: IterationTimerRepositoryProtocol {
         update(array)
     }
 
-    public func updateTimer(uuid: UUID, timer: IterationTimer) {
-        update(getTimers.map { $0.uuid == uuid ? timer : $0 })
+    public func updateTimer(id: UUID, timer: IterationTimer) {
+        update(getTimers.map { $0.id == id ? timer : $0 })
     }
 
-    public func deleteTimer(uuid: UUID) {
-        update(getTimers.filter { $0.uuid != uuid })
+    public func deleteTimer(id: UUID) {
+        update(getTimers.filter { $0.id != id })
     }
     
     private func update(_ array: [IterationTimer]) {
