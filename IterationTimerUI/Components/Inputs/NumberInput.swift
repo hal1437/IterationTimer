@@ -17,7 +17,8 @@ public struct NumberInput: View {
     public var body: some View {
         TextField("0", text: $text)
             .textFieldStyle(RoundedBorderTextFieldStyle())
-            .frame(width: 50)
+            .frame(width: 100)
+            .keyboardType(.numberPad)
     }
 }
 
