@@ -10,29 +10,37 @@ import XCTest
 
 class IterationTimerSettingsTest: XCTestCase {
 
-    let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 10, duration: 10)
     let baseDate = Date(timeIntervalSince1970: 0)
 
-    func testProperties1() throws {
-        let settings1 = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 80, duration: 1)
-        let timer1 = IterationTimer(currentStamina: 10, settings: settings1, since: baseDate)
+    func testDuration1() throws {
+        let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 80, duration: 1)
+        let timer = IterationTimer(currentStamina: 10, settings: settings, since: baseDate)
         let now = Date(timeIntervalSince1970: 60) // 1分後
 
-        XCTAssertEqual(timer1.currentStamina(date: now), 70)
-        XCTAssertEqual(timer1.remainingOne(date: now), 1) // 0秒にはならない
-        XCTAssertEqual(timer1.remainingFull(date: now), 10)
+        XCTAssertEqual(timer.currentStamina(date: now), 70, "現在のスタミナがdurationが1の場合、1分後には60増えていること")
+        XCTAssertEqual(timer.remainingOne(date: now), 1, "次のスタミナ回復時間が1秒後であること") // 0秒にはならない
+        XCTAssertEqual(timer.remainingFull(date: now), 10, "全てのスタミナ回復時間が10秒後であること")
     }
 
-    func testProperties2() throws {
-        let settings1 = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 10, duration: 70)
-        let timer1 = IterationTimer(currentStamina: 0, settings: settings1, since: baseDate)
+    func testDuration70() throws {
+        let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 10, duration: 70)
+        let timer = IterationTimer(currentStamina: 0, settings: settings, since: baseDate)
         let now = Date(timeIntervalSince1970: 60) // 1分後
 
-        XCTAssertEqual(timer1.remainingOne(date: now), 10)
+        XCTAssertEqual(timer.remainingOne(date: now), 10, "現在のスタミナがdurationが70の場合、1分後でも増えていないこと")
     }
 
-    func testUnexpedtedInitialize() throws {
-        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: -1, duration: 222))
-        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: -1))
+    func testOverCurrentStamina() throws {
+        let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 10, duration: 10)
+        let timer = IterationTimer(currentStamina: 0, settings: settings, since: baseDate)
+        let now = Date(timeIntervalSince1970: 120) // 2分後
+
+        XCTAssertEqual(timer.currentStamina(date: now), 10, "現在のスタミナがスタミナの最大値を超えないこと")
+    }
+    
+    func testInitialize() throws {
+        XCTAssertNoThrow(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: 222), "正常な値で初期化できること")
+        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: -1, duration: 222), "スタミナがマイナスでは初期化出来ないこと")
+        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: -1), "durationがマイナスでは初期化出来ないこと")
     }
 }
