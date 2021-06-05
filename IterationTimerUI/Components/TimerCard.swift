@@ -28,8 +28,8 @@ public struct TimerCard: View {
                             if drawable.currentStamina >= drawable.maxStamina {
                                 Text("回復済み").font(.body)
                             } else {
-                                Text("\(drawable.remainingOne)秒").font(.body)
-                                Text("\(drawable.remainingFull)秒").font(.body)
+                                Text("\(Int(drawable.remainingOne))秒").font(.body)
+                                Text("\(Int(drawable.remainingFull))秒").font(.body)
                             }
                             Text("\(min(drawable.currentStamina, drawable.maxStamina))/\(drawable.maxStamina)").font(.body)
                         }

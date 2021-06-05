@@ -23,7 +23,8 @@ public struct IterationTimer: Codable, Identifiable {
     
     /// 現在のスタミナ
     public func currentStamina(date: Date) -> Int {
-        return Int(date.timeIntervalSince(startTime) / settings.duration)
+        let currentStamina = Int(date.timeIntervalSince(startTime) / settings.duration)
+        return currentStamina > settings.maxStamina ? settings.maxStamina : currentStamina
     }
 
     /// スタミナが1つ回復するまでの秒数
