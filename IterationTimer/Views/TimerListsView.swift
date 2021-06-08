@@ -17,15 +17,16 @@ struct TimerListsView: View {
         NavigationView {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))]) {
-                    ForEach(viewModel.timers) { unit in
-                        
-                        TimerCard(drawable: IterationTimerDrawable(timer: unit, date: Date())).padding()
-                            .onTapGesture {
-                                viewModel.isTransitionEditTimer = true
-                            }
-                            .sheet(isPresented: $viewModel.isTransitionEditTimer, onDismiss: viewModel.refreshTimers) {
-                                TimerEditView(mode: .edit(timer: unit))
-                            }
+                    ForEach(viewModel.timers) { timer in
+                        if let index = viewModel.timers.firstIndex(where: { $0.id == timer.id } ) {
+                            TimerCard(drawable: IterationTimerDrawable(timer: timer, date: Date())).padding()
+                                .onTapGesture {
+                                    viewModel.transitonEditView(timer: timer)
+                                }
+                                .sheet(isPresented: $viewModel.isTransitionEditTimer[index], onDismiss: viewModel.refreshTimers) {
+                                    TimerEditView(mode: .edit(timer: timer))
+                                }
+                        }
                     }
                 }
             }

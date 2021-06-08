@@ -13,30 +13,36 @@ class TimerListsViewModel: ObservableObject {
     
     @Published var timers: [IterationTimer]
     @Published var isTransitionAddTimer = false
-    @Published var isTransitionEditTimer = false
+    @Published var isTransitionEditTimer: [Bool] = [false]
     @Published var currentTime = Date()
     
     private var repository: IterationTimerRepositoryProtocol
-    private var timerCancellable: AnyCancellable?
+    private var cancellables: Set<AnyCancellable> = []
 
     init(repository: IterationTimerRepositoryProtocol) {
         self.repository = repository
         timers = repository.getTimers
         
-        timerCancellable = Timer
+        Timer
             .publish(every: 1, on: .main, in: .common)
             .autoconnect()
-            .filter { _ in !self.isTransitionAddTimer && !self.isTransitionEditTimer }
+            .filter { _ in !self.isTransitionAddTimer && self.isTransitionEditTimer.allSatisfy { !$0 } }
             .sink { _ in self.currentTime = Date() }
-        
+            .store(in: &cancellables)
+
+        $timers
+            .map { $0.map { _ in false } }
+            .assign(to: \.isTransitionEditTimer, on: self)
+            .store(in: &cancellables)
     }
     
     func transitonAddView() {
         isTransitionAddTimer = true
     }
 
-    func transitonEditView() {
-        isTransitionEditTimer = true
+    func transitonEditView(timer: IterationTimer) {
+        guard let index = timers.firstIndex(where: { $0.id == timer.id } )  else { return }
+        isTransitionEditTimer[index] = true
     }
     
     func refreshTimers() {
