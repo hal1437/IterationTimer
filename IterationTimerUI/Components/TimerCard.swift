@@ -21,7 +21,7 @@ public struct TimerCard: View {
                 Text(drawable.title)
                     .font(.headline)
                 VStack(alignment: .leading, spacing: 4) {
-                    ProgressView(value: Double(drawable.currentStamina), total: Double(drawable.maxStamina))
+                    ProgressView(value: CGFloat(drawable.currentStamina), total: CGFloat(drawable.maxStamina))
                     HStack(alignment: .bottom) {
                         Spacer()
                         HStack(alignment: .top, spacing: 16) {
