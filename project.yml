@@ -35,6 +35,7 @@ targets:
         - IterationTimerUITests
       gatherCoverageData: true
     dependencies:
+      - target: IterationTimerCore
       - target: IterationTimerModel
       - target: IterationTimerUI
       - target: IterationTimerWidget
