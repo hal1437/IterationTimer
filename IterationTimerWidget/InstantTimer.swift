@@ -5,6 +5,8 @@
 //  Created by hal1437 on 2021/06/10.
 //
 
+import IterationTimerCore
+import IterationTimerUI
 import SwiftUI
 
 public struct InstantTimer: View {

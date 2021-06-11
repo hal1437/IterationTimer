@@ -7,7 +7,7 @@
 
 import SwiftUI
 import WidgetKit
-//import IterationTimerUI
+import IterationTimerUI
 
 struct MultipleTimer: View {
     
@@ -15,7 +15,6 @@ struct MultipleTimer: View {
     
     var body: some View {
         VStack {
-            InstantTimer(drawable: Drawable())
             InstantTimer(drawable: Drawable())
             InstantTimer(drawable: Drawable())
             InstantTimer(drawable: Drawable())

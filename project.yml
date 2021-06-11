@@ -18,7 +18,9 @@ targets:
   IterationTimer:
     type: application
     platform: iOS
-    sources: [IterationTimer]
+    sources: 
+      - IterationTimer
+      - path: IterationTimerWidget/IterationTimerWidget.intentdefinition
     settings:
       configs:
         debug:
@@ -35,6 +37,7 @@ targets:
     dependencies:
       - target: IterationTimerModel
       - target: IterationTimerUI
+      - target: IterationTimerWidget
 
   IterationTimerCore:
     platform: iOS
@@ -67,6 +70,22 @@ targets:
     dependencies:
       - target: IterationTimerCore
 
+  IterationTimerWidget:
+    type: app-extension
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.hal1437.IterationTimer.IterationTimerWidget
+        INFOPLIST_FILE: IterationTimerWidget/Info.plist
+    sources:
+      - IterationTimerWidget
+    dependencies:
+      - sdk: SwiftUI.framework
+      - sdk: WidgetKit.framework
+      - target: IterationTimerCore
+      - target: IterationTimerModel
+      - target: IterationTimerUI
+
   IterationTimerTests:
     platform: iOS
     type: bundle.unit-test
@@ -94,3 +113,33 @@ targets:
     sources: Test/IterationTimerUITests
     dependencies:
       - target: IterationTimerUI
+
+schemes:
+  IterationTimerWidgetExtension: # Scheme名は任意のものを
+    build:
+      targets:
+        IterationTimerWidget: all
+        IterationTimer: all
+    run:
+      config: Debug
+      askForAppToLaunch: true
+      debugEnabled: false
+      environmentVariables:
+        - variable: _XCWidgetKind
+          value:
+          isEnabled: false
+        - variable: _XCWidgetDefaultView
+          value: timeline
+          isEnabled: false
+        - variable: _XCWidgetFamily
+          value: medium
+          isEnabled: false
+    test:
+      config: Debug
+    profile:
+      config: Release
+      askForAppToLaunch: true
+    analyze:
+      config: Debug
+    archive:
+      config: Release

@@ -5,6 +5,8 @@
 //  Created by hal1437 on 2021/06/10.
 //
 
+import IterationTimerCore
+
 public protocol InstantTimerDrawable {
     var category: TimerCategory { get }
     var title: String { get }

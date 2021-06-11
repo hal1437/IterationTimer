@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-extension TimerCategory {
+public extension TimerCategory {
     var image: UIImage {
         switch self {
         case .game:
