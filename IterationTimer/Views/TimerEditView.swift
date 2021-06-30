@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import IterationTimerCore
 import IterationTimerUI
 import IterationTimerModel
 
@@ -22,7 +23,7 @@ struct TimerEditView: View {
     
     public init(mode: Mode) {
         self.mode = mode
-        self.viewModel = TimerEditViewModel(repository: IterationTimerRepository(userDefaults: .standard), mode: mode)
+        self.viewModel = TimerEditViewModel(repository: IterationTimerRepository(userDefaults: .appGroups), mode: mode)
     }
 
     var body: some View {

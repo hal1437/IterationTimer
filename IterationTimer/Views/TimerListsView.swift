@@ -11,7 +11,7 @@ import IterationTimerModel
 
 struct TimerListsView: View {
     
-    @ObservedObject var viewModel = TimerListsViewModel(repository: IterationTimerRepository(userDefaults: .standard))
+    @ObservedObject var viewModel = TimerListsViewModel(repository: IterationTimerRepository(userDefaults: .appGroups))
     
     var body: some View {
         NavigationView {
