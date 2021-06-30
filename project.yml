@@ -39,6 +39,10 @@ targets:
       - target: IterationTimerModel
       - target: IterationTimerUI
       - target: IterationTimerWidget
+    entitlements:
+      path: IterationTimer/IterationTimer.entitlements
+      properties:
+        com.apple.security.application-groups: group.IterationTimer.timers
 
   IterationTimerCore:
     platform: iOS
@@ -86,6 +90,10 @@ targets:
       - target: IterationTimerCore
       - target: IterationTimerModel
       - target: IterationTimerUI
+    entitlements:
+      path: IterationTimerWidget/IterationTimerWidget.entitlements
+      properties:
+        com.apple.security.application-groups: group.IterationTimer.timers
 
   IterationTimerTests:
     platform: iOS
