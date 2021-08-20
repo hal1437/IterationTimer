@@ -10,6 +10,7 @@ import IterationTimerUI
 import SwiftUI
 
 public struct InstantTimer: View {
+    @Environment(\.widgetFamily) var family
     let drawable: InstantTimerDrawable
     
     public init(drawable: InstantTimerDrawable) {
@@ -18,7 +19,9 @@ public struct InstantTimer: View {
 
     public var body: some View {
         HStack(alignment: .center, spacing: 4) {
-            Image(uiImage: drawable.category.image)
+            if family != .systemSmall {
+                Image(uiImage: drawable.category.image)
+            }
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(drawable.title)

@@ -11,13 +11,13 @@ import IterationTimerModel
 import IterationTimerUI
 
 struct MultipleTimer: View {
-    
+    @Environment(\.widgetFamily) var family
     @ObservedObject var viewModel = MultipleTimerViewModel(repository: IterationTimerRepository(userDefaults: .appGroups))
     private let drawable = Drawable()
     
     var body: some View {
         VStack {
-            ForEach(viewModel.timers) { timer in
+            ForEach(viewModel.timers.prefix(family.counts)) { timer in
                 InstantTimer(drawable: InstantDrawable(timer: timer, date: Date()))
             }
         }.padding(.horizontal, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
@@ -52,4 +52,15 @@ private struct InstantDrawable: InstantTimerDrawable {
     var maxStamina: Int { timer.settings.maxStamina }
     var remainingOne: TimeInterval { timer.remainingOne(date: date) }
     var remainingFull: TimeInterval { timer.remainingFull(date: date) }
+}
+
+private extension WidgetFamily {
+    var counts: Int {
+        switch self {
+        case .systemSmall, .systemMedium: return 3
+        case .systemLarge: return 8
+        @unknown default:
+            return 8
+        }
+    }
 }
