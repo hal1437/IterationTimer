@@ -10,12 +10,16 @@ import WidgetKit
 
 @main
 struct Main: App {
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some Scene {
         WindowGroup {
             TimerListsView()
-                .onAppear {
-                    WidgetCenter.shared.reloadAllTimelines()
-                }
+        }
+        .onChange(of: scenePhase) { phase in
+            if phase == .active {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
         }
     }
 }
