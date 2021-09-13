@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 @main
 struct Main: App {
     var body: some Scene {
         WindowGroup {
             TimerListsView()
+                .onAppear {
+                    WidgetCenter.shared.reloadAllTimelines()
+                }
         }
     }
 }
