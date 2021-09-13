@@ -12,4 +12,5 @@ public protocol InstantTimerDrawable {
     var title: String { get }
     var currentStamina: Int { get }
     var maxStamina: Int { get }
+    var remainingFull: TimeInterval { get }
 }

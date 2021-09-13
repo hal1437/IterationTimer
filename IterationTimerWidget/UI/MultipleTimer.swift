@@ -36,6 +36,7 @@ private struct Drawable: InstantTimerDrawable {
     var title = "Game"
     var currentStamina = 50
     var maxStamina = 100
+    var remainingFull =  TimeInterval(50*60)
 }
 
 private struct InstantDrawable: InstantTimerDrawable {

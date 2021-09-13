@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension TimeInterval {
+public extension TimeInterval {
     
     /// DateComponentsFormatterを使って適切な文字列に変換する
     func toFormatString() -> String {
@@ -18,7 +18,7 @@ extension TimeInterval {
         let formatter = DateComponentsFormatter()
         formatter.calendar = calendar
         formatter.unitsStyle = .full
-        formatter.allowedUnits = [.day, .hour, .minute, .second]
+        formatter.allowedUnits = [.hour, .minute]
         formatter.zeroFormattingBehavior = [.dropLeading]
 
         return formatter.string(from: self)!

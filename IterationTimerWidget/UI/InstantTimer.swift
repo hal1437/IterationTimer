@@ -8,6 +8,7 @@
 import IterationTimerCore
 import IterationTimerUI
 import SwiftUI
+import WidgetKit
 
 public struct InstantTimer: View {
     @Environment(\.widgetFamily) var family
@@ -25,18 +26,29 @@ public struct InstantTimer: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(drawable.title)
-                        .font(.body)
+                        .font(.caption)
                         .lineLimit(1)
+
                     Spacer()
+
                     Text("\(drawable.currentStamina)/\(drawable.maxStamina)")
                         .font(.caption)
                         .lineLimit(1)
                         .allowsTightening(true)
                 }
-                
+
                 CustomProgressView(progress: CGFloat(drawable.currentStamina) / CGFloat(drawable.maxStamina))
+                
+                HStack {
+                    Spacer()
+                    Text(drawable.remainingFull.toFormatString())
+                        .font(.caption)
+                }
             }
         }
+        .padding(8)
+        .background(Color(.systemGray6))
+        .cornerRadius(10)
     }
 }
 
@@ -59,8 +71,9 @@ struct CustomProgressView: View {
 struct InstantTimer_Previews: PreviewProvider {
     static var previews: some View {
         InstantTimer(drawable: Drawable())
-            .frame(width: 146, height: 146, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            .frame(width: 146, height: 146, alignment: .center)
             .previewLayout(.sizeThatFits)
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
 
@@ -69,4 +82,5 @@ private struct Drawable: InstantTimerDrawable {
     var title = "SampleTitleSampleTitle"
     var currentStamina = 33
     var maxStamina = 100
+    var remainingFull =  TimeInterval(60*60*20)
 }
