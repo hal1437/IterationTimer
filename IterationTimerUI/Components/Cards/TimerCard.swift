@@ -23,15 +23,15 @@ public struct TimerCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     ProgressView(value: CGFloat(drawable.currentStamina), total: CGFloat(drawable.maxStamina))
                     HStack(alignment: .bottom) {
-                        Spacer()
                         HStack(alignment: .top, spacing: 16) {
+                            Text("\(min(drawable.currentStamina, drawable.maxStamina))/\(drawable.maxStamina)").font(.body)
+                            Spacer()
                             if drawable.currentStamina >= drawable.maxStamina {
                                 Text("回復済み").font(.body)
                             } else {
-                                Text("\(Int(drawable.remainingOne))秒").font(.body)
-                                Text("\(Int(drawable.remainingFull))秒").font(.body)
+//                                Text(drawable.remainingOne.toFormatString()).font(.body)
+                                Text(drawable.remainingFull.toFormatString()).font(.body)
                             }
-                            Text("\(min(drawable.currentStamina, drawable.maxStamina))/\(drawable.maxStamina)").font(.body)
                         }
                     }
                 }
