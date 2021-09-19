@@ -51,7 +51,7 @@ struct IterationTimerWidgetEntryView : View {
 
 @main
 struct IterationTimerWidget: Widget {
-    let kind: String = "IterationTimerWidget"
+    let kind = IterationTimerKind.IterationTimerWidget.rawValue
 
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
