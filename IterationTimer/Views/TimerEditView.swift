@@ -9,6 +9,7 @@ import SwiftUI
 import IterationTimerCore
 import IterationTimerUI
 import IterationTimerModel
+import WidgetKit
 
 struct TimerEditView: View {
     enum Mode {
@@ -70,12 +71,13 @@ struct TimerEditView: View {
                                 trailing: Button(mode.doneButton) {
                                     viewModel.done()
                                     self.presentationMode.wrappedValue.dismiss()
+                                    WidgetCenter.shared.reloadAllTimelines()
                                 })
         }
     }
 }
 
-extension TimerEditView.Mode {
+private extension TimerEditView.Mode {
     var title: String {
         switch self {
         case .add: return "タイマーの追加"
