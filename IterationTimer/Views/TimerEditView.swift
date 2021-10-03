@@ -29,39 +29,52 @@ struct TimerEditView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                TimerCard(drawable: IterationTimerDrawable(timer: viewModel.timer, date: Date()))
-                    .padding()
-
-                Divider()
-                
-                ScrollView {
-                    VStack {
-                        HorizontalInput(title: "名前", contents: TextInput(placeholder: "名前", text: $viewModel.name))
-                        Divider()
+            VStack(alignment: .center, spacing: 0) {
+                TimerCard(drawable: IterationTimerDrawable(timer: viewModel.input.timer, date: Date())).padding()
+                    .background(Color(UIColor.systemGroupedBackground))
+                Form {
+                    Section(header: Text("タイマー名")) {
+                        TextField("name", text: $viewModel.input.name)
+                    }
+                    Section(header: Text("スタミナの設定")) {
                         if mode.isEdit {
-                            HorizontalInput(title: "現在値", contents: NumberInput(text: $viewModel.currentValue))
-                            Divider()
+                            HStack {
+                                Text("現在値")
+                                TextField("0", text: $viewModel.input.currentValue)
+                                    .multilineTextAlignment(.trailing)
+                            }
                         }
-                        HorizontalInput(title: "最大値", contents: NumberInput(text: $viewModel.maxValue))
-                        Divider()
-                        HorizontalInput(title: "1単位が回復するまでの秒数", contents: NumberInput(text: $viewModel.duration))
-                        Divider()
+                        
+                        HStack {
+                            Text("最大値")
+                            TextField("0", text: $viewModel.input.maxValue)
+                                .multilineTextAlignment(.trailing)
+                        }
+
+                        HStack {
+                            Text("1単位の時間")
+                            TextField("0", text: $viewModel.input.duration)
+                                .multilineTextAlignment(.trailing)
+                        }
+                    }
+                    Section(header: Text("通知設定")) {
+                        Toggle("回復時の通知", isOn: $viewModel.input.willPushNotify)
+                    }
+                    
+                    Section {
                         if mode.isEdit {
                             Button("タイマーを削除する") {
                                 self.showingDeleteAlert = true
                             }
-                                .alert(isPresented: $showingDeleteAlert) {
-                                    Alert(title: Text("警告"),
-                                          message: Text("データが削除されますがよろしいですか？"),
-                                          primaryButton: .cancel(Text("キャンセル")),    // キャンセル用
-                                          secondaryButton: .destructive(Text("削除"), action: {
-                                                viewModel.delete()
-                                                self.presentationMode.wrappedValue.dismiss()
-                                          }))   // 破壊的変更用
-                                }
-                                .padding()
-                            Divider()
+                            .actionSheet(isPresented: $showingDeleteAlert) {
+                                ActionSheet(title: Text("データが削除されますがよろしいですか？"), buttons: [
+                                    .destructive(Text("削除する"), action: {
+                                          viewModel.delete()
+                                          self.presentationMode.wrappedValue.dismiss()
+                                    }),
+                                    .cancel()]
+                                )
+                            }
                         }
                     }
                 }
@@ -104,7 +117,7 @@ struct TimerEditView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             TimerEditView(mode: .add)
-            TimerEditView(mode: .edit(timer: IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, duration: 10), since: Date())))
+            TimerEditView(mode: .edit(timer: IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, duration: 10, willPushNotify: false), since: Date())))
         }
     }
 }

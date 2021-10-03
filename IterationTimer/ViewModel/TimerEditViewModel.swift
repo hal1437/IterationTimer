@@ -11,12 +11,23 @@ import IterationTimerModel
 
 class TimerEditViewModel: ObservableObject {
     
-    @Published var timer: IterationTimer
-    @Published var category = TimerCategory.game
-    @Published var name = "name"
-    @Published var currentValue = "10"
-    @Published var maxValue = "10"
-    @Published var duration = "10"
+    struct Inputs {
+        var timer = IterationTimer(currentStamina: 10,
+                                   settings: try! .init(title: "NO NAME",
+                                                        category: .game,
+                                                        maxStamina: 10,
+                                                        duration: 10,
+                                                        willPushNotify: false),
+                                   since: Date())
+        var category = TimerCategory.game
+        var name = ""
+        var currentValue = "10"
+        var maxValue = "10"
+        var duration = "10"
+        var willPushNotify = false
+    }
+    
+    @Published var input: Inputs = Inputs()
     private var mode: TimerEditView.Mode
 
     private var cancellables: Set<AnyCancellable> = []
@@ -25,34 +36,14 @@ class TimerEditViewModel: ObservableObject {
     init(repository: IterationTimerRepositoryProtocol, mode: TimerEditView.Mode) {
         self.repository = repository
         self.mode = mode
-        
-        switch mode {
-        case .add:
-            self.timer = .init(currentStamina: 10,settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, duration: 10), since: Date())
-        case .edit(let timer):
-            self.timer = timer
+
+        if case .edit(let timer) = mode {
+            self.input.timer = timer
         }
-
-        self.name = timer.settings.title
-        self.currentValue = "\(timer.currentStamina(date: Date()))"
-        self.maxValue = "\(timer.settings.maxStamina)"
-        self.duration = "\(Int(timer.settings.duration))"
-
-        let setting = Publishers.CombineLatest4($name,
-                                                Just(TimerCategory.game),
-                                                $maxValue.compactMap(Int.init),
-                                                $duration.compactMap(TimeInterval.init))
-            .map { try? IterationTimerSettings(title: $0, category: $1, maxStamina: $2, duration: $3) }
-        
-        let timer = Publishers.CombineLatest($currentValue.compactMap { Int($0) },
-                                             setting.compactMap { $0 })
-            .map { ($0, $1, Date()) }
-            .map(IterationTimer.init)
-        
-        timer.assign(to: \.timer, on: self).store(in: &cancellables)
     }
 
     func done() {
+        let timer = input.timer
         switch mode {
         case .add:
             let count = repository.getTimers.count

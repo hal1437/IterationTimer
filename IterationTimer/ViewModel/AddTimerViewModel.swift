@@ -17,6 +17,7 @@ class AddTimerViewModel: ObservableObject {
     @Published var maxValue = "10"
     @Published var duration = "10"
     @Published var isCompleteNotification = false
+    @Published var willPushNotify = false
 
     private var cancellable: AnyCancellable?
     private var repository: IterationTimerRepositoryProtocol
@@ -27,17 +28,21 @@ class AddTimerViewModel: ObservableObject {
                                settings: try! .init(title: "NO NAME",
                                                     category: .game,
                                                     maxStamina: 10,
-                                                    duration: 60),
+                                                    duration: 60,
+                                                    willPushNotify: false),
                                since: Date())
         
         cancellable = $name
-            .combineLatest($maxValue.compactMap { Int($0) }, $duration.compactMap { TimeInterval($0) })
-            .sink { name, maxValue, duration in
+            .combineLatest($maxValue.compactMap { Int($0) },
+                           $duration.compactMap { TimeInterval($0) },
+                           $willPushNotify)
+            .sink { name, maxValue, duration, willPushNotify in
                 self.timer = IterationTimer(currentStamina: 0,
                                             settings: try! .init(title: name,
                                                                  category: .game,
                                                                  maxStamina: maxValue,
-                                                                 duration: duration),
+                                                                 duration: duration,
+                                                                 willPushNotify: willPushNotify),
                                             since: Date())
             }
     }

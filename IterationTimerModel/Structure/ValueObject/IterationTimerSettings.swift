@@ -12,12 +12,14 @@ public struct IterationTimerSettings: Codable {
     public var category: TimerCategory
     public var maxStamina: Int
     public var duration: TimeInterval
+    public var willPushNotify: Bool
     
-    public init(title: String, category: TimerCategory, maxStamina: Int, duration: TimeInterval) throws {
+    public init(title: String, category: TimerCategory, maxStamina: Int, duration: TimeInterval, willPushNotify: Bool) throws {
         if maxStamina <= 0 || duration <= 0 { throw IterationTimerError.unexpectedInitialize }
         self.title = title
         self.category = category
         self.maxStamina = maxStamina
         self.duration = duration
+        self.willPushNotify = willPushNotify
     }
 }
