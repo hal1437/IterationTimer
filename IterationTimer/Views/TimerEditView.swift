@@ -30,7 +30,7 @@ struct TimerEditView: View {
     var body: some View {
         NavigationView {
             VStack(alignment: .center, spacing: 0) {
-                TimerCard(drawable: IterationTimerDrawable(timer: viewModel.input.timer, date: Date())).padding()
+                TimerCard(drawable: IterationTimerDrawable(timer: viewModel.timer, date: Date())).padding()
                     .background(Color(UIColor.systemGroupedBackground))
                 Form {
                     Section(header: Text("タイマー名")) {
@@ -85,7 +85,9 @@ struct TimerEditView: View {
                                     viewModel.done()
                                     self.presentationMode.wrappedValue.dismiss()
                                     WidgetCenter.shared.reloadAllTimelines()
-                                })
+                                }
+                                .disabled(!viewModel.isEnabled)
+            )
         }
     }
 }
