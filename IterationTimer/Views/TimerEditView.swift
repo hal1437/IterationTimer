@@ -40,21 +40,24 @@ struct TimerEditView: View {
                         if mode.isEdit {
                             HStack {
                                 Text("現在値")
+                                    .frame(width: 100, alignment: .leading)
                                 TextField("0", text: $viewModel.input.currentValue)
-                                    .multilineTextAlignment(.trailing)
+                                    .keyboardType(.numberPad)
                             }
                         }
                         
                         HStack {
                             Text("最大値")
+                                .frame(width: 100, alignment: .leading)
                             TextField("0", text: $viewModel.input.maxValue)
-                                .multilineTextAlignment(.trailing)
+                                .keyboardType(.numberPad)
                         }
 
                         HStack {
                             Text("1単位の時間")
+                                .frame(width: 100, alignment: .leading)
                             TextField("0", text: $viewModel.input.duration)
-                                .multilineTextAlignment(.trailing)
+                                .keyboardType(.numberPad)
                         }
                     }
                     Section(header: Text("通知設定")) {

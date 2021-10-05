@@ -18,6 +18,7 @@ extension IterationTimer {
         // タイトル、本文、サウンド設定の保持
         let content = UNMutableNotificationContent()
         content.title = "\(settings.title)が回復しました。"
+        content.sound = UNNotificationSound.default
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
         let request = UNNotificationRequest(identifier: pushIdentifier(), content: content, trigger: trigger)
