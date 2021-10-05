@@ -8,6 +8,7 @@
 import Combine
 import Foundation
 import IterationTimerModel
+import NotificationCenter
 
 class TimerEditViewModel: ObservableObject {
     
@@ -34,6 +35,7 @@ class TimerEditViewModel: ObservableObject {
 
     private var cancellables: Set<AnyCancellable> = []
     private var repository: IterationTimerRepositoryProtocol
+    private var oldTimer: IterationTimer?
 
     init(repository: IterationTimerRepositoryProtocol, mode: TimerEditView.Mode) {
         self.repository = repository
@@ -51,8 +53,21 @@ class TimerEditViewModel: ObservableObject {
             .assign(to: \.isEnabled, on: self)
             .store(in: &cancellables)
 
+        $input
+            .map(\.willPushNotify)
+            .filter { $0 }
+            .sink(receiveValue: { [unowned self] _ in
+                let center = UNUserNotificationCenter.current()
+                center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+                    if !granted {
+                        self.input.willPushNotify = false
+                    }
+                }
+            })
+            .store(in: &cancellables)
 
         if case .edit(let timer) = mode {
+            self.oldTimer = timer
             self.timer = timer
             self.input = TimerEditViewModel.constructInput(timer: timer)
         }
@@ -66,6 +81,13 @@ class TimerEditViewModel: ObservableObject {
             repository.insertTimer(index: count, timer: timer)
         case .edit(let unit):
             repository.updateTimer(id: unit.id, timer: timer)
+            oldTimer?.unregisterNotification()
+        }
+        
+        if timer.settings.willPushNotify {
+            timer.registerNotification()
+        } else {
+            timer.unregisterNotification()
         }
     }
 
