@@ -12,6 +12,13 @@ import IterationTimerModel
 import WidgetKit
 
 struct TimerEditView: View {
+    enum Field: CaseIterable, Hashable {
+        case timerName
+        case currentValue
+        case maxValue
+        case duration
+    }
+    
     enum Mode {
         case add
         case edit(timer: IterationTimer)
@@ -20,6 +27,7 @@ struct TimerEditView: View {
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var viewModel: TimerEditViewModel
     @State private var showingDeleteAlert = false
+    @FocusState private var focusedField: Field?
     private var mode: Mode
     
     public init(mode: Mode) {
@@ -35,6 +43,7 @@ struct TimerEditView: View {
                 Form {
                     Section(header: Text("タイマー名")) {
                         TextField("name", text: $viewModel.input.name)
+                            .focused($focusedField, equals: .timerName)
                     }
                     Section(header: Text("スタミナの設定")) {
                         if mode.isEdit {
@@ -43,6 +52,7 @@ struct TimerEditView: View {
                                     .frame(width: 100, alignment: .leading)
                                 TextField("0", text: $viewModel.input.currentValue)
                                     .keyboardType(.numberPad)
+                                    .focused($focusedField, equals: .timerName)
                             }
                         }
                         
@@ -51,6 +61,7 @@ struct TimerEditView: View {
                                 .frame(width: 100, alignment: .leading)
                             TextField("0", text: $viewModel.input.maxValue)
                                 .keyboardType(.numberPad)
+                                .focused($focusedField, equals: .maxValue)
                         }
 
                         HStack {
@@ -58,6 +69,7 @@ struct TimerEditView: View {
                                 .frame(width: 100, alignment: .leading)
                             TextField("0", text: $viewModel.input.duration)
                                 .keyboardType(.numberPad)
+                                .focused($focusedField, equals: .duration)
                         }
                     }
                     Section(header: Text("通知設定")) {
@@ -91,6 +103,14 @@ struct TimerEditView: View {
                                 }
                                 .disabled(!viewModel.isEnabled)
             )
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("閉じる") {
+                        focusedField = nil
+                    }
+                }
+            }
         }
     }
 }
