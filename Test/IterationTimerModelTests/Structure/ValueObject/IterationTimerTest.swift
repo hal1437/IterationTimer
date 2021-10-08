@@ -11,7 +11,7 @@ import XCTest
 class IterationTimerTest: XCTestCase {
 
     func testInitialize() throws {
-        let properties = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: 222, willPushNotify: false)
+        let properties = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: 222, notification: .never)
         XCTAssertEqual(properties.title, "xxx", "適切な値が代入されていること")
         XCTAssertEqual(properties.category, .game, "適切な値が代入されていること")
         XCTAssertEqual(properties.maxStamina, 111, "適切な値が代入されていること")
@@ -19,9 +19,9 @@ class IterationTimerTest: XCTestCase {
     }
 
     func testUnexpedtedInitialize() throws {
-        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: -1, duration: 222, willPushNotify: false), "スタミナがマイナスでは初期化出来ないこと")
-        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: -1, willPushNotify: false), "durationがマイナスでは初期化出来ないこと")
-        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 0, duration: 222, willPushNotify: false), "スタミナが0では初期化出来ないこと")
-        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: 0, willPushNotify: false), "durationが0では初期化出来ないこと")
+        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: -1, duration: 222, notification: .never), "スタミナがマイナスでは初期化出来ないこと")
+        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: -1, notification: .never), "durationがマイナスでは初期化出来ないこと")
+        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 0, duration: 222, notification: .never), "スタミナが0では初期化出来ないこと")
+        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: 0, notification: .never), "durationが0では初期化出来ないこと")
     }
 }
