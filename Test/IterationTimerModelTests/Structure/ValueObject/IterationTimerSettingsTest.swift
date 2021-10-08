@@ -13,7 +13,7 @@ class IterationTimerSettingsTest: XCTestCase {
     let baseDate = Date(timeIntervalSince1970: 0)
 
     func testDuration1() throws {
-        let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 80, duration: 1)
+        let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 80, duration: 1, willPushNotify: false)
         let timer = IterationTimer(currentStamina: 10, settings: settings, since: baseDate)
         let now = Date(timeIntervalSince1970: 60) // 1分後
 
@@ -23,7 +23,7 @@ class IterationTimerSettingsTest: XCTestCase {
     }
 
     func testDuration70() throws {
-        let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 10, duration: 70)
+        let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 10, duration: 70, willPushNotify: false)
         let timer = IterationTimer(currentStamina: 0, settings: settings, since: baseDate)
         let now = Date(timeIntervalSince1970: 60) // 1分後
 
@@ -31,7 +31,7 @@ class IterationTimerSettingsTest: XCTestCase {
     }
 
     func testOverCurrentStamina() throws {
-        let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 10, duration: 10)
+        let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 10, duration: 10, willPushNotify: false)
         let timer = IterationTimer(currentStamina: 0, settings: settings, since: baseDate)
         let now = Date(timeIntervalSince1970: 120) // 2分後
 
@@ -39,8 +39,8 @@ class IterationTimerSettingsTest: XCTestCase {
     }
     
     func testInitialize() throws {
-        XCTAssertNoThrow(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: 222), "正常な値で初期化できること")
-        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: -1, duration: 222), "スタミナがマイナスでは初期化出来ないこと")
-        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: -1), "durationがマイナスでは初期化出来ないこと")
+        XCTAssertNoThrow(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: 222, willPushNotify: false), "正常な値で初期化できること")
+        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: -1, duration: 222, willPushNotify: false), "スタミナがマイナスでは初期化出来ないこと")
+        XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: -1, willPushNotify: false), "durationがマイナスでは初期化出来ないこと")
     }
 }
