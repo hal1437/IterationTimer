@@ -72,9 +72,6 @@ struct TimerEditView: View {
                                 .focused($focusedField, equals: .duration)
                         }
                     }
-                    Section(header: Text("通知設定")) {
-                        Toggle("回復時の通知", isOn: $viewModel.input.willPushNotify)
-                    }
                     
                     Section {
                         if mode.isEdit {
@@ -142,7 +139,7 @@ struct TimerEditView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             TimerEditView(mode: .add)
-            TimerEditView(mode: .edit(timer: IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, duration: 10, willPushNotify: false), since: Date())))
+            TimerEditView(mode: .edit(timer: IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, duration: 10, notification: .never), since: Date())))
         }
     }
 }

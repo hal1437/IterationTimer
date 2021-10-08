@@ -40,4 +40,13 @@ public struct IterationTimer: Codable, Identifiable {
     public func remainingFull(date: Date) -> TimeInterval {
         return endTime.timeIntervalSince(date)
     }
+    
+    /// 次の通知を行う時刻
+    public func nextNotifyDate() -> Date {
+        switch self.settings.notification {
+        case .never: return Date.init(timeIntervalSince1970: 0)
+        case .on(let stamina): return startTime.addingTimeInterval(TimeInterval(stamina * Int(settings.duration)))
+        case .completion(let offset): return endTime.addingTimeInterval(offset)
+        }
+    }
 }

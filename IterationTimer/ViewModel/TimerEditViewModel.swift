@@ -18,7 +18,7 @@ class TimerEditViewModel: ObservableObject {
         var currentValue = "10"
         var maxValue = "10"
         var duration = "10"
-        var willPushNotify = false
+        var notification = NotificationTrigger.never
     }
     
     @Published var input: Inputs = Inputs()
@@ -28,7 +28,7 @@ class TimerEditViewModel: ObservableObject {
                                                     category: .game,
                                                     maxStamina: 10,
                                                     duration: 10,
-                                                    willPushNotify: false),
+                                                    notification: .never),
                                since: Date())
     
     private var mode: TimerEditView.Mode
@@ -54,13 +54,13 @@ class TimerEditViewModel: ObservableObject {
             .store(in: &cancellables)
 
         $input
-            .map(\.willPushNotify)
-            .filter { $0 }
+            .map(\.notification)
+            .filter { $0 != .never }
             .sink(receiveValue: { [unowned self] _ in
                 let center = UNUserNotificationCenter.current()
                 center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                     if !granted {
-                        self.input.willPushNotify = false
+                        self.input.notification = .never
                     }
                 }
             })
@@ -84,7 +84,7 @@ class TimerEditViewModel: ObservableObject {
             oldTimer?.unregisterNotification()
         }
         
-        if timer.settings.willPushNotify {
+        if timer.settings.notification != .never {
             timer.registerNotification()
         } else {
             timer.unregisterNotification()
@@ -105,7 +105,7 @@ class TimerEditViewModel: ObservableObject {
                                                         category: input.category,
                                                         maxStamina: maxStamina,
                                                         duration: duration,
-                                                        willPushNotify: input.willPushNotify) else { return nil }
+                                                        notification: input.notification) else { return nil }
         
         return IterationTimer(currentStamina: currentStamina,
                               settings: setting,
@@ -118,6 +118,6 @@ class TimerEditViewModel: ObservableObject {
                       currentValue: "\(timer.currentStamina(date: Date()))",
                       maxValue: "\(timer.settings.maxStamina)",
                       duration: "\(Int(timer.settings.duration))",
-                      willPushNotify: timer.settings.willPushNotify)
+                      notification: timer.settings.notification)
     }
 }
