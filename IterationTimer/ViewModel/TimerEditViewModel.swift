@@ -146,9 +146,9 @@ private extension TimerEditViewModel.NotificationSetting {
         case .on(let stamina):
             self.type = .on
             self.on = "\(stamina)"
-        case .completion(let offset):
+        case .completion(let before):
             self.type = .completion
-            self.completion = "\(offset)"
+            self.completion = "\(Int(before))"
         }
     }
 }
@@ -159,11 +159,11 @@ private extension NotificationTrigger {
         case .never:
             self = .never
         case .on:
-            guard let on = Int(settings.on) else { return nil}
+            guard let on = Int(settings.on) else { return nil }
             self = .on(stamina: on)
         case .completion:
-            guard let completion = TimeInterval(settings.completion) else { return nil}
-            self = .completion(offset: completion)
+            guard let completion = TimeInterval(settings.completion) else { return nil }
+            self = .completion(before: completion)
         }
     }
 }

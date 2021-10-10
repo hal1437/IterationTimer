@@ -45,8 +45,8 @@ public struct IterationTimer: Codable, Identifiable {
     public func nextNotifyDate() -> Date {
         switch self.settings.notification {
         case .never: return Date.init(timeIntervalSince1970: 0)
-        case .on(let stamina): return startTime.addingTimeInterval(TimeInterval(stamina * Int(settings.duration)))
-        case .completion(let offset): return endTime.addingTimeInterval(offset)
+        case .on(let stamina): return startTime + TimeInterval(stamina * Int(settings.duration))
+        case .completion(let before): return endTime - before
         }
     }
 }

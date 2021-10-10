@@ -10,5 +10,5 @@ import Foundation
 public enum NotificationTrigger: Codable, Equatable {
     case never // 通知を行わない
     case on(stamina: Int) // 現在のスタミナがXXとなった時
-    case completion(offset: TimeInterval) // 完了時からの相対時刻
+    case completion(before: TimeInterval) // 完了時からの相対時刻
 }
