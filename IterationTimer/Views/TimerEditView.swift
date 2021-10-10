@@ -24,6 +24,10 @@ struct TimerEditView: View {
         case edit(timer: IterationTimer)
     }
     
+    public enum NotificationSelection: CaseIterable {
+        case never, on, completion
+    }
+    
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var viewModel: TimerEditViewModel
     @State private var showingDeleteAlert = false
@@ -73,6 +77,38 @@ struct TimerEditView: View {
                         }
                     }
                     
+                    Section(header: Text("通知設定")) {
+                        Picker("通知", selection: $viewModel.input.notification.type) {
+                            ForEach(TimerEditViewModel.NotificationSelection.allCases, id: \.self) {
+                                Text($0.title)
+                            }
+                        }
+
+                        switch viewModel.input.notification.type {
+                        case .never: EmptyView()
+                        case .on:
+                            HStack {
+                                Text("通知する値")
+                                    .frame(width: 100, alignment: .leading)
+                                Spacer()
+                                TextField("0", text: $viewModel.input.notification.on)
+                                    .keyboardType(.numberPad)
+                                    .multilineTextAlignment(.trailing)
+                                    .focused($focusedField, equals: .duration)
+                            }
+                        case .completion:
+                            HStack {
+                                Text("事前に通知する秒数")
+                                    .frame(width: 100, alignment: .leading)
+                                Spacer()
+                                TextField("0", text: $viewModel.input.notification.completion)
+                                    .keyboardType(.numberPad)
+                                    .multilineTextAlignment(.trailing)
+                                    .focused($focusedField, equals: .duration)
+                            }
+                        }
+                    }
+
                     Section {
                         if mode.isEdit {
                             Button("タイマーを削除する") {
@@ -134,6 +170,17 @@ private extension TimerEditView.Mode {
         }
     }
 }
+
+extension TimerEditViewModel.NotificationSelection {
+    var title: String {
+        switch self {
+        case .never: return "通知しない"
+        case .on: return "特定の値の時に通知"
+        case .completion: return "回復前に通知"
+        }
+    }
+}
+
 
 struct TimerEditView_Previews: PreviewProvider {
     static var previews: some View {

@@ -18,7 +18,17 @@ class TimerEditViewModel: ObservableObject {
         var currentValue = "10"
         var maxValue = "10"
         var duration = "10"
-        var notification = NotificationTrigger.never
+        var notification = NotificationSetting()
+    }
+    
+    struct NotificationSetting {
+        var type = NotificationSelection.never
+        var on = "0"
+        var completion = "0"
+    }
+    
+    enum NotificationSelection: CaseIterable {
+        case never, on, completion
     }
     
     @Published var input: Inputs = Inputs()
@@ -41,26 +51,27 @@ class TimerEditViewModel: ObservableObject {
         self.repository = repository
         self.mode = mode
 
-        $input
-            .map(TimerEditViewModel.constructTimer)
+        let timer = $input.map(IterationTimer.init)
+        
+        timer
             .filter { $0 != nil }.map { $0! }
             .assign(to: \.timer, on: self)
             .store(in: &cancellables)
 
-        $input
-            .map(TimerEditViewModel.constructTimer)
+        timer
             .map { $0 != nil }
             .assign(to: \.isEnabled, on: self)
             .store(in: &cancellables)
 
-        $input
-            .map(\.notification)
+        timer
+            .map(\.?.settings.notification)
+            .filter { $0 != nil }.map { $0! }
             .filter { $0 != .never }
             .sink(receiveValue: { [unowned self] _ in
                 let center = UNUserNotificationCenter.current()
                 center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                     if !granted {
-                        self.input.notification = .never
+                        self.input.notification.type = .never
                     }
                 }
             })
@@ -69,12 +80,12 @@ class TimerEditViewModel: ObservableObject {
         if case .edit(let timer) = mode {
             self.oldTimer = timer
             self.timer = timer
-            self.input = TimerEditViewModel.constructInput(timer: timer)
+            self.input = .init(timer: timer)
         }
     }
 
     func done() {
-        let timer = TimerEditViewModel.constructTimer(input: input)!
+        let timer = IterationTimer(input: input)!
         switch mode {
         case .add:
             let count = repository.getTimers.count
@@ -96,28 +107,63 @@ class TimerEditViewModel: ObservableObject {
             repository.deleteTimer(id: unit.id)
         }
     }
+}
 
-    static private func constructTimer(input: Inputs) -> IterationTimer? {
+private extension TimerEditViewModel.Inputs {
+    init(timer: IterationTimer) {
+        self.category = timer.settings.category
+        self.name = timer.settings.title
+        self.currentValue = "\(timer.currentStamina(date: Date()))"
+        self.maxValue = "\(timer.settings.maxStamina)"
+        self.duration = "\(Int(timer.settings.duration))"
+        self.notification = .init(trigger: timer.settings.notification)
+    }
+}
+
+
+private extension IterationTimer {
+    init?(input: TimerEditViewModel.Inputs) {
         guard let currentStamina = Int(input.currentValue),
               let maxStamina = Int(input.maxValue),
               let duration = TimeInterval(input.duration),
+              let trigger = NotificationTrigger(settings: input.notification),
               let setting = try? IterationTimerSettings(title: input.name,
                                                         category: input.category,
                                                         maxStamina: maxStamina,
                                                         duration: duration,
-                                                        notification: input.notification) else { return nil }
-        
-        return IterationTimer(currentStamina: currentStamina,
-                              settings: setting,
-                              since: Date())
+                                                        notification: trigger) else { return nil }
+        self = .init(currentStamina: currentStamina,
+                     settings: setting,
+                     since: Date())
     }
+}
 
-    static private func constructInput(timer: IterationTimer) -> Inputs {
-        return Inputs(category: timer.settings.category,
-                      name: timer.settings.title,
-                      currentValue: "\(timer.currentStamina(date: Date()))",
-                      maxValue: "\(timer.settings.maxStamina)",
-                      duration: "\(Int(timer.settings.duration))",
-                      notification: timer.settings.notification)
+private extension TimerEditViewModel.NotificationSetting {
+    init(trigger: NotificationTrigger) {
+        switch trigger {
+        case .never:
+            self.type = .never
+        case .on(let stamina):
+            self.type = .on
+            self.on = "\(stamina)"
+        case .completion(let offset):
+            self.type = .completion
+            self.completion = "\(offset)"
+        }
+    }
+}
+
+private extension NotificationTrigger {
+    init?(settings: TimerEditViewModel.NotificationSetting) {
+        switch settings.type {
+        case .never:
+            self = .never
+        case .on:
+            guard let on = Int(settings.on) else { return nil}
+            self = .on(stamina: on)
+        case .completion:
+            guard let completion = TimeInterval(settings.completion) else { return nil}
+            self = .completion(offset: completion)
+        }
     }
 }
