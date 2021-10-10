@@ -43,4 +43,26 @@ class IterationTimerSettingsTest: XCTestCase {
         XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: -1, duration: 222, notification: .never), "スタミナがマイナスでは初期化出来ないこと")
         XCTAssertThrowsError(try IterationTimerSettings(title: "xxx", category: .game, maxStamina: 111, duration: -1, notification: .never), "durationがマイナスでは初期化出来ないこと")
     }
+    
+    func testNotifyNever() throws {
+        let anotherDate = Date(timeIntervalSince1970: 111)
+        let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 10, duration: 10, notification: .never)
+        let timer = IterationTimer(currentStamina: 0, settings: settings, since: anotherDate)
+
+        XCTAssertEqual(timer.nextNotifyDate(), Date(timeIntervalSince1970: 0))
+    }
+
+    func testNotifyOn() throws {
+        let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 10, duration: 10, notification: .on(stamina: 9))
+        let timer = IterationTimer(currentStamina: 0, settings: settings, since: baseDate)
+
+        XCTAssertEqual(timer.nextNotifyDate(), Date(timeIntervalSince1970: 90))
+    }
+
+    func testNotifyComplete() throws {
+        let settings = try! IterationTimerSettings(title: "xxx", category: .game, maxStamina: 10, duration: 10, notification: .completion(before: TimeInterval(9)))
+        let timer = IterationTimer(currentStamina: 0, settings: settings, since: baseDate)
+
+        XCTAssertEqual(timer.nextNotifyDate(), Date(timeIntervalSince1970: 91))
+    }
 }
