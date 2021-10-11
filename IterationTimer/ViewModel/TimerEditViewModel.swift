@@ -34,7 +34,7 @@ class TimerEditViewModel: ObservableObject {
     @Published var input: Inputs = Inputs()
     var isEnabled = false
     var timer = IterationTimer(currentStamina: 10,
-                               settings: try! .init(title: "NO NAME",
+                               settings: try! .init(title: "",
                                                     category: .game,
                                                     maxStamina: 10,
                                                     duration: 10,

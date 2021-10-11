@@ -45,14 +45,14 @@ struct TimerEditView: View {
                 TimerCard(drawable: IterationTimerDrawable(timer: viewModel.timer, date: Date())).padding()
                     .background(Color(UIColor.systemGroupedBackground))
                 Form {
-                    Section(header: Text("タイマー名")) {
+                    Section(header: Text("TimerEditTimerSection")) {
                         TextField("name", text: $viewModel.input.name)
                             .focused($focusedField, equals: .timerName)
                     }
-                    Section(header: Text("スタミナの設定")) {
+                    Section(header: Text("TimerEditStaminaSection")) {
                         if mode.isEdit {
                             HStack {
-                                Text("現在値")
+                                Text("TimerEditCurrentValue")
                                     .frame(width: 100, alignment: .leading)
                                 TextField("0", text: $viewModel.input.currentValue)
                                     .keyboardType(.numberPad)
@@ -61,7 +61,7 @@ struct TimerEditView: View {
                         }
                         
                         HStack {
-                            Text("最大値")
+                            Text("TimerEditMaxValue")
                                 .frame(width: 100, alignment: .leading)
                             TextField("0", text: $viewModel.input.maxValue)
                                 .keyboardType(.numberPad)
@@ -69,7 +69,7 @@ struct TimerEditView: View {
                         }
 
                         HStack {
-                            Text("1単位の時間")
+                            Text("TimerEditDuration")
                                 .frame(width: 100, alignment: .leading)
                             TextField("0", text: $viewModel.input.duration)
                                 .keyboardType(.numberPad)
@@ -77,8 +77,8 @@ struct TimerEditView: View {
                         }
                     }
                     
-                    Section(header: Text("通知設定")) {
-                        Picker("通知", selection: $viewModel.input.notification.type) {
+                    Section(header: Text("TimerEditNotificationSection")) {
+                        Picker("TimerEditNotification", selection: $viewModel.input.notification.type) {
                             ForEach(TimerEditViewModel.NotificationSelection.allCases, id: \.self) {
                                 Text($0.title)
                             }
@@ -88,7 +88,7 @@ struct TimerEditView: View {
                         case .never: EmptyView()
                         case .on:
                             HStack {
-                                Text("通知する値")
+                                Text("TimerEditNotificationOn")
                                     .frame(width: 100, alignment: .leading)
                                 Spacer()
                                 TextField("0", text: $viewModel.input.notification.on)
@@ -98,7 +98,7 @@ struct TimerEditView: View {
                             }
                         case .completion:
                             HStack {
-                                Text("事前に通知する秒数")
+                                Text("TimerEditNotificationCompleteBefore")
                                     .frame(width: 100, alignment: .leading)
                                 Spacer()
                                 TextField("0", text: $viewModel.input.notification.completion)
@@ -111,12 +111,12 @@ struct TimerEditView: View {
 
                     Section {
                         if mode.isEdit {
-                            Button("タイマーを削除する") {
+                            Button("TimerEditDeleteButton") {
                                 self.showingDeleteAlert = true
                             }
                             .actionSheet(isPresented: $showingDeleteAlert) {
-                                ActionSheet(title: Text("データが削除されますがよろしいですか？"), buttons: [
-                                    .destructive(Text("削除する"), action: {
+                                ActionSheet(title: Text("TimerEditDeleteConfirm"), buttons: [
+                                    .destructive(Text("TimerEditDelete"), action: {
                                           viewModel.delete()
                                           self.presentationMode.wrappedValue.dismiss()
                                     }),
@@ -128,7 +128,7 @@ struct TimerEditView: View {
                 }
             }
             .navigationBarTitle(mode.title, displayMode: .inline)
-            .navigationBarItems(leading: Button("キャンセル") { self.presentationMode.wrappedValue.dismiss() },
+            .navigationBarItems(leading: Button("CommonCancel") { self.presentationMode.wrappedValue.dismiss() },
                                 trailing: Button(mode.doneButton) {
                                     viewModel.done()
                                     self.presentationMode.wrappedValue.dismiss()
@@ -139,7 +139,7 @@ struct TimerEditView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("閉じる") {
+                    Button("CommonClose") {
                         focusedField = nil
                     }
                 }
@@ -151,15 +151,15 @@ struct TimerEditView: View {
 private extension TimerEditView.Mode {
     var title: String {
         switch self {
-        case .add: return "タイマーの追加"
-        case .edit(_): return "タイマーの編集"
+        case .add: return NSLocalizedString("TimerAddTitle", comment: "")
+        case .edit(_): return NSLocalizedString("TimerEditTitle", comment: "")
         }
     }
 
     var doneButton: String {
         switch self {
-        case .add: return "追加"
-        case .edit(_): return "完了"
+        case .add: return NSLocalizedString("CommonAdd", comment: "")
+        case .edit(_): return NSLocalizedString("CommonComplete", comment: "")
         }
     }
     
@@ -174,9 +174,9 @@ private extension TimerEditView.Mode {
 extension TimerEditViewModel.NotificationSelection {
     var title: String {
         switch self {
-        case .never: return "通知しない"
-        case .on: return "特定の値の時に通知"
-        case .completion: return "回復前に通知"
+        case .never: return NSLocalizedString("TimerEditNotificationSelectionNever", comment: "")
+        case .on: return NSLocalizedString("TimerEditNotificationSelectionOn", comment: "")
+        case .completion: return NSLocalizedString("TimerEditNotificationSelectionCompletion", comment: "")
         }
     }
 }

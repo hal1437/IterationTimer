@@ -46,12 +46,13 @@ extension NotificationTrigger {
     func notificationtTitle(timerTitle: String) -> String {
         switch self {
         case .never: return ""
-        case .on(let stamina): return "\(timerTitle)の値が\(stamina)になりました。"
+        case .on(let stamina):
+            return String(format: NSLocalizedString("NotificationOn", comment: ""), timerTitle, stamina)
         case .completion(let before):
             if before == 0 {
-                return "\(timerTitle)が回復しました"
+                return String(format: NSLocalizedString("NotificationCompleted", comment: ""), timerTitle)
             } else {
-                return "\(timerTitle)の値が\(Int(before))秒に回復します"
+                return String(format: NSLocalizedString("NotificationCompleteBefore", comment: ""), timerTitle, Int(before))
             }
         }
     }

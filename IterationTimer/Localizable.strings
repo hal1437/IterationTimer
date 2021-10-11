@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  IterationTimer
+
+  Created by hal1437 on 2021/05/29.
+  
+*/
+
+"NotificationOn"="%@の値が%dになりました。";
+"NotificationCompleted"="%@が回復しました。";
+"NotificationCompleteBefore"="%@の値が%d秒に回復します。";
+"CommonOK"="OK";
+"CommonClose"="閉じる";
+"CommonCancel"="キャンセル";
+"CommonAdd"="追加";
+"CommonComplete"="完了";
+"TimerAddTitle"="タイマーの追加";
+"TimerEditTitle"="タイマーの編集";
+"TimerEditTimerSection"="タイマー名";
+"TimerEditStaminaSection"="スタミナの設定";
+"TimerEditCurrentValue"="現在値";
+"TimerEditMaxValue"="現在値";
+"TimerEditDuration"="1単位の時間";
+"TimerEditNotificationSection"="通知設定";
+"TimerEditNotification"="通知";
+"TimerEditNotificationOn"="通知する値";
+"TimerEditNotificationCompleteBefore"="事前に通知する秒数";
+"TimerEditNotificationSelectionNever"="通知しない";
+"TimerEditNotificationSelectionOn"="特定の値の時に通知";
+"TimerEditNotificationSelectionCompletion"="回復前に通知";
+"TimerEditNotificationCompleteBefore"="事前に通知する秒数";
+"TimerEditDeleteButton"="タイマーを削除する";
+"TimerEditDeleteConfirm"="データが削除されますがよろしいですか？";
+"TimerEditDelete"="削除する";
