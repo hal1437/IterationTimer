@@ -20,6 +20,12 @@ struct MultipleTimer: View {
             ForEach(viewModel.timers.prefix(family.counts)) { timer in
                 InstantTimer(drawable: InstantDrawable(timer: timer, date: Date()))
             }
+            
+            if viewModel.timers.isEmpty {
+                Text("タイマーがありません")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
         }.padding(.horizontal, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
     }
 }
