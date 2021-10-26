@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import IterationTimerCore
 
 public protocol IterationTimerRepositoryProtocol {
     var getTimers: [IterationTimer] { get }
@@ -15,14 +16,14 @@ public protocol IterationTimerRepositoryProtocol {
 }
 
 public struct IterationTimerRepository: IterationTimerRepositoryProtocol {
-    let userDefaults: UserDefaults
+    let dataStore: DataStore
     
-    public init(userDefaults: UserDefaults) {
-        self.userDefaults = userDefaults
+    public init(dataStore: DataStore) {
+        self.dataStore = dataStore
     }
 
     public var getTimers: [IterationTimer] {
-        guard let json = userDefaults.string(forKey: UserDefaultsKey.iterationTimer.rawValue),
+        guard let json = dataStore.get(forKey: UserDefaultsKey.iterationTimer.rawValue),
               let data = json.data(using: .utf8),
               let array = try? JSONDecoder().decode([IterationTimer].self, from: data) else { return [] }
         
@@ -47,6 +48,6 @@ public struct IterationTimerRepository: IterationTimerRepositoryProtocol {
         let json = try! JSONEncoder().encode(array)
         let string = String(data: json, encoding: .utf8)!
         
-        userDefaults.setValue(string, forKeyPath: UserDefaultsKey.iterationTimer.rawValue)
+        dataStore.set(value: string, forKey: UserDefaultsKey.iterationTimer.rawValue)
     }
 }

@@ -12,7 +12,7 @@ import IterationTimerUI
 
 struct MultipleTimer: View {
     @Environment(\.widgetFamily) var family
-    @ObservedObject var viewModel = MultipleTimerViewModel(repository: IterationTimerRepository(userDefaults: .appGroups))
+    @ObservedObject var viewModel = MultipleTimerViewModel(repository: IterationTimerRepository(dataStore: NSUbiquitousKeyValueStore.default))
     private let drawable = Drawable()
     
     var body: some View {
