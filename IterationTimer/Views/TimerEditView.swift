@@ -108,6 +108,7 @@ struct TimerEditView: View {
                             }
                         }
                     }
+                    .disabled(!viewModel.isEnableNotification)
 
                     Section {
                         if mode.isEdit {

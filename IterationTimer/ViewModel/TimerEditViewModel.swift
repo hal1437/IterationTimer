@@ -32,6 +32,8 @@ class TimerEditViewModel: ObservableObject {
     }
     
     @Published var input: Inputs = Inputs()
+    @Published var isEnableNotification = false
+
     var isEnabled = false
     var timer = IterationTimer(currentStamina: 10,
                                settings: try! .init(title: "",
@@ -51,6 +53,10 @@ class TimerEditViewModel: ObservableObject {
         self.repository = repository
         self.mode = mode
 
+        UNUserNotificationCenter.current().getNotificationSettings {
+            self.isEnableNotification = $0.notificationCenterSetting == .enabled
+        }
+        
         let timer = $input.map(IterationTimer.init)
         
         timer
@@ -67,11 +73,14 @@ class TimerEditViewModel: ObservableObject {
             .map(\.?.settings.notification)
             .filter { $0 != nil }.map { $0! }
             .filter { $0 != .never }
+            .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [unowned self] _ in
                 let center = UNUserNotificationCenter.current()
                 center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                     if !granted {
-                        self.input.notification.type = .never
+                        DispatchQueue.main.async {
+                            self.input.notification.type = .never
+                        }
                     }
                 }
             })
