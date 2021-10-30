@@ -23,7 +23,7 @@ struct DividedProgressBar: View {
             let property = makeGraphProperty(geometry)
 
             property.barPath.fill(Color.gray)
-//            barPath(property).fill(Color.blue).mask(maskPath(property))
+            property.barPath.fill(Color.blue).mask(property.maskPath)
         }.frame(maxHeight: CGFloat(10), alignment: .center)
     }
     
@@ -37,11 +37,13 @@ struct DividedProgressBar: View {
         let height = CGFloat(10)
 
         // 割り切れる部分の...
-        var unitDivideCount: Int { return Int(maxValue/divideValue) } // 本数
+        var unitDivideCount: Int { return maxValue / divideValue } // 本数
+        var competeUnitDivideCount: Int { return currentValue / divideValue } // 満たされている本数
         var unitWidth: CGFloat { return (width - leaveWidth - separateWidth * CGFloat(unitDivideCount - (isJust ? 1 : 0))) / CGFloat(unitDivideCount) }
         
         // 割り切れない部分の...
         var leaveCount: Int { return maxValue % divideValue } // 値換算値
+        var leaveCurrentCount: Int { return currentValue - unitDivideCount * divideValue }
         var leaveWidth: CGFloat { return isJust ? 0 : max(width * CGFloat(leaveCount) / CGFloat(maxValue), height) } // 長さ換算値
         
         var isJust: Bool { return maxValue % divideValue == 0 } // 割り切れるかどうか
@@ -66,7 +68,29 @@ struct DividedProgressBar: View {
                                         cornerSize: CGSize(width: height / 2, height: height / 2))
                 }
             }
+        }
+        
+        var maskPath: Path {
+            // 枠組みの描画
+            return Path { path in
+                var width = CGFloat(0)
+    
+                // ゲージが完成している分の進行度
+                width += (unitWidth + separateWidth) * CGFloat(competeUnitDivideCount)
+    
+                if currentValue < divideValue * unitDivideCount {
+                    // ゲージが分割区間内で途中の場合
+                    width += unitWidth * (CGFloat(currentValue % divideValue) / CGFloat(divideValue))
+                } else {
+                    // ゲージが分割区間外で途中の場合
+                    width += leaveWidth * (CGFloat(leaveCurrentCount) / CGFloat(leaveCount))
+                }
 
+                path.addRect(CGRect(x: 0,
+                                    y: CGFloat(0),
+                                    width: width,
+                                    height: height))
+            }
         }
     }
         
@@ -92,24 +116,24 @@ struct DividedProgressBar_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             VStack {
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 1)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 5)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 10)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 20)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 30)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 40)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 50)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 60)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 1)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 5)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 10)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 20)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 30)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 40)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 50)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 60)
             }
             Divider()
             VStack {
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 70)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 80)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 90)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 100)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 110)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 119)
-                DividedProgressBar(currentValue: 60, maxValue: 120, divideValue: 120)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 70)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 80)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 90)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 100)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 110)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 119)
+                DividedProgressBar(currentValue: 100, maxValue: 120, divideValue: 120)
             }
             Divider()
             Spacer()
