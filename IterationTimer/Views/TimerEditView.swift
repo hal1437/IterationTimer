@@ -124,6 +124,7 @@ struct TimerEditView: View {
                                     .cancel()]
                                 )
                             }
+                            .foregroundColor(.red)
                         }
                     }
                 }
