@@ -50,14 +50,12 @@ struct TimerEditView: View {
                             .focused($focusedField, equals: .timerName)
                     }
                     Section(header: Text("TimerEditStaminaSection")) {
-                        if mode.isEdit {
-                            HStack {
-                                Text("TimerEditCurrentValue")
-                                    .frame(width: 100, alignment: .leading)
-                                TextField("0", text: $viewModel.input.currentValue)
-                                    .keyboardType(.numberPad)
-                                    .focused($focusedField, equals: .timerName)
-                            }
+                        HStack {
+                            Text("TimerEditCurrentValue")
+                                .frame(width: 100, alignment: .leading)
+                            TextField("0", text: $viewModel.input.currentValue)
+                                .keyboardType(.numberPad)
+                                .focused($focusedField, equals: .timerName)
                         }
                         
                         HStack {
