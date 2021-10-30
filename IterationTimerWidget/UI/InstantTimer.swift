@@ -41,8 +41,12 @@ public struct InstantTimer: View {
                 
                 HStack {
                     Spacer()
-                    Text(drawable.remainingFull.toFormatString())
-                        .font(.caption)
+                    if drawable.currentStamina >= drawable.maxStamina {
+                        Text("回復済み").font(.caption)
+                    } else {
+                        Text(drawable.remainingFull.toFormatString())
+                            .font(.caption)
+                    }
                 }
             }
         }
