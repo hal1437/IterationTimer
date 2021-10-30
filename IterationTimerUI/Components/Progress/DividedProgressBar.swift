@@ -21,9 +21,9 @@ struct DividedProgressBar: View {
     var body: some View {
         GeometryReader { geometry in
             let property = makeGraphProperty(geometry)
-
             property.barPath.fill(Color.gray)
-            property.barPath.fill(Color.blue).mask(property.maskPath)
+            property.barPath.fill(Color.yellow).mask(property.maskPath)
+            property.barPath.fill(Color.green).mask(property.completePath)
         }.frame(maxHeight: CGFloat(10), alignment: .center)
     }
     
@@ -86,6 +86,18 @@ struct DividedProgressBar: View {
                     width += leaveWidth * (CGFloat(leaveCurrentCount) / CGFloat(leaveCount))
                 }
 
+                path.addRect(CGRect(x: 0,
+                                    y: CGFloat(0),
+                                    width: width,
+                                    height: height))
+            }
+        }
+
+        var completePath: Path {
+            // 枠組みの描画
+            return Path { path in
+                let width = (unitWidth + separateWidth) * CGFloat(competeUnitDivideCount)
+    
                 path.addRect(CGRect(x: 0,
                                     y: CGFloat(0),
                                     width: width,
