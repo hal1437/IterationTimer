@@ -24,7 +24,7 @@ struct DividedProgressBar: View {
             property.barPath.fill(Color.gray)
             property.barPath.fill(Color.yellow).mask(property.maskPath)
             property.barPath.fill(Color.green).mask(property.completePath)
-        }.frame(maxHeight: CGFloat(10), alignment: .center)
+        }.frame(maxHeight: CGFloat(5), alignment: .center)
     }
     
     struct GraphProperty {
@@ -33,8 +33,8 @@ struct DividedProgressBar: View {
         let divideValue: Int // カウントの分割単位
         let width: CGFloat // 全体幅
 
-        let separateWidth = CGFloat(5)
-        let height = CGFloat(10)
+        let height = CGFloat(5)
+        let separateWidth = CGFloat(5) / 2
 
         // 割り切れる部分の...
         var unitDivideCount: Int { return maxValue / divideValue } // 本数
