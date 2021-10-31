@@ -16,6 +16,7 @@ struct TimerEditView: View {
         case timerName
         case currentValue
         case maxValue
+        case divideValue
         case duration
     }
     
@@ -72,6 +73,13 @@ struct TimerEditView: View {
                             TextField("0", text: $viewModel.input.duration)
                                 .keyboardType(.numberPad)
                                 .focused($focusedField, equals: .duration)
+                        }
+                        HStack {
+                            Text("分割値")
+                                .frame(width: 100, alignment: .leading)
+                            TextField("0", text: $viewModel.input.divideValue)
+                                .keyboardType(.numberPad)
+                                .focused($focusedField, equals: .divideValue)
                         }
                     }
                     
@@ -186,7 +194,7 @@ struct TimerEditView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             TimerEditView(mode: .add)
-            TimerEditView(mode: .edit(timer: IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, duration: 10, notification: .never), since: Date())))
+            TimerEditView(mode: .edit(timer: IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, divideStamina: 10, duration: 10, notification: .never), since: Date())))
         }
     }
 }

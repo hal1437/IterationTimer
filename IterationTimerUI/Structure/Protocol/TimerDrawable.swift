@@ -12,6 +12,7 @@ public protocol TimerDrawable {
     var title: String { get }
     var currentStamina: Int { get }
     var maxStamina: Int { get }
+    var divideStamina: Int { get }
     var remainingOne: TimeInterval { get }
     var remainingFull: TimeInterval { get }
 }

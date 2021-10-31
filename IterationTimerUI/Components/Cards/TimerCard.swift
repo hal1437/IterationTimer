@@ -21,7 +21,7 @@ public struct TimerCard: View {
                 Text(drawable.title)
                     .font(.headline)
                 VStack(alignment: .leading, spacing: 4) {
-                    ProgressView(value: CGFloat(drawable.currentStamina), total: CGFloat(drawable.maxStamina))
+                    DividedProgressBar(currentValue: drawable.currentStamina, maxValue: drawable.maxStamina, divideValue: drawable.divideStamina)
                     HStack(alignment: .bottom) {
                         HStack(alignment: .top, spacing: 16) {
                             Text("\(min(drawable.currentStamina, drawable.maxStamina))/\(drawable.maxStamina)").font(.body)
@@ -29,7 +29,6 @@ public struct TimerCard: View {
                             if drawable.currentStamina >= drawable.maxStamina {
                                 Text("回復済み").font(.body)
                             } else {
-//                                Text(drawable.remainingOne.toFormatString()).font(.body)
                                 Text(drawable.remainingFull.toFormatString()).font(.body)
                             }
                         }
@@ -66,6 +65,7 @@ private struct Drawable: TimerDrawable {
     var title = "SampleTitle"
     var currentStamina = 50
     var maxStamina = 100
+    var divideStamina = 40
     var remainingOne = TimeInterval(10)
     var remainingFull = TimeInterval(500)
 }

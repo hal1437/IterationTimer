@@ -20,6 +20,7 @@ struct IterationTimerDrawable: TimerDrawable {
     var title: String { timer.settings.title }
     var currentStamina: Int { timer.currentStamina(date: date) }
     var maxStamina: Int { timer.settings.maxStamina }
+    var divideStamina: Int { timer.settings.divideStamina }
     var remainingOne: TimeInterval { timer.remainingOne(date: date) }
     var remainingFull: TimeInterval { timer.remainingFull(date: date) }
 }

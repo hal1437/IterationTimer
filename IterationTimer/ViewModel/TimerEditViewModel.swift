@@ -17,6 +17,7 @@ class TimerEditViewModel: ObservableObject {
         var name = ""
         var currentValue = "10"
         var maxValue = "10"
+        var divideValue = "10"
         var duration = "10"
         var notification = NotificationSetting()
     }
@@ -39,6 +40,7 @@ class TimerEditViewModel: ObservableObject {
                                settings: try! .init(title: "",
                                                     category: .game,
                                                     maxStamina: 10,
+                                                    divideStamina: 0,
                                                     duration: 10,
                                                     notification: .never),
                                since: Date())
@@ -124,6 +126,7 @@ private extension TimerEditViewModel.Inputs {
         self.name = timer.settings.title
         self.currentValue = "\(timer.currentStamina(date: Date()))"
         self.maxValue = "\(timer.settings.maxStamina)"
+        self.divideValue = "\(Int(timer.settings.divideStamina))"
         self.duration = "\(Int(timer.settings.duration))"
         self.notification = .init(trigger: timer.settings.notification)
     }
@@ -134,11 +137,13 @@ private extension IterationTimer {
     init?(input: TimerEditViewModel.Inputs) {
         guard let currentStamina = Int(input.currentValue),
               let maxStamina = Int(input.maxValue),
+              let divideStamina = Int(input.divideValue),
               let duration = TimeInterval(input.duration),
               let trigger = NotificationTrigger(settings: input.notification),
               let setting = try? IterationTimerSettings(title: input.name,
                                                         category: input.category,
                                                         maxStamina: maxStamina,
+                                                        divideStamina: divideStamina,
                                                         duration: duration,
                                                         notification: trigger) else { return nil }
         self = .init(currentStamina: currentStamina,
