@@ -15,7 +15,7 @@ struct DividedProgressBar: View {
     init(currentValue: Int, maxValue: Int, divideValue: Int) {
         self.currentValue = min(currentValue, maxValue)
         self.maxValue = max(maxValue, 1)
-        self.divideValue = divideValue <= 0 ? maxValue : divideValue
+        self.divideValue = max(min(divideValue, maxValue), 1)
     }
     
     var body: some View {
