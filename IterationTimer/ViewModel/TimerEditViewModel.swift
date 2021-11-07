@@ -118,6 +118,17 @@ class TimerEditViewModel: ObservableObject {
             repository.deleteTimer(id: unit.id)
         }
     }
+    
+    func divideButtonTapped() {
+        guard let currentValue = Int(input.currentValue),
+              let divideValue = Int(input.divideValue) else { return }
+        
+        let resultValue = currentValue - divideValue
+        
+        if resultValue < 0 { return }
+        
+        input.currentValue = String(resultValue)
+    }
 }
 
 private extension TimerEditViewModel.Inputs {

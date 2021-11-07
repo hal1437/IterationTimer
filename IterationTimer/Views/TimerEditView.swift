@@ -56,7 +56,18 @@ struct TimerEditView: View {
                                 .frame(width: 100, alignment: .leading)
                             TextField("0", text: $viewModel.input.currentValue)
                                 .keyboardType(.numberPad)
-                                .focused($focusedField, equals: .timerName)
+                                .focused($focusedField, equals: .currentValue)
+                            if mode.isEdit {
+                                Spacer()
+
+                                Button(action: viewModel.divideButtonTapped) {
+                                    HStack {
+                                        Image(systemName: "minus.circle")
+                                        Text("\(viewModel.input.divideValue)")
+                                    }
+                                }
+                                .buttonStyle(.bordered)
+                            }
                         }
                         
                         HStack {
@@ -118,7 +129,7 @@ struct TimerEditView: View {
 
                     Section {
                         if mode.isEdit {
-                            Button("TimerEditDeleteButton") {
+                            Button("TimerEditDeleteButton", role: .destructive) {
                                 self.showingDeleteAlert = true
                             }
                             .actionSheet(isPresented: $showingDeleteAlert) {
@@ -130,7 +141,6 @@ struct TimerEditView: View {
                                     .cancel()]
                                 )
                             }
-                            .foregroundColor(.red)
                         }
                     }
                 }
