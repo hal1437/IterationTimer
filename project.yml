@@ -27,6 +27,7 @@ targets:
           CUSTOM_BUILD_SETTING: my_debug_value
         release:
           CUSTOM_BUILD_SETTING: my_release_value
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     scheme:
       testTargets:
         - IterationTimerTests
