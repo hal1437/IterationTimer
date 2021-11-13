@@ -5,7 +5,12 @@ options:
   deploymentTarget: 14.0
   developmentLanguage: ja
   xcodeVersion: "12.5"
-  
+
+packages:
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk.git
+    majorVersion: 8.9.1
+
 settings:
   base:
     MARKETING_VERSION: 1.0.0
@@ -35,11 +40,17 @@ targets:
         - IterationTimerModelTests
         - IterationTimerUITests
       gatherCoverageData: true
+      commandLineArguments: 
+        "-FIRDebugEnabled": true
     dependencies:
       - target: IterationTimerCore
       - target: IterationTimerModel
       - target: IterationTimerUI
       - target: IterationTimerWidget
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
     entitlements:
       path: IterationTimer/IterationTimer.entitlements
       properties:
@@ -125,7 +136,7 @@ targets:
       - target: IterationTimerUI
 
 schemes:
-  IterationTimerWidgetExtension: # Scheme名は任意のものを
+  IterationTimerWidgetExtension:
     build:
       targets:
         IterationTimerWidget: all
