@@ -55,6 +55,9 @@ targets:
       path: IterationTimer/IterationTimer.entitlements
       properties:
         com.apple.security.application-groups: group.IterationTimer.timers
+    prebuildScripts:
+      - name: Upload dSYM
+        script: ${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run
 
   IterationTimerCore:
     platform: iOS
