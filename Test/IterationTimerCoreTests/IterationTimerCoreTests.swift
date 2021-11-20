@@ -9,8 +9,8 @@
 import XCTest
 
 class IterationTimerCoreTests: XCTestCase {
-
-    func testSum() throws {
-        XCTAssertEqual(sum(a: 1, b: 1), 2)
+    func testExample() throws {
+        // This is an example of a functional test case.
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 }
