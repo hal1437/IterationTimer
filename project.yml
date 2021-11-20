@@ -4,7 +4,7 @@ options:
   groupSortPosition: top
   deploymentTarget: 14.0
   developmentLanguage: ja
-  xcodeVersion: "12.5"
+  xcodeVersion: "13.0"
 
 packages:
   Firebase:
