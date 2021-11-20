@@ -9,8 +9,4 @@
 import XCTest
 
 class IterationTimerModelTests: XCTestCase {
-
-    func testSum() throws {
-        XCTAssertEqual(sum(a: 1, b: 1), 2)
-    }
 }
