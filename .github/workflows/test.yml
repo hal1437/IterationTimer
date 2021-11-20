@@ -1,0 +1,25 @@
+name: Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+concurrency: 
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-11
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup project
+      run: bundle install
+    - name: Install xcodegen
+      run: brew install xcodegen
+    - name: Run xcodegen
+      run: xcodegen generate
+    - name: Run tests
+      run: bundle exec fastlane test
