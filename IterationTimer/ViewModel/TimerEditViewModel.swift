@@ -56,7 +56,7 @@ class TimerEditViewModel: ObservableObject {
         self.mode = mode
 
         UNUserNotificationCenter.current().getNotificationSettings {
-            self.isEnableNotification = $0.notificationCenterSetting == .enabled
+            self.isEnableNotification = $0.authorizationStatus != .denied
         }
         
         let timer = $input.map(IterationTimer.init)
