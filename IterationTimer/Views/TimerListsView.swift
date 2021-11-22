@@ -8,6 +8,7 @@
 import SwiftUI
 import IterationTimerUI
 import IterationTimerModel
+import WidgetKit
 
 struct TimerListsView: View {
     
@@ -42,6 +43,9 @@ struct TimerListsView: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $viewModel.isTransitionAddTimer, onDismiss: viewModel.refreshTimers) {
             TimerEditView(mode: .add)
+        }
+        .onAppear {
+            WidgetCenter.shared.reloadAllTimelines()
         }
     }
 }
