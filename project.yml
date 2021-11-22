@@ -4,7 +4,7 @@ options:
   groupSortPosition: top
   deploymentTarget: 14.0
   developmentLanguage: ja
-  xcodeVersion: "12.5"
+  xcodeVersion: "13.0"
 
 packages:
   Firebase:
@@ -13,7 +13,7 @@ packages:
 
 settings:
   base:
-    MARKETING_VERSION: 1.0.0
+    MARKETING_VERSION: 1.0.1
     CURRENT_PROJECT_VERSION: 1
   config:
     debug:
@@ -55,6 +55,8 @@ targets:
       path: IterationTimer/IterationTimer.entitlements
       properties:
         com.apple.security.application-groups: group.IterationTimer.timers
+        aps-environment: development
+        com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)$(CFBundleIdentifier)
     postbuildScripts:
       - name: Upload dSYM
         script: ${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run
@@ -109,6 +111,7 @@ targets:
       path: IterationTimerWidget/IterationTimerWidget.entitlements
       properties:
         com.apple.security.application-groups: group.IterationTimer.timers
+        com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)com.hal1437.IterationTimer
 
   IterationTimerTests:
     platform: iOS

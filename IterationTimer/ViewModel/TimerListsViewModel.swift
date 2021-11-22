@@ -31,7 +31,9 @@ class TimerListsViewModel: ObservableObject {
             .store(in: &cancellables)
 
         $timers
-            .map { $0.map { _ in false } }
+            .map(\.count)
+            .removeDuplicates()
+            .map { [Bool](repeating: false, count: $0) }
             .assign(to: \.isTransitionEditTimer, on: self)
             .store(in: &cancellables)
     }
