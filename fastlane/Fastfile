@@ -36,4 +36,29 @@ platform :ios do
       scheme: "IterationTimer"
     )
   end
+
+  lane :build_for_appstore do
+    build_app(
+      scheme: "IterationTimer",
+      export_method: "app-store",
+    )
+  end
+
+  lane :upload_app do
+    pilot(
+      username: "halstroemeria@gmail.com",
+      ipa: "./IterationTimer.ipa",
+    )
+  end
+  
+  lane :deliver_app do
+    deliver(
+      build_number: sh("git rev-list HEAD | wc -l | tr -d ' '"),
+      username: "halstroemeria@gmail.com",
+      overwrite_screenshots: true,
+      submit_for_review: false,
+      skip_binary_upload: true,
+      force: true,
+    )
+  end
 end
