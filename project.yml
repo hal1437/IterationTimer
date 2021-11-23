@@ -61,6 +61,13 @@ targets:
         com.apple.security.application-groups: group.IterationTimer.timers
         aps-environment: development
         com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)$(CFBundleIdentifier)
+    postCompileScripts:
+      - name: Set app build version
+        script: |
+                if [ "${CONFIGURATION}" = "Release" ]; then
+                  buildNumber=$(git rev-list HEAD | wc -l | tr -d ' ')
+                  /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" "${PROJECT_DIR}/${INFOPLIST_FILE}"
+                fi
     postbuildScripts:
       - name: Upload dSYM
         script: ${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run
