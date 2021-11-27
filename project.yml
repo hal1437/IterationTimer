@@ -25,7 +25,6 @@ targets:
     platform: iOS
     sources: 
       - IterationTimer
-      - path: IterationTimerWidget/IterationTimerWidget.intentdefinition
     settings:
       configs:
         debug:
