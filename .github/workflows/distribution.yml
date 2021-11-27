@@ -32,5 +32,9 @@ jobs:
       run: bundle exec fastlane build_for_appstore
     - name: Upload to Testflight
       run: bundle exec fastlane upload_app
+      env:
+        ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        ASC_KEY_CONTENT: ${{ secrets.ASC_KEY_CONTENT }}        
     - name: Deliver app
       run: bundle exec fastlane deliver_app
