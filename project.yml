@@ -65,10 +65,9 @@ targets:
     postCompileScripts:
       - name: Set app build version
         script: |
-                if [ "${CONFIGURATION}" = "Release" ]; then
-                  buildNumber=$(git rev-list HEAD | wc -l | tr -d ' ')
-                  /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" "${TEMP_DIR}/Preprocessed-Info.plist"
-                fi
+                buildNumber=$(git rev-list HEAD | wc -l | tr -d ' ')
+                /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" "${TEMP_DIR}/Preprocessed-Info.plist"
+        basedOnDependencyAnalysis: false
     postbuildScripts:
       - name: Upload dSYM
         script: ${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run
