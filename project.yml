@@ -65,7 +65,7 @@ targets:
     preBuildScripts:
       - name: Set app build version
         script: |
-                buildNumber=$(git rev-list HEAD | wc -l | tr -d ' ')
+                buildNumber=$(git rev-list HEAD --count)
                 /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" "${TEMP_DIR}/Preprocessed-Info.plist"
         basedOnDependencyAnalysis: false
     postbuildScripts:
