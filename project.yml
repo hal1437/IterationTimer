@@ -26,6 +26,8 @@ targets:
     sources: 
       - IterationTimer
     settings:
+      base:
+        INFOPLIST_PREPROCESS: true
       configs:
         debug:
           CODE_SIGN_IDENTITY: Apple Development
@@ -65,7 +67,7 @@ targets:
         script: |
                 if [ "${CONFIGURATION}" = "Release" ]; then
                   buildNumber=$(git rev-list HEAD | wc -l | tr -d ' ')
-                  /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" "${PROJECT_DIR}/${INFOPLIST_FILE}"
+                  /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" "${TEMP_DIR}/Preprocessed-Info.plist"
                 fi
     postbuildScripts:
       - name: Upload dSYM
