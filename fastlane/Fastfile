@@ -74,6 +74,7 @@ platform :ios do
     )
 
     pilot(
+      build_number: sh("git rev-list HEAD | wc -l | tr -d ' '"),
       api_key: api_key,
       ipa: "./IterationTimer.ipa",
     )
