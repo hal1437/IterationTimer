@@ -110,6 +110,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.hal1437.IterationTimer.IterationTimerWidget
         INFOPLIST_FILE: IterationTimerWidget/Info.plist
+        INFOPLIST_PREPROCESS: true
       configs:
         debug:
           CODE_SIGN_IDENTITY: Apple Development
@@ -132,6 +133,12 @@ targets:
       properties:
         com.apple.security.application-groups: group.IterationTimer.timers
         com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)com.hal1437.IterationTimer
+    preBuildScripts:
+      - name: Set app build version
+        script: |
+                buildNumber=$(git rev-list HEAD --count)
+                /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" "${TEMP_DIR}/Preprocessed-Info.plist"
+        basedOnDependencyAnalysis: false
 
   IterationTimerTests:
     platform: iOS

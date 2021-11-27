@@ -9,6 +9,13 @@ concurrency:
   group: distribution-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+  ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+  ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+  ASC_KEY_CONTENT: ${{ secrets.ASC_KEY_CONTENT }}        
+
 jobs:
   distribution:
     runs-on: macos-11
@@ -24,12 +31,6 @@ jobs:
       run: xcodegen generate
     - name: Match AppStore
       run: bundle exec fastlane match_appstore
-      env:
-        MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-        MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
-        ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-        ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-        ASC_KEY_CONTENT: ${{ secrets.ASC_KEY_CONTENT }}        
     - name: Build for AppStore
       run: bundle exec fastlane build_for_appstore
     - name: Upload to Testflight
