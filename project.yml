@@ -62,7 +62,7 @@ targets:
         com.apple.security.application-groups: group.IterationTimer.timers
         aps-environment: development
         com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)$(CFBundleIdentifier)
-    postCompileScripts:
+    preBuildScripts:
       - name: Set app build version
         script: |
                 buildNumber=$(git rev-list HEAD | wc -l | tr -d ' ')
