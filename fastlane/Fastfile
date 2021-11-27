@@ -43,18 +43,24 @@ platform :ios do
       provider: "travis",
     )
 
+    api_key = app_store_connect_api_key(
+      key_id: ENV['ASC_KEY_ID'],
+      issuer_id: ENV['ASC_ISSUER_ID'],
+      key_content: ENV['ASC_KEY_CONTENT'],
+      in_house: false
+    )
+  
     username = ENV['USERNAME']
     personal_github_access_token = ENV["PERSONAL_GITHUB_ACCESS_TOKEN"]
     authorization_token_str = "#{username}:#{personal_github_access_token}"
-    git_basic_authorization = Base64.strict_encode64(authorization_token_str)
-
+    basic_authorization_token = Base64.strict_encode64(authorization_token_str)
+  
     match(
+      git_basic_authorization:basic_authorization_token,
+      api_key: api_key,
+      app_identifier: 'com.example.myapp',
       type: "appstore",
-      git_url: "git@github.com:hal1437/IterationTimer_Match.git",
-      app_identifier: ["com.hal1437.IterationTimer", "com.hal1437.IterationTimer.IterationTimerWidget"],
-      git_basic_authorization: git_basic_authorization,
-      username: "halstroemeria@gmail.com",
-      readonly: true,
+      readonly: is_ci
     )
   end
 
