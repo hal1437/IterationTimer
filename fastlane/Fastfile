@@ -95,6 +95,7 @@ platform :ios do
       skip_binary_upload: true,
       skip_screenshots: is_ci,
       force: true,
+      precheck_include_in_app_purchases: false,
     )
   end
 end
