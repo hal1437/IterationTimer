@@ -38,10 +38,21 @@ platform :ios do
   end
 
   lane :match_appstore do
+    setup_ci(
+      force: true,
+      provider: "travis",
+    )
+
+    username = ENV['USERNAME']
+    personal_github_access_token = ENV["PERSONAL_GITHUB_ACCESS_TOKEN"]
+    authorization_token_str = "#{username}:#{personal_github_access_token}"
+    git_basic_authorization = Base64.strict_encode64(authorization_token_str)
+
     match(
       type: "appstore",
       git_url: "git@github.com:hal1437/IterationTimer_Match.git",
       app_identifier: ["com.hal1437.IterationTimer", "com.hal1437.IterationTimer.IterationTimerWidget"],
+      git_basic_authorization: git_basic_authorization,
       username: "halstroemeria@gmail.com",
       readonly: true,
     )
