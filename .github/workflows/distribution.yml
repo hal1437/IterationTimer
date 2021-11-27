@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  distribution:
     runs-on: macos-11
     steps:
     - uses: actions/checkout@v2
@@ -20,6 +20,10 @@ jobs:
       run: brew install xcodegen
     - name: Run xcodegen
       run: xcodegen generate
+    - name: Match AppStore
+      run: bundle exec fastlane match_appstore
+      env:
+        MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
     - name: Build for AppStore
       run: bundle exec fastlane build_for_appstore
     - name: Upload to Testflight
