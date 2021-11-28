@@ -23,7 +23,7 @@ public struct IterationTimerRepository: IterationTimerRepositoryProtocol {
     }
 
     public var getTimers: [IterationTimer] {
-        guard let json = dataStore.get(forKey: UserDefaultsKey.iterationTimer.rawValue),
+        guard let json = dataStore.get(forKey: DataStoreKey.iterationTimer.rawValue),
               let data = json.data(using: .utf8),
               let array = try? JSONDecoder().decode([IterationTimer].self, from: data) else { return [] }
         
@@ -48,6 +48,6 @@ public struct IterationTimerRepository: IterationTimerRepositoryProtocol {
         let json = try! JSONEncoder().encode(array)
         let string = String(data: json, encoding: .utf8)!
         
-        dataStore.set(value: string, forKey: UserDefaultsKey.iterationTimer.rawValue)
+        dataStore.set(value: string, forKey: DataStoreKey.iterationTimer.rawValue)
     }
 }

@@ -37,7 +37,7 @@ struct TimerEditView: View {
     
     public init(mode: Mode) {
         self.mode = mode
-        self.viewModel = TimerEditViewModel(repository: IterationTimerRepository(dataStore: NSUbiquitousKeyValueStore.default), mode: mode)
+        self.viewModel = TimerEditViewModel(repository: IterationTimerRepository(dataStore: DataStoreSynchronizer(local: UserDefaults.appGroups, remote: NSUbiquitousKeyValueStore.default)), mode: mode)
     }
 
     var body: some View {

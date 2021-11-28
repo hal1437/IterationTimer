@@ -31,10 +31,12 @@ targets:
       configs:
         debug:
           CODE_SIGN_IDENTITY: Apple Development
+          CODE_SIGN_ENTITLEMENTS: IterationTimer/IterationTimer.entitlements
           PROVISIONING_PROFILE_SPECIFIER: com.hal1437.IterationTimer
           DEVELOPMENT_TEAM: JTT4T82QAY
         release:
           CODE_SIGN_IDENTITY: iPhone Distribution
+          CODE_SIGN_ENTITLEMENTS: IterationTimer/IterationTimer.entitlements
           PROVISIONING_PROFILE_SPECIFIER: match AppStore com.hal1437.IterationTimer
           DEVELOPMENT_TEAM: JTT4T82QAY
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -59,7 +61,7 @@ targets:
     entitlements:
       path: IterationTimer/IterationTimer.entitlements
       properties:
-        com.apple.security.application-groups: group.IterationTimer.timers
+        com.apple.security.application-groups: [group.IterationTimer.timers]
         aps-environment: development
         com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)$(CFBundleIdentifier)
     preBuildScripts:
@@ -131,7 +133,7 @@ targets:
     entitlements:
       path: IterationTimerWidget/IterationTimerWidget.entitlements
       properties:
-        com.apple.security.application-groups: group.IterationTimer.timers
+        com.apple.security.application-groups: [group.IterationTimer.timers]
         com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)com.hal1437.IterationTimer
     preBuildScripts:
       - name: Set app build version

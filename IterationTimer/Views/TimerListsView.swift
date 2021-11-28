@@ -12,7 +12,7 @@ import WidgetKit
 
 struct TimerListsView: View {
     
-    @ObservedObject var viewModel = TimerListsViewModel(repository: IterationTimerRepository(dataStore: NSUbiquitousKeyValueStore.default))
+    @ObservedObject var viewModel = TimerListsViewModel(repository: IterationTimerRepository(dataStore: DataStoreSynchronizer(local: UserDefaults.appGroups, remote: NSUbiquitousKeyValueStore.default)))
     
     var body: some View {
         NavigationView {
