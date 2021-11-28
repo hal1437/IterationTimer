@@ -1,0 +1,38 @@
+name: Distribution
+
+on:
+  push:
+    branches: [main]
+
+concurrency: 
+  group: distribution-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+  ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+  ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+  ASC_KEY_CONTENT: ${{ secrets.ASC_KEY_CONTENT }}        
+
+jobs:
+  distribution:
+    runs-on: macos-11
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # コミット数をビルドナンバーとしているため shallow clone を無効化
+    - name: bundle install
+      run: bundle install
+    - name: Install xcodegen
+      run: brew install xcodegen
+    - name: Run xcodegen
+      run: xcodegen generate
+    - name: Match AppStore
+      run: bundle exec fastlane match_appstore
+    - name: Build for AppStore
+      run: bundle exec fastlane build_for_appstore
+    - name: Upload to Testflight
+      run: bundle exec fastlane upload_app
+    - name: Deliver app
+      run: bundle exec fastlane deliver_app
