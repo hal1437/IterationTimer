@@ -1,3 +1,4 @@
+[![Distribution](https://github.com/hal1437/IterationTimer/actions/workflows/distribution.yml/badge.svg?branch=main)](https://github.com/hal1437/IterationTimer/actions/workflows/distribution.yml)
 [![Test](https://github.com/hal1437/IterationTimer/actions/workflows/test.yml/badge.svg)](https://github.com/hal1437/IterationTimer/actions/workflows/test.yml)
 
 # ⏳ IterationTimer
