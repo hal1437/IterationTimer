@@ -2,8 +2,7 @@ name: Distribution
 
 on:
   push:
-    branches: [feature/AppStoreDeliver]
-    # branches: [main]
+    branches: [main]
 
 concurrency: 
   group: distribution-${{ github.ref }}
