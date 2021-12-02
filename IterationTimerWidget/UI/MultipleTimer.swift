@@ -14,19 +14,25 @@ struct MultipleTimer: View {
     @Environment(\.widgetFamily) var family
     @ObservedObject var viewModel = MultipleTimerViewModel(repository: IterationTimerRepository(dataStore: DataStoreSynchronizer(local: UserDefaults.appGroups, remote: NSUbiquitousKeyValueStore.default)))
     private let drawable = Drawable()
+    private let spacing = CGFloat(8)
     
     var body: some View {
-        VStack {
-            ForEach(viewModel.timers.prefix(family.counts)) { timer in
-                InstantTimer(drawable: InstantDrawable(timer: timer, date: Date()))
+        GeometryReader { geometry in
+            LazyVGrid(columns: Array(repeating: GridItem(), count: family.contents.columns), spacing: spacing) {
+                if viewModel.timers.isEmpty {
+                    Text("タイマーがありません")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                } else {
+                    ForEach(viewModel.timers.prefix(family.contents.rows * family.contents.columns)) { timer in
+                        let height = CGFloat((Int(geometry.size.height) - Int(spacing) * (family.contents.rows - 1)) / family.contents.rows)
+                        InstantTimer(drawable: InstantDrawable(timer: timer, date: Date()))
+                            .frame(width: .infinity, height: height, alignment: .center)
+                    }
+                    Spacer()
+                }
             }
-            
-            if viewModel.timers.isEmpty {
-                Text("タイマーがありません")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
-        }.padding(.horizontal, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+        }.padding(10)
     }
 }
 
@@ -62,12 +68,14 @@ private struct InstantDrawable: InstantTimerDrawable {
 }
 
 private extension WidgetFamily {
-    var counts: Int {
+    var contents: (rows: Int, columns: Int) {
         switch self {
-        case .systemSmall, .systemMedium: return 3
-        case .systemLarge: return 8
+        case .systemSmall: return (2, 1)
+        case .systemMedium: return (2, 2)
+        case .systemLarge: return (5, 2)
+        case .systemExtraLarge:  return (4, 4)
         @unknown default:
-            return 8
+            return (2, 1)
         }
     }
 }
