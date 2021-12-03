@@ -50,4 +50,11 @@ class TimerListsViewModel: ObservableObject {
     func refreshTimers() {
         timers = repository.getTimers
     }
+    
+    func handle(url: URL) {
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        guard let uuidString = components.queryItems?.first(where: { $0.name == "id" })?.value,
+              let index = timers.firstIndex(where: { $0.id == UUID(uuidString: uuidString) } ) else { return }
+        isTransitionEditTimer[index] = true
+    }
 }

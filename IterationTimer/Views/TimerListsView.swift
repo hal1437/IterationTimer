@@ -47,5 +47,8 @@ struct TimerListsView: View {
         .onAppear {
             WidgetCenter.shared.reloadAllTimelines()
         }
+        .onOpenURL(perform: {
+            viewModel.handle(url: $0)
+        })
     }
 }

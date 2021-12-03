@@ -26,8 +26,11 @@ struct MultipleTimer: View {
                 } else {
                     ForEach(viewModel.timers.prefix(family.contents.rows * family.contents.columns)) { timer in
                         let height = CGFloat((Int(geometry.size.height) - Int(spacing) * (family.contents.rows - 1)) / family.contents.rows)
-                        InstantTimer(drawable: InstantDrawable(timer: timer, date: Date()))
-                            .frame(width: .infinity, height: height, alignment: .center)
+                        
+                        Link(destination: URL(string: "com.hal1437.IterationTimer://?id=\(timer.id)")!, label: {
+                            InstantTimer(drawable: InstantDrawable(timer: timer, date: Date()))
+                                .frame(width: nil, height: height, alignment: .center)
+                        })
                     }
                     Spacer()
                 }
