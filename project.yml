@@ -139,6 +139,8 @@ targets:
     sources: Test/IterationTimerTests
     dependencies:
       - target: IterationTimer
+    settings:
+      TEST_HOST: ""
 
   IterationTimerCoreTests:
     platform: iOS
