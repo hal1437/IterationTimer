@@ -1,6 +1,6 @@
 //
-//  IterationTimerWidget.swift
-//  IterationTimerWidget
+//  TimerListWidget.swift
+//  TimerListWidget
 //
 //  Created by hal1437 on 2021/06/09.
 //
@@ -39,7 +39,7 @@ struct SimpleEntry: TimelineEntry {
     let configuration: ConfigurationIntent
 }
 
-struct IterationTimerWidgetEntryView : View {
+struct TimerListWidgetEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
@@ -48,7 +48,7 @@ struct IterationTimerWidgetEntryView : View {
 }
 
 @main
-struct IterationTimerWidget: Widget {
+struct TimerListWidget: Widget {
     let kind = IterationTimerKind.list.rawValue
 
     var body: some WidgetConfiguration {
@@ -61,16 +61,16 @@ struct IterationTimerWidget: Widget {
     }
 }
 
-struct IterationTimerWidget_Previews: PreviewProvider {
+struct TimerListWidget_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            IterationTimerWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
+            TimerListWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
             
-//            IterationTimerWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
+//            TimerListWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
 //                .previewContext(WidgetPreviewContext(family: .systemMedium))
 //
-//            IterationTimerWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
+//            TimerListWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
 //                .previewContext(WidgetPreviewContext(family: .systemLarge))
         }
     }
