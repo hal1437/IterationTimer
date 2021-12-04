@@ -40,15 +40,6 @@ targets:
           PROVISIONING_PROFILE_SPECIFIER: match AppStore com.hal1437.IterationTimer
           DEVELOPMENT_TEAM: JTT4T82QAY
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-    scheme:
-      testTargets:
-        - IterationTimerTests
-        - IterationTimerCoreTests
-        - IterationTimerModelTests
-        - IterationTimerUITests
-      gatherCoverageData: true
-      commandLineArguments: 
-        "-FIRDebugEnabled": true
     dependencies:
       - target: IterationTimerCore
       - target: IterationTimerModel
@@ -171,6 +162,26 @@ targets:
       - target: IterationTimerUI
 
 schemes:
+  IterationTimer: 
+    build:
+      targets:
+        IterationTimerWidget: all
+        IterationTimer: all
+    run: 
+      commandLineArguments: 
+        "-FIRDebugEnabled": true
+    test:
+      gatherCoverageData: true
+      coverageTargets:
+        - IterationTimer
+        - IterationTimerCore
+        - IterationTimerModel
+        - IterationTimerUI
+      targets:
+        - IterationTimerTests
+        - IterationTimerCoreTests
+        - IterationTimerModelTests
+        - IterationTimerUITests
   IterationTimerWidgetExtension:
     build:
       targets:
@@ -190,12 +201,3 @@ schemes:
         - variable: _XCWidgetFamily
           value: medium
           isEnabled: false
-    test:
-      config: Debug
-    profile:
-      config: Release
-      askForAppToLaunch: true
-    analyze:
-      config: Debug
-    archive:
-      config: Release
