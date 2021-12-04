@@ -8,7 +8,5 @@
 import Foundation
 
 public extension UserDefaults {
-    static var appGroups: UserDefaults {
-        return UserDefaults(suiteName: "group.IterationTimer.timers")!
-    }
+    static var appGroups: UserDefaults = UserDefaults(suiteName: "group.IterationTimer.timers")!
 }
