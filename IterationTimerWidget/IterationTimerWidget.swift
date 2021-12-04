@@ -49,14 +49,15 @@ struct IterationTimerWidgetEntryView : View {
 
 @main
 struct IterationTimerWidget: Widget {
-    let kind = IterationTimerKind.IterationTimerWidget.rawValue
+    let kind = IterationTimerKind.list.rawValue
 
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
             MultipleTimer()
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("MultipleTimerWidgetName")
+        .description("MultipleTimerWidgetDescription")
+        .supportedFamilies([.systemMedium, .systemLarge, .systemExtraLarge])
     }
 }
 
