@@ -5,5 +5,5 @@
   Created by hal1437 on 2021/12/04.
   
 */
-"MultipleTimerWidgetName"="一覧";
-"MultipleTimerWidgetDescription"="設定済みのタイマーの一覧を表示します。";
+"TimerListWidgetName"="一覧";
+"TimerListWidgetDescription"="設定済みのタイマーの一覧を表示します。";

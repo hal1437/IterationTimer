@@ -55,8 +55,8 @@ struct TimerListWidget: Widget {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
             MultipleTimer()
         }
-        .configurationDisplayName("MultipleTimerWidgetName")
-        .description("MultipleTimerWidgetDescription")
+        .configurationDisplayName("TimerListWidgetName")
+        .description("TimerListWidgetDescription")
         .supportedFamilies([.systemMedium, .systemLarge, .systemExtraLarge])
     }
 }
