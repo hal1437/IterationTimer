@@ -39,6 +39,8 @@ public struct InstantTimer: View {
 
                 CustomProgressView(progress: CGFloat(drawable.currentStamina) / CGFloat(drawable.maxStamina))
                 
+                Spacer(minLength: 0)
+
                 HStack {
                     Spacer()
                     if drawable.currentStamina >= drawable.maxStamina {

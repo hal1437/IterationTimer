@@ -8,5 +8,5 @@
 import Foundation
 
 enum IterationTimerKind: String {
-    case IterationTimerWidget
+    case list
 }
