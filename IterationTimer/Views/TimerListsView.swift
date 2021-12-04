@@ -16,28 +16,37 @@ struct TimerListsView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))]) {
-                    ForEach(viewModel.timers) { timer in
-                        if let index = viewModel.timers.firstIndex(where: { $0.id == timer.id } ) {
-                            TimerCard(drawable: IterationTimerDrawable(timer: timer, date: Date())).padding()
-                                .onTapGesture {
-                                    viewModel.transitonEditView(timer: timer)
-                                }
-                                .sheet(isPresented: $viewModel.isTransitionEditTimer[index], onDismiss: viewModel.refreshTimers) {
-                                    TimerEditView(mode: .edit(timer: timer))
-                                }
+            ScrollViewReader { scrollProxy in
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))]) {
+                        ForEach(viewModel.timers) { timer in
+                            if let index = viewModel.timers.firstIndex(where: { $0.id == timer.id } ) {
+                                TimerCard(drawable: IterationTimerDrawable(timer: timer, date: Date())).padding()
+                                    .onTapGesture {
+                                        viewModel.transitonEditView(timer: timer)
+                                    }
+                                    .sheet(isPresented: $viewModel.isTransitionEditTimer[index], onDismiss: viewModel.refreshTimers) {
+                                        TimerEditView(mode: .edit(timer: timer))
+                                    }
+                                    .id(timer.id)
+                            }
                         }
                     }
                 }
-            }
-            .navigationTitle("Timers")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: viewModel.transitonAddView) {
-                        Image(systemName: "plus")
+                .navigationTitle("Timers")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: viewModel.transitonAddView) {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
+                .onOpenURL(perform: { url in
+                    withAnimation {
+                        scrollProxy.scrollTo(url.uuid, anchor: .bottom)
+                    }
+                    viewModel.handle(url: url)
+                })
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
@@ -47,8 +56,12 @@ struct TimerListsView: View {
         .onAppear {
             WidgetCenter.shared.reloadAllTimelines()
         }
-        .onOpenURL(perform: {
-            viewModel.handle(url: $0)
-        })
+    }
+}
+
+extension URL {
+    var uuid: UUID {
+        let components = URLComponents(url: self, resolvingAgainstBaseURL: false)!
+        return UUID(uuidString: components.queryItems!.first(where: { $0.name == "id" })!.value!)!
     }
 }
