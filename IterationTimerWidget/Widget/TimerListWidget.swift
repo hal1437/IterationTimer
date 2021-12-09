@@ -10,13 +10,13 @@ import SwiftUI
 import Intents
 import IterationTimerUI
 
-struct Provider: IntentTimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationIntent())
+struct TimerListProvider: IntentTimelineProvider {
+    func placeholder(in context: Context) -> TimerListSimpleEntry {
+        TimerListSimpleEntry(date: Date(), configuration: ConfigurationIntent())
     }
 
-    func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), configuration: configuration)
+    func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (TimerListSimpleEntry) -> ()) {
+        let entry = TimerListSimpleEntry(date: Date(), configuration: configuration)
         completion(entry)
     }
 
@@ -24,9 +24,9 @@ struct Provider: IntentTimelineProvider {
         let currentDate = Date()
         let entries = (0 ..< 6)
             .map { $0 * 15 }
-            .map { minuteOffset -> SimpleEntry in
+            .map { minuteOffset -> TimerListSimpleEntry in
                 let entryDate = Calendar.current.date(byAdding: .minute, value: minuteOffset, to: currentDate)!
-                return SimpleEntry(date: entryDate, configuration: configuration)
+                return TimerListSimpleEntry(date: entryDate, configuration: configuration)
             }
 
         let timeline = Timeline(entries: entries, policy: .atEnd)
@@ -34,13 +34,13 @@ struct Provider: IntentTimelineProvider {
     }
 }
 
-struct SimpleEntry: TimelineEntry {
+struct TimerListSimpleEntry: TimelineEntry {
     let date: Date
     let configuration: ConfigurationIntent
 }
 
 struct TimerListWidgetEntryView : View {
-    var entry: Provider.Entry
+    var entry: TimerListProvider.Entry
 
     var body: some View {
         Text(entry.date, style: .time)
@@ -51,7 +51,7 @@ struct TimerListWidget: Widget {
     let kind = IterationTimerKind.list.rawValue
 
     var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
+        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: TimerListProvider()) { entry in
             MultipleTimer()
         }
         .configurationDisplayName("TimerListWidgetName")
@@ -63,13 +63,13 @@ struct TimerListWidget: Widget {
 struct TimerListWidget_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            TimerListWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
+            TimerListWidgetEntryView(entry: TimerListSimpleEntry(date: Date(), configuration: ConfigurationIntent()))
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
             
-//            TimerListWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
+//            TimerListWidgetEntryView(entry: TimerListSimpleEntry(date: Date(), configuration: ConfigurationIntent()))
 //                .previewContext(WidgetPreviewContext(family: .systemMedium))
 //
-//            TimerListWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
+//            TimerListWidgetEntryView(entry: TimerListSimpleEntry(date: Date(), configuration: ConfigurationIntent()))
 //                .previewContext(WidgetPreviewContext(family: .systemLarge))
         }
     }
