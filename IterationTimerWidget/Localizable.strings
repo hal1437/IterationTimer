@@ -7,3 +7,5 @@
 */
 "TimerListWidgetName"="一覧";
 "TimerListWidgetDescription"="設定済みのタイマーの一覧を表示します。";
+"RecentTimerWidgetName"="最近";
+"RecentTimerWidgetDescription"="最も残り時間の少ないタイマーを表示します。";

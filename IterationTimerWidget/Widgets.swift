@@ -11,5 +11,6 @@ import SwiftUI
 struct Widgets: WidgetBundle {
    var body: some Widget {
        TimerListWidget()
+       RecentTimerWidget()
    }
 }
