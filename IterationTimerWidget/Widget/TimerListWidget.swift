@@ -47,7 +47,6 @@ struct TimerListWidgetEntryView : View {
     }
 }
 
-@main
 struct TimerListWidget: Widget {
     let kind = IterationTimerKind.list.rawValue
 
