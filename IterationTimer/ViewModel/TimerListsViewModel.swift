@@ -43,8 +43,9 @@ class TimerListsViewModel: ObservableObject {
     }
 
     func transitonEditView(timer: IterationTimer) {
-        guard let index = timers.firstIndex(where: { $0.id == timer.id } )  else { return }
-        isTransitionEditTimer[index] = true
+        isTransitionEditTimer = timers.map {
+            $0.id == timer.id
+        }
     }
     
     func refreshTimers() {
@@ -53,8 +54,10 @@ class TimerListsViewModel: ObservableObject {
     
     func handle(url: URL) {
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-        guard let uuidString = components.queryItems?.first(where: { $0.name == "id" })?.value,
-              let index = timers.firstIndex(where: { $0.id == UUID(uuidString: uuidString) } ) else { return }
-        isTransitionEditTimer[index] = true
+        guard let uuidString = components.queryItems?.first(where: { $0.name == "id" })?.value else { return }
+        
+        isTransitionEditTimer = timers.map {
+            $0.id == UUID(uuidString: uuidString)
+        }
     }
 }
