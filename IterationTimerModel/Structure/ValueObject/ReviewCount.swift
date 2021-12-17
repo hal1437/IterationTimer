@@ -17,7 +17,7 @@ struct ReviewCount {
 
         guard let countString = dataStore.get(forKey: DataStoreKey.reviewCount.rawValue),
               let count = Int(countString) else {
-            self.count = 0
+            self.count = ReviewCount.reviewCountCoolTime
             return
         }
         
