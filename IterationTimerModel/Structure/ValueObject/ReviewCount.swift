@@ -6,7 +6,7 @@
 //
 
 struct ReviewCount {
-    static let reviewCountCoolTime = 3
+    static let reviewCountCoolTime = 5 // レビューを表示するのに必要なdecrementの回数
     var count: Int
     let dataStore: DataStore
 

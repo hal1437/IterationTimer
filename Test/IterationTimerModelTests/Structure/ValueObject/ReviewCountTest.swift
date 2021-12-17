@@ -14,28 +14,28 @@ class ReviewCountTest: XCTestCase {
 
     func testInitialize() throws {
         let reviewCount = ReviewCount(dataStore: userDefaults)
-        XCTAssertEqual(reviewCount.count, 3)
+        XCTAssertEqual(reviewCount.count, ReviewCount.reviewCountCoolTime)
+        XCTAssertEqual(reviewCount.requireReview, false)
     }
 
     func testDecrement() throws {
         var reviewCount = ReviewCount(dataStore: userDefaults)
+        
+        (0..<ReviewCount.reviewCountCoolTime).forEach { i in
+            reviewCount.decrement()
+            XCTAssertEqual(reviewCount.count, ReviewCount.reviewCountCoolTime - i - 1)
+        }
         reviewCount.decrement()
-        XCTAssertEqual(reviewCount.count, 2)
-        reviewCount.decrement()
-        XCTAssertEqual(reviewCount.count, 1)
-        reviewCount.decrement()
-        XCTAssertEqual(reviewCount.count, 0)
-        reviewCount.decrement()
-        XCTAssertEqual(reviewCount.count, 3)
+        XCTAssertEqual(reviewCount.count, ReviewCount.reviewCountCoolTime, "0の際にdecrementした場合はreviewCountCoolTimeとする")
     }
 
     func testRequireReview() throws {
         var reviewCount = ReviewCount(dataStore: userDefaults)
-        XCTAssertEqual(reviewCount.requireReview, false)
-        reviewCount.decrement()
-        XCTAssertEqual(reviewCount.requireReview, false)
-        reviewCount.decrement()
-        XCTAssertEqual(reviewCount.requireReview, false)
+        
+        (0..<ReviewCount.reviewCountCoolTime - 1).forEach { _ in
+            reviewCount.decrement()
+            XCTAssertEqual(reviewCount.requireReview, false)
+        }
         reviewCount.decrement()
         XCTAssertEqual(reviewCount.requireReview, true)
         reviewCount.decrement()
