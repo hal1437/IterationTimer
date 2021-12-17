@@ -48,6 +48,18 @@ class ReviewCountTest: XCTestCase {
         XCTAssertEqual(reviewCount.count, 1)
     }
 
+    func testInitHigher() throws {
+        userDefaults.set("\(ReviewCount.reviewCountCoolTime + 1)", forKey: DataStoreKey.reviewCount.rawValue)
+        let reviewCount = ReviewCount(dataStore: userDefaults)
+        XCTAssertEqual(reviewCount.count, ReviewCount.reviewCountCoolTime)
+    }
+
+    func testInitLower() throws {
+        userDefaults.set("\(-1)", forKey: DataStoreKey.reviewCount.rawValue)
+        let reviewCount = ReviewCount(dataStore: userDefaults)
+        XCTAssertEqual(reviewCount.count, 0)
+    }
+    
     override func tearDown() {
         userDefaults.removePersistentDomain(forName: "ReviewCountTest")
         super.tearDown()
