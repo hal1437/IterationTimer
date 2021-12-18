@@ -46,14 +46,16 @@ class TimerEditViewModel: ObservableObject {
                                since: Date())
     
     private var mode: TimerEditView.Mode
+    private let storeReview: StoreReviewable
 
     private var cancellables: Set<AnyCancellable> = []
     private var repository: IterationTimerRepositoryProtocol
     private var oldTimer: IterationTimer?
 
-    init(repository: IterationTimerRepositoryProtocol, mode: TimerEditView.Mode) {
+    init(repository: IterationTimerRepositoryProtocol, mode: TimerEditView.Mode, storeReview: StoreReviewable) {
         self.repository = repository
         self.mode = mode
+        self.storeReview = storeReview
 
         UNUserNotificationCenter.current().getNotificationSettings {
             self.isEnableNotification = $0.authorizationStatus != .denied
@@ -111,6 +113,7 @@ class TimerEditViewModel: ObservableObject {
         } else {
             timer.unregisterNotification()
         }
+        storeReview.requestReviewIfNeeded()
     }
 
     func delete() {

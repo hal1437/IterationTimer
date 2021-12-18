@@ -61,8 +61,6 @@ class DataStoreSynchronizerTest: XCTestCase {
         XCTAssertEqual(local .result[.updateDate]!.latest    , "3"  , "新しい値で上書きされていること")
         XCTAssertEqual(remote.result[.iterationTimer]!.latest, "new", "新しい値で上書きされていること")
         XCTAssertEqual(remote.result[.updateDate]!.latest    , "3"  , "新しい値で上書きされていること")
-        // 現状はiterationTimerしかKeyが無いが、今後増えた場合は以下のテストを有効化する。
-//        XCTAssertEqual(local.result[<#newProperty#>]!.latest, remote.result[<#newProperty#>]!.latest, "setに関係のない値でもLocalの方が新しければuploadされていること")
     }
 
     func testGetRemoteNewer() throws {
@@ -78,8 +76,6 @@ class DataStoreSynchronizerTest: XCTestCase {
         XCTAssertEqual(local .result[.updateDate]!.latest    , "3"  , "新しい値で上書きされていること")
         XCTAssertEqual(remote.result[.iterationTimer]!.latest, "new", "新しい値で上書きされていること")
         XCTAssertEqual(remote.result[.updateDate]!.latest    , "3"  , "新しい値で上書きされていること")
-        // 現状はiterationTimerしかKeyが無いが、今後増えた場合は以下のテストを有効化する。
-//        XCTAssertEqual(remote.result[<#newProperty#>]!.latest, .result[<#newProperty#>]!.latest, "setに関係のない値でもRemoteの方が新しければdownloadされていること")
     }
 }
 
@@ -89,7 +85,7 @@ class SynchronizerMockDataStore: MockDataStore {
     init(initial: [DataStoreKey: String?]) {
         
         var result = [DataStoreKey: (initial: String?, latest: String?)]()
-        DataStoreKey.allCases.forEach {
+        [.updateDate, .iterationTimer].forEach {
             result[$0] = (initial: initial[$0]!, latest: nil)
         }
         self.result = result
@@ -98,11 +94,11 @@ class SynchronizerMockDataStore: MockDataStore {
 
         self.onGet = { forKey in
             let key = DataStoreKey(rawValue: forKey)!
-            return self.result[key]!.latest ?? self.result[key]?.initial
+            return self.result[key]?.latest ?? self.result[key]?.initial
         }
         self.onSet = { (value, forKey) in
             let key = DataStoreKey(rawValue: forKey)!
-            self.result[key]!.latest = value
+            self.result[key]?.latest = value
         }
     }
 }
