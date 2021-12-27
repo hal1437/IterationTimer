@@ -54,7 +54,7 @@ private struct Drawable: InstantTimerDrawable {
     var remainingFull =  TimeInterval(50*60)
 }
 
-private struct InstantDrawable: InstantTimerDrawable {
+struct InstantDrawable: InstantTimerDrawable {
     private var timer: IterationTimer
     private var date: Date
     init(timer: IterationTimer, date: Date) {

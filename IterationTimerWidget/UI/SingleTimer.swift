@@ -6,69 +6,83 @@
 //
 
 import IterationTimerCore
+import IterationTimerModel
 import IterationTimerUI
 import SwiftUI
 import WidgetKit
 
 struct SingleTimer: View {
     
-    let drawable: InstantTimerDrawable
-    let percent: CGFloat
-    
+    let drawable: InstantTimerDrawable?
+
+    init() {
+        let dataStore = DataStoreSynchronizer(local: UserDefaults.appGroups, remote: NSUbiquitousKeyValueStore.default)
+        let repository = IterationTimerRepository(dataStore: dataStore)
+        if let timer = repository.recentTimer {
+            self.drawable = InstantDrawable(timer: timer, date: Date())
+        } else {
+            self.drawable = nil
+        }
+    }
+
     init(drawable: InstantTimerDrawable) {
         self.drawable = drawable
-        percent = CGFloat(min(drawable.currentStamina, drawable.maxStamina)) / CGFloat(drawable.maxStamina)
     }
     
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            LinearGradient(gradient: Gradient(stops: [Gradient.Stop(color: Color.green, location: 0.0),
-                                                      Gradient.Stop(color: Color.green, location: percent),
-                                                      Gradient.Stop(color: Color(.systemGray3), location: percent),
-                                                      Gradient.Stop(color: Color(.systemGray3), location: 1.0)]),
-                           startPoint: .leading,
-                           endPoint: .trailing)
-                .opacity(0.6)
+        if let drawable = drawable {
+            let percent = CGFloat(min(drawable.currentStamina, drawable.maxStamina)) / CGFloat(drawable.maxStamina)
+            ZStack(alignment: .topTrailing) {
+                LinearGradient(gradient: Gradient(stops: [Gradient.Stop(color: Color.green, location: 0.0),
+                                                          Gradient.Stop(color: Color.green, location: percent),
+                                                          Gradient.Stop(color: Color(.systemGray3), location: percent),
+                                                          Gradient.Stop(color: Color(.systemGray3), location: 1.0)]),
+                               startPoint: .leading,
+                               endPoint: .trailing)
+                    .opacity(0.6)
 
-            GeometryReader { proxy in
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text(drawable.title)
-                            .font(.caption)
-                            .lineLimit(1)
+                GeometryReader { proxy in
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text(drawable.title)
+                                .font(.caption)
+                                .lineLimit(1)
+                            
+                            Spacer().frame(width: 20)
+                        }
                         
-                        Spacer().frame(width: 20)
-                    }
-                    
-                    VStack(alignment: .leading,
-                           spacing: 0) {
-                        Text("\(min(drawable.currentStamina, drawable.maxStamina))")
-                            .font(.largeTitle)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.01)
+                        VStack(alignment: .leading,
+                               spacing: 0) {
+                            Text("\(min(drawable.currentStamina, drawable.maxStamina))")
+                                .font(.largeTitle)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.01)
 
-                        Text(" / \(drawable.maxStamina)")
-                            .font(.callout)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.01)
-                    }
-                    
-                    Spacer()
+                            Text(" / \(drawable.maxStamina)")
+                                .font(.callout)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.01)
+                        }
+                        
+                        Spacer()
 
-                    if drawable.currentStamina >= drawable.maxStamina {
-                        Text("回復済み").font(.body)
-                    } else {
-                        Text(drawable.remainingFull.toFormatString()).font(.body)
+                        if drawable.currentStamina >= drawable.maxStamina {
+                            Text("回復済み").font(.body)
+                        } else {
+                            Text(drawable.remainingFull.toFormatString()).font(.body)
+                        }
                     }
-                }
-            }.padding()
-            
-            Image(uiImage: drawable.category.image)
-                .renderingMode(.template)
-                .foregroundColor(Color(.label))
-                .padding()
+                }.padding()
+                
+                Image(uiImage: drawable.category.image)
+                    .renderingMode(.template)
+                    .foregroundColor(Color(.label))
+                    .padding()
+            }
+            .background(Color(.systemGray6))
+        } else {
+            Text("タイマーがありません").font(.body)
         }
-        .background(Color(.systemGray6))
     }
 }
 
