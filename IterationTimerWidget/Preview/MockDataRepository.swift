@@ -27,7 +27,7 @@ class MockTimerRepository: IterationTimerRepositoryProtocol {
                                                                   divideStamina: 40,
                                                                   duration: 480,
                                                                   notification: .never),
-                                             since: Date(timeIntervalSince1970: 0)),
+                                             since: Date()),
                                        .init(currentStamina: 200,
                                              settings: try! .init(title: "Sample2",
                                                                   category: .game,
@@ -35,7 +35,7 @@ class MockTimerRepository: IterationTimerRepositoryProtocol {
                                                                   divideStamina: 40,
                                                                   duration: 300,
                                                                   notification: .never),
-                                             since: Date(timeIntervalSince1970: 0)),
+                                             since: Date()),
                                       ]
     var recentTimer: IterationTimer? { getTimers[0] }
     
