@@ -10,4 +10,5 @@ import WidgetKit
 struct IntentTimelineEntry: TimelineEntry {
     let date: Date
     let configuration: ConfigurationIntent
+    let relevance: TimelineEntryRelevance?
 }
