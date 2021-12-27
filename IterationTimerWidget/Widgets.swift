@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct Widgets: WidgetBundle {
    var body: some Widget {
-       TimerListWidget()
        RecentTimerWidget()
+       TimerListWidget()
    }
 }
