@@ -1,6 +1,6 @@
 //
 //  InstantTimer.swift
-//  IterationTimerUI
+//  IterationTimerWidget
 //
 //  Created by hal1437 on 2021/06/10.
 //
@@ -22,6 +22,8 @@ public struct InstantTimer: View {
         HStack(alignment: .center, spacing: 4) {
             if family != .systemSmall {
                 Image(uiImage: drawable.category.image)
+                    .renderingMode(.template)
+                    .foregroundColor(Color(.label))
             }
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
@@ -41,15 +43,9 @@ public struct InstantTimer: View {
                 
                 Spacer(minLength: 0)
 
-                HStack {
-                    Spacer()
-                    if drawable.currentStamina >= drawable.maxStamina {
-                        Text("回復済み").font(.caption)
-                    } else {
-                        Text(drawable.remainingFull.toFormatString())
-                            .font(.caption)
-                    }
-                }
+                Text(drawable.currentStamina >= drawable.maxStamina ? "回復済み" : drawable.remainingFull.toFormatString())
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .font(.caption)
             }
         }
         .padding(8)
@@ -76,17 +72,22 @@ struct CustomProgressView: View {
 
 struct InstantTimer_Previews: PreviewProvider {
     static var previews: some View {
-        InstantTimer(drawable: Drawable())
-            .frame(width: 146, height: 146, alignment: .center)
-            .previewLayout(.sizeThatFits)
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+        Group {
+            InstantTimer(drawable: Drawable())
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+
+            InstantTimer(drawable: Drawable())
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+        }
+        .padding()
     }
 }
 
 private struct Drawable: InstantTimerDrawable {
     var category: TimerCategory = .game
+    var id = UUID()
     var title = "SampleTitleSampleTitle"
-    var currentStamina = 33
+    var currentStamina = 100
     var maxStamina = 100
     var remainingFull =  TimeInterval(60*60*20)
 }

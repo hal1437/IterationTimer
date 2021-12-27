@@ -8,5 +8,6 @@
 import Foundation
 
 enum IterationTimerKind: String {
+    case recent
     case list
 }

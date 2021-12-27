@@ -10,6 +10,7 @@ import IterationTimerCore
 
 public protocol IterationTimerRepositoryProtocol {
     var getTimers: [IterationTimer] { get }
+    var recentTimer: IterationTimer? { get }
     func insertTimer(index: Int, timer: IterationTimer)
     func updateTimer(id: UUID, timer: IterationTimer)
     func deleteTimer(id: UUID)
@@ -28,6 +29,11 @@ public struct IterationTimerRepository: IterationTimerRepositoryProtocol {
               let array = try? JSONDecoder().decode([IterationTimer].self, from: data) else { return [] }
         
         return array
+    }
+    
+    public var recentTimer: IterationTimer? {
+        let date = Date()
+        return getTimers.min { $0.remainingFull(date: date) < $1.remainingFull(date: date) }
     }
     
     public func insertTimer(index: Int, timer: IterationTimer) {

@@ -1,6 +1,6 @@
 //
 //  MultipleTimer.swift
-//  IterationTimerUI
+//  IterationTimerWidget
 //
 //  Created by hal1437 on 2021/06/10.
 //
@@ -12,18 +12,22 @@ import IterationTimerUI
 
 struct MultipleTimer: View {
     @Environment(\.widgetFamily) var family
-    @ObservedObject var viewModel = MultipleTimerViewModel(repository: IterationTimerRepository(dataStore: DataStoreSynchronizer(local: UserDefaults.appGroups, remote: NSUbiquitousKeyValueStore.default)))
-    private let drawable = Drawable()
+    @ObservedObject var viewModel: MultipleTimerViewModel
     private let spacing = CGFloat(8)
     
+    init(repository: IterationTimerRepositoryProtocol) {
+        self.viewModel = .init(repository: repository)
+    }
+    
     var body: some View {
-        GeometryReader { geometry in
-            LazyVGrid(columns: Array(repeating: GridItem(), count: family.contents.columns), spacing: spacing) {
-                if viewModel.timers.isEmpty {
-                    Text("タイマーがありません")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                } else {
+        if viewModel.timers.isEmpty {
+            Text("タイマーがありません")
+                .minimumScaleFactor(0.5)
+                .font(.caption)
+                .foregroundColor(.gray)
+        } else {
+            GeometryReader { geometry in
+                LazyVGrid(columns: Array(repeating: GridItem(), count: family.contents.columns), spacing: spacing) {
                     ForEach(viewModel.timers.prefix(family.contents.rows * family.contents.columns)) { timer in
                         let height = CGFloat((Int(geometry.size.height) - Int(spacing) * (family.contents.rows - 1)) / family.contents.rows)
                         
@@ -35,39 +39,33 @@ struct MultipleTimer: View {
                     Spacer()
                 }
             }
-        }.padding(10)
+            .padding(10)
+        }
     }
 }
 
 struct MultipleTimer_Previews: PreviewProvider {
+    static let previewFamily: [WidgetFamily] = [.systemSmall, .systemMedium, .systemLarge, .systemExtraLarge]
     static var previews: some View {
-        MultipleTimer()
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
-    }
-}
+        Group {
+            MultipleTimer(repository: EmptyMockTimerRepository())
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
 
-private struct Drawable: InstantTimerDrawable {
-    var category: TimerCategory = .game
-    var title = "Game"
-    var currentStamina = 50
-    var maxStamina = 100
-    var remainingFull =  TimeInterval(50*60)
-}
+            ForEach(previewFamily, id: \.self) { family in
+                Group {
+                    MultipleTimer(repository: MockTimerRepository())
+                }
+                .previewContext(WidgetPreviewContext(family: family))
+                .environment(\.colorScheme, .light)
 
-private struct InstantDrawable: InstantTimerDrawable {
-    private var timer: IterationTimer
-    private var date: Date
-    init(timer: IterationTimer, date: Date) {
-        self.timer = timer
-        self.date = date
+                Group {
+                    MultipleTimer(repository: MockTimerRepository())
+                }
+                .previewContext(WidgetPreviewContext(family: family))
+                .environment(\.colorScheme, .dark)
+            }
+        }
     }
-    
-    var category: TimerCategory { timer.settings.category }
-    var title: String { timer.settings.title }
-    var currentStamina: Int { timer.currentStamina(date: date) }
-    var maxStamina: Int { timer.settings.maxStamina }
-    var remainingOne: TimeInterval { timer.remainingOne(date: date) }
-    var remainingFull: TimeInterval { timer.remainingFull(date: date) }
 }
 
 private extension WidgetFamily {
