@@ -10,4 +10,5 @@ import Foundation
 enum DataStoreKey: String, CaseIterable {
     case iterationTimer
     case updateDate
+    case reviewCount
 }
