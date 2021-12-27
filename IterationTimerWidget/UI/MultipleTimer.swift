@@ -13,7 +13,6 @@ import IterationTimerUI
 struct MultipleTimer: View {
     @Environment(\.widgetFamily) var family
     @ObservedObject var viewModel = MultipleTimerViewModel(repository: IterationTimerRepository(dataStore: DataStoreSynchronizer(local: UserDefaults.appGroups, remote: NSUbiquitousKeyValueStore.default)))
-    private let drawable = Drawable()
     private let spacing = CGFloat(8)
     
     var body: some View {
@@ -44,32 +43,6 @@ struct MultipleTimer_Previews: PreviewProvider {
         MultipleTimer()
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
-}
-
-private struct Drawable: InstantTimerDrawable {
-    var category: TimerCategory = .game
-    var id = UUID()
-    var title = "Game"
-    var currentStamina = 50
-    var maxStamina = 100
-    var remainingFull =  TimeInterval(50*60)
-}
-
-struct InstantDrawable: InstantTimerDrawable {
-    private var timer: IterationTimer
-    private var date: Date
-    init(timer: IterationTimer, date: Date) {
-        self.timer = timer
-        self.date = date
-    }
-    
-    var id: UUID { timer.id }
-    var category: TimerCategory { timer.settings.category }
-    var title: String { timer.settings.title }
-    var currentStamina: Int { timer.currentStamina(date: date) }
-    var maxStamina: Int { timer.settings.maxStamina }
-    var remainingOne: TimeInterval { timer.remainingOne(date: date) }
-    var remainingFull: TimeInterval { timer.remainingFull(date: date) }
 }
 
 private extension WidgetFamily {
