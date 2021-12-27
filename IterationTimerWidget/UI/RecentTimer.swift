@@ -1,5 +1,5 @@
 //
-//  SingleTimer.swift
+//  RecentTimer.swift
 //  IterationTimerWidget
 //
 //  Created by hal1437 on 2021/12/18.
@@ -11,7 +11,7 @@ import IterationTimerUI
 import SwiftUI
 import WidgetKit
 
-struct SingleTimer: View {
+struct RecentTimer: View {
     
     let drawable: InstantTimerDrawable?
 
@@ -96,14 +96,14 @@ private struct Drawable: InstantTimerDrawable {
     var remainingFull = TimeInterval(60*60*20)
 }
 
-struct SingleTimer_Previews: PreviewProvider {
+struct RecentTimer_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SingleTimer(drawable: Drawable())
+            RecentTimer(drawable: Drawable())
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
                 .environment(\.colorScheme, .light)
 
-            SingleTimer(drawable: Drawable())
+            RecentTimer(drawable: Drawable())
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
                 .environment(\.colorScheme, .dark)
 

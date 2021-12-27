@@ -13,7 +13,7 @@ struct RecentTimerWidget: Widget {
 
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: AlmostAlwaysProvider()) { entry in
-            SingleTimer()
+            RecentTimer()
         }
         .configurationDisplayName("RecentTimerWidgetName")
         .description("RecentTimerWidgetDescription")
