@@ -41,15 +41,9 @@ public struct InstantTimer: View {
                 
                 Spacer(minLength: 0)
 
-                HStack {
-                    Spacer()
-                    if drawable.currentStamina >= drawable.maxStamina {
-                        Text("回復済み").font(.caption)
-                    } else {
-                        Text(drawable.remainingFull.toFormatString())
-                            .font(.caption)
-                    }
-                }
+                Text(drawable.currentStamina >= drawable.maxStamina ? "回復済み" : drawable.remainingFull.toFormatString())
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .font(.caption)
             }
         }
         .padding(8)
@@ -77,8 +71,6 @@ struct CustomProgressView: View {
 struct InstantTimer_Previews: PreviewProvider {
     static var previews: some View {
         InstantTimer(drawable: Drawable())
-            .frame(width: 146, height: 146, alignment: .center)
-            .previewLayout(.sizeThatFits)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
@@ -87,7 +79,7 @@ private struct Drawable: InstantTimerDrawable {
     var category: TimerCategory = .game
     var id = UUID()
     var title = "SampleTitleSampleTitle"
-    var currentStamina = 33
+    var currentStamina = 100
     var maxStamina = 100
     var remainingFull =  TimeInterval(60*60*20)
 }

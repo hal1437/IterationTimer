@@ -12,17 +12,22 @@ import IterationTimerUI
 
 struct MultipleTimer: View {
     @Environment(\.widgetFamily) var family
-    @ObservedObject var viewModel = MultipleTimerViewModel(repository: IterationTimerRepository(dataStore: DataStoreSynchronizer(local: UserDefaults.appGroups, remote: NSUbiquitousKeyValueStore.default)))
+    @ObservedObject var viewModel: MultipleTimerViewModel
     private let spacing = CGFloat(8)
     
+    init(repository: IterationTimerRepositoryProtocol) {
+        self.viewModel = .init(repository: repository)
+    }
+    
     var body: some View {
-        GeometryReader { geometry in
-            LazyVGrid(columns: Array(repeating: GridItem(), count: family.contents.columns), spacing: spacing) {
-                if viewModel.timers.isEmpty {
-                    Text("タイマーがありません")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                } else {
+        if viewModel.timers.isEmpty {
+            Text("タイマーがありません")
+                .minimumScaleFactor(0.5)
+                .font(.caption)
+                .foregroundColor(.gray)
+        } else {
+            GeometryReader { geometry in
+                LazyVGrid(columns: Array(repeating: GridItem(), count: family.contents.columns), spacing: spacing) {
                     ForEach(viewModel.timers.prefix(family.contents.rows * family.contents.columns)) { timer in
                         let height = CGFloat((Int(geometry.size.height) - Int(spacing) * (family.contents.rows - 1)) / family.contents.rows)
                         
@@ -34,14 +39,23 @@ struct MultipleTimer: View {
                     Spacer()
                 }
             }
-        }.padding(10)
+            .padding(10)
+        }
     }
 }
 
 struct MultipleTimer_Previews: PreviewProvider {
+    static let previewFamily: [WidgetFamily] = [.systemSmall, .systemMedium, .systemLarge, .systemExtraLarge]
     static var previews: some View {
-        MultipleTimer()
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+        Group {
+            ForEach(previewFamily, id: \.self) { family in
+                Group {
+                    MultipleTimer(repository: EmptyMockTimerRepository())
+                    MultipleTimer(repository: MockTimerRepository())
+                }
+                .previewContext(WidgetPreviewContext(family: family))
+            }
+        }
     }
 }
 
