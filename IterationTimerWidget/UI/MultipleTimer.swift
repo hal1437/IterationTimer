@@ -48,6 +48,7 @@ struct MultipleTimer_Previews: PreviewProvider {
 
 private struct Drawable: InstantTimerDrawable {
     var category: TimerCategory = .game
+    var id = UUID()
     var title = "Game"
     var currentStamina = 50
     var maxStamina = 100
@@ -62,6 +63,7 @@ struct InstantDrawable: InstantTimerDrawable {
         self.date = date
     }
     
+    var id: UUID { timer.id }
     var category: TimerCategory { timer.settings.category }
     var title: String { timer.settings.title }
     var currentStamina: Int { timer.currentStamina(date: date) }

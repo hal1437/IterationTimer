@@ -80,6 +80,7 @@ struct SingleTimer: View {
                     .padding()
             }
             .background(Color(.systemGray6))
+            .widgetURL(URL(string: "com.hal1437.IterationTimer://?id=\(drawable.id)"))
         } else {
             Text("タイマーがありません").font(.body)
         }
@@ -88,6 +89,7 @@ struct SingleTimer: View {
 
 private struct Drawable: InstantTimerDrawable {
     var category: TimerCategory = .game
+    var id = UUID()
     var title = "InstantTimerDrawable"
     var currentStamina = 120
     var maxStamina = 160

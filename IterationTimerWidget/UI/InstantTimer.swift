@@ -85,6 +85,7 @@ struct InstantTimer_Previews: PreviewProvider {
 
 private struct Drawable: InstantTimerDrawable {
     var category: TimerCategory = .game
+    var id = UUID()
     var title = "SampleTitleSampleTitle"
     var currentStamina = 33
     var maxStamina = 100

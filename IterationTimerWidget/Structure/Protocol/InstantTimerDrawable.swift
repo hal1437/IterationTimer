@@ -9,6 +9,7 @@ import IterationTimerCore
 
 public protocol InstantTimerDrawable {
     var category: TimerCategory { get }
+    var id: UUID { get }
     var title: String { get }
     var currentStamina: Int { get }
     var maxStamina: Int { get }
