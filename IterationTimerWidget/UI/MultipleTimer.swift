@@ -48,12 +48,21 @@ struct MultipleTimer_Previews: PreviewProvider {
     static let previewFamily: [WidgetFamily] = [.systemSmall, .systemMedium, .systemLarge, .systemExtraLarge]
     static var previews: some View {
         Group {
+            MultipleTimer(repository: EmptyMockTimerRepository())
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+
             ForEach(previewFamily, id: \.self) { family in
                 Group {
-                    MultipleTimer(repository: EmptyMockTimerRepository())
                     MultipleTimer(repository: MockTimerRepository())
                 }
                 .previewContext(WidgetPreviewContext(family: family))
+                .environment(\.colorScheme, .light)
+
+                Group {
+                    MultipleTimer(repository: MockTimerRepository())
+                }
+                .previewContext(WidgetPreviewContext(family: family))
+                .environment(\.colorScheme, .dark)
             }
         }
     }

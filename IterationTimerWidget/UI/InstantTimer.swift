@@ -22,6 +22,8 @@ public struct InstantTimer: View {
         HStack(alignment: .center, spacing: 4) {
             if family != .systemSmall {
                 Image(uiImage: drawable.category.image)
+                    .renderingMode(.template)
+                    .foregroundColor(Color(.label))
             }
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
@@ -70,8 +72,14 @@ struct CustomProgressView: View {
 
 struct InstantTimer_Previews: PreviewProvider {
     static var previews: some View {
-        InstantTimer(drawable: Drawable())
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+        Group {
+            InstantTimer(drawable: Drawable())
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+
+            InstantTimer(drawable: Drawable())
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+        }
+        .padding()
     }
 }
 
