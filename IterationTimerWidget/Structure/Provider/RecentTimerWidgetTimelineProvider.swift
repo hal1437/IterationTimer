@@ -28,8 +28,8 @@ struct RecentTimerWidgetTimelineProvider: IntentTimelineProvider {
         }
 
         let remainingFull = max(timer.remainingFull(date: currentDate), 0)
-        let refreshTimes = Int(remainingFull / 60)
-        let entries = (0 ..< refreshTimes)
+        let refreshTimes = Int(remainingFull / timer.settings.duration)
+        let entries = (0 ..< (min(refreshTimes, 5)))
             .map { minuteOffset -> IntentTimelineEntry in
                 let entryDate = Calendar.current.date(byAdding: .minute, value: minuteOffset, to: currentDate)!
                 return IntentTimelineEntry(date: entryDate, configuration: configuration, relevance: timer.relevance(date: entryDate))
