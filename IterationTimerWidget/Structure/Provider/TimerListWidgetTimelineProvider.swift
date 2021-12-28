@@ -27,15 +27,16 @@ struct TimerListWidgetTimelineProvider: IntentTimelineProvider {
             return
         }
         
-        let remainingFull = timers.map { $0.remainingFull(date: currentDate) }.max()!
-        let refreshTimes = Int(remainingFull / 60)
-        let entries = (0 ..< refreshTimes)
+        let remainingFull = max(timers.map { $0.remainingFull(date: currentDate) }.max()!, 0)
+
+        let entries = (0 ..< 6)
+            .map { $0 * 15 }
             .map { minuteOffset -> IntentTimelineEntry in
                 let entryDate = Calendar.current.date(byAdding: .minute, value: minuteOffset, to: currentDate)!
                 let total = timers.map { $0.relevance(date: entryDate).score }.reduce(0, +)
                 return IntentTimelineEntry(date: entryDate, configuration: configuration, relevance: .init(score: total))
             }
-        
+
         completion(Timeline(entries: entries, policy: .atEnd))
     }
 }
