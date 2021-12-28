@@ -91,7 +91,7 @@ platform :ios do
       build_number: sh("git rev-list HEAD --count"),
       api_key: api_key,
       overwrite_screenshots: true,
-      submit_for_review: true,
+      submit_for_review: false,
       skip_binary_upload: true,
       skip_screenshots: is_ci,
       force: true,
