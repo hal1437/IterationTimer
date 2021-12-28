@@ -27,7 +27,7 @@ struct RecentTimerWidgetTimelineProvider: IntentTimelineProvider {
             return
         }
 
-        let remainingFull = timer.remainingFull(date: currentDate)
+        let remainingFull = max(timer.remainingFull(date: currentDate), 0)
         let refreshTimes = Int(remainingFull / 60)
         let entries = (0 ..< refreshTimes)
             .map { minuteOffset -> IntentTimelineEntry in

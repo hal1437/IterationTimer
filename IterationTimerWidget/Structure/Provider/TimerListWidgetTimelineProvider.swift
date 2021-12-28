@@ -27,7 +27,7 @@ struct TimerListWidgetTimelineProvider: IntentTimelineProvider {
             return
         }
         
-        let remainingFull = timers.map { $0.remainingFull(date: currentDate) }.max()!
+        let remainingFull = max(timers.map { $0.remainingFull(date: currentDate) }.max()!, 0)
         let refreshTimes = Int(remainingFull / 60)
         let entries = (0 ..< refreshTimes)
             .map { minuteOffset -> IntentTimelineEntry in
