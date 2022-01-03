@@ -23,12 +23,11 @@ struct TimerListWidgetTimelineProvider: IntentTimelineProvider {
         let currentDate = Date()
         let timers = repository.getTimers
         guard !timers.isEmpty else {
-            completion(Timeline(entries: [], policy: .never))
+            let currentEntry = IntentTimelineEntry(date: currentDate, configuration: configuration, relevance: nil)
+            completion(Timeline(entries: [currentEntry], policy: .never))
             return
         }
         
-        let remainingFull = max(timers.map { $0.remainingFull(date: currentDate) }.max()!, 0)
-
         let entries = (0 ..< 6)
             .map { $0 * 15 }
             .map { minuteOffset -> IntentTimelineEntry in
