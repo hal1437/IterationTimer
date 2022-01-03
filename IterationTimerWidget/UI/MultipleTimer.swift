@@ -21,7 +21,7 @@ struct MultipleTimer: View {
     
     var body: some View {
         if viewModel.timers.isEmpty {
-            Text("タイマーがありません")
+            Text("WidgetTimerNotFound")
                 .minimumScaleFactor(0.5)
                 .font(.caption)
                 .foregroundColor(.gray)

@@ -82,7 +82,10 @@ struct RecentTimer: View {
             .background(Color(.systemGray6))
             .widgetURL(URL(string: "com.hal1437.IterationTimer://?id=\(drawable.id)"))
         } else {
-            Text("タイマーがありません").font(.body)
+            Text("WidgetTimerNotFound")
+                .minimumScaleFactor(0.5)
+                .font(.caption)
+                .foregroundColor(.gray)
         }
     }
 }
