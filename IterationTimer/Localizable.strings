@@ -14,6 +14,7 @@
 "CommonCancel"="キャンセル";
 "CommonAdd"="追加";
 "CommonComplete"="完了";
+"TimerNotFound"="タイマーがありません\n右上の+から新しいタイマーを追加できます";
 "TimerAddTitle"="タイマーの追加";
 "TimerEditTitle"="タイマーの編集";
 "TimerEditTimerSection"="タイマー名";
