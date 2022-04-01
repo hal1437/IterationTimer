@@ -15,3 +15,4 @@ IterationTimerはゲームのスタミナなど、一定時間ごとに回復す
 # 🚪 installation
 1. bundle install
 1. xcodegen generate
+1. open IterationTimer.xcodeproj
