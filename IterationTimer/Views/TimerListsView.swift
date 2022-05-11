@@ -22,7 +22,7 @@ struct TimerListsView: View {
                         Text("TimerNotFound")
                             .minimumScaleFactor(0.5)
                             .font(.caption)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                     } else {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))]) {
