@@ -10,19 +10,31 @@ import SwiftUI
 struct CardIcon: View {
     let category: TimerCategory
     var body: some View {
-        Image(uiImage: category.image)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 30, height: 30, alignment: .center)
-            .padding(8)
-            .background(Color.gray)
-            .clipShape(Circle())
+        ZStack {
+            Circle()
+                .frame(width: 40, height: 40, alignment: .center)
+                .foregroundColor(.tertiarySystemBackground)
+
+            Image(systemName: category.systemName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 25.0, height: 25.0)
+                .foregroundColor(.primary)
+        }
     }
 }
 
 struct CardIcon_Previews: PreviewProvider {
     static var previews: some View {
-        CardIcon(category: .game)
-            .previewLayout(.sizeThatFits)
+        Group {
+            CardIcon(category: .game)
+                .background(Color.secondarySystemBackground)
+
+            CardIcon(category: .game)
+                .background(Color.secondarySystemBackground)
+                .environment(\.colorScheme, .dark)
+        }
+        .previewLayout(.sizeThatFits)
+
     }
 }
