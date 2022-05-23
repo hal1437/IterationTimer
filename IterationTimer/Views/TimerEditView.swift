@@ -51,6 +51,12 @@ struct TimerEditView: View {
                     Section(header: Text("TimerEditTimerSection")) {
                         TextField("name", text: $viewModel.input.name)
                             .focused($focusedField, equals: .timerName)
+                        StaminaQuickAccess(text: "クエスト1", count: -30) {
+                            print("クエスト1")
+                        }
+                        StaminaQuickAccess(text: "クエスト2", count: 60) {
+                            print("クエスト2")
+                        }
                     }
                     Section(header: Text("TimerEditStaminaSection")) {
                         HStack {
