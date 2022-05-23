@@ -33,7 +33,7 @@ struct TimerListsView: View {
                                             viewModel.transitonEditView(timer: timer)
                                         }
                                         .sheet(isPresented: $viewModel.isTransitionEditTimer[index], onDismiss: viewModel.refreshTimers) {
-                                            TimerEditView(mode: .edit(timer: timer))
+                                            TimerEditView(timer: timer)
                                         }
                                         .id(timer.id)
                                 }
@@ -58,9 +58,9 @@ struct TimerListsView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .sheet(isPresented: $viewModel.isTransitionAddTimer, onDismiss: viewModel.refreshTimers) {
-            TimerEditView(mode: .add)
-        }
+//        .sheet(isPresented: $viewModel.isTransitionAddTimer, onDismiss: viewModel.refreshTimers) {
+//            TimerEditView(mode: .add)
+//        }
         .onAppear {
             WidgetCenter.shared.reloadAllTimelines()
         }

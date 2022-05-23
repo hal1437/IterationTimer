@@ -45,35 +45,34 @@ class TimerEditViewModel: ObservableObject {
                                                     notification: .never),
                                since: Date())
     
-    private var mode: TimerEditView.Mode
     private let storeReview: StoreReviewable
 
     private var cancellables: Set<AnyCancellable> = []
     private var repository: IterationTimerRepositoryProtocol
     private var oldTimer: IterationTimer?
 
-    init(repository: IterationTimerRepositoryProtocol, mode: TimerEditView.Mode, storeReview: StoreReviewable) {
+    init(repository: IterationTimerRepositoryProtocol, timer: IterationTimer, storeReview: StoreReviewable) {
         self.repository = repository
-        self.mode = mode
+        self.timer = timer
         self.storeReview = storeReview
 
         UNUserNotificationCenter.current().getNotificationSettings {
             self.isEnableNotification = $0.authorizationStatus != .denied
         }
         
-        let timer = $input.map(IterationTimer.init)
+        let newTimer = $input.map(IterationTimer.init)
         
-        timer
+        newTimer
             .filter { $0 != nil }.map { $0! }
             .assign(to: \.timer, on: self)
             .store(in: &cancellables)
 
-        timer
+        newTimer
             .map { $0 != nil }
             .assign(to: \.isEnabled, on: self)
             .store(in: &cancellables)
 
-        timer
+        newTimer
             .map(\.?.settings.notification)
             .filter { $0 != nil }.map { $0! }
             .filter { $0 != .never }
@@ -90,23 +89,13 @@ class TimerEditViewModel: ObservableObject {
             })
             .store(in: &cancellables)
 
-        if case .edit(let timer) = mode {
-            self.oldTimer = timer
-            self.timer = timer
-            self.input = .init(timer: timer)
-        }
+        self.oldTimer = timer
+        self.input = .init(timer: timer)
     }
 
     func done() {
-        let timer = IterationTimer(input: input)!
-        switch mode {
-        case .add:
-            let count = repository.getTimers.count
-            repository.insertTimer(index: count, timer: timer)
-        case .edit(let unit):
-            repository.updateTimer(id: unit.id, timer: timer)
-            oldTimer?.unregisterNotification()
-        }
+        repository.updateTimer(id: timer.id, timer: timer)
+        oldTimer?.unregisterNotification()
         
         if timer.settings.notification != .never {
             timer.registerNotification()
@@ -117,9 +106,7 @@ class TimerEditViewModel: ObservableObject {
     }
 
     func delete() {
-        if case .edit(let unit) = mode {
-            repository.deleteTimer(id: unit.id)
-        }
+        repository.deleteTimer(id: timer.id)
     }
     
     func divideButtonTapped() {

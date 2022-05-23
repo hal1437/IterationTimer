@@ -20,12 +20,7 @@ struct TimerEditView: View {
         case divideValue
         case duration
     }
-    
-    enum Mode {
-        case add
-        case edit(timer: IterationTimer)
-    }
-    
+
     public enum NotificationSelection: CaseIterable {
         case never, on, completion
     }
@@ -34,16 +29,16 @@ struct TimerEditView: View {
     @ObservedObject var viewModel: TimerEditViewModel
     @State private var showingDeleteAlert = false
     @FocusState private var focusedField: Field?
-    private var mode: Mode
+    private var timer: IterationTimer
     
-    public init(mode: Mode) {
-        self.mode = mode
+    public init(timer: IterationTimer) {
+        self.timer = timer
         let dataStore = DataStoreSynchronizer(local: UserDefaults.appGroups,
                                               remote: NSUbiquitousKeyValueStore.default)
         let storeReview = StoreReviewModel(reviewer: SKStoreReview(),
                                            dataStore: dataStore)
         self.viewModel = TimerEditViewModel(repository: IterationTimerRepository(dataStore: dataStore),
-                                            mode: mode,
+                                            timer: timer,
                                             storeReview: storeReview)
     }
 
@@ -64,17 +59,15 @@ struct TimerEditView: View {
                             TextField("0", text: $viewModel.input.currentValue)
                                 .keyboardType(.numberPad)
                                 .focused($focusedField, equals: .currentValue)
-                            if mode.isEdit {
-                                Spacer()
+                            Spacer()
 
-                                Button(action: viewModel.divideButtonTapped) {
-                                    HStack {
-                                        Image(systemName: "minus.circle")
-                                        Text("\(viewModel.input.divideValue)")
-                                    }
+                            Button(action: viewModel.divideButtonTapped) {
+                                HStack {
+                                    Image(systemName: "minus.circle")
+                                    Text("\(viewModel.input.divideValue)")
                                 }
-                                .buttonStyle(.bordered)
                             }
+                            .buttonStyle(.bordered)
                         }
                         
                         HStack {
@@ -135,26 +128,24 @@ struct TimerEditView: View {
                     .disabled(!viewModel.isEnableNotification)
 
                     Section {
-                        if mode.isEdit {
-                            Button("TimerEditDeleteButton", role: .destructive) {
-                                self.showingDeleteAlert = true
-                            }
-                            .actionSheet(isPresented: $showingDeleteAlert) {
-                                ActionSheet(title: Text("TimerEditDeleteConfirm"), buttons: [
-                                    .destructive(Text("TimerEditDelete"), action: {
-                                          viewModel.delete()
-                                          self.presentationMode.wrappedValue.dismiss()
-                                    }),
-                                    .cancel()]
-                                )
-                            }
+                        Button("TimerEditDeleteButton", role: .destructive) {
+                            self.showingDeleteAlert = true
+                        }
+                        .actionSheet(isPresented: $showingDeleteAlert) {
+                            ActionSheet(title: Text("TimerEditDeleteConfirm"), buttons: [
+                                .destructive(Text("TimerEditDelete"), action: {
+                                      viewModel.delete()
+                                      self.presentationMode.wrappedValue.dismiss()
+                                }),
+                                .cancel()]
+                            )
                         }
                     }
                 }
             }
-            .navigationBarTitle(mode.title, displayMode: .inline)
+            .navigationBarTitle(NSLocalizedString("TimerEditTitle", comment: ""), displayMode: .inline)
             .navigationBarItems(leading: Button("CommonCancel") { self.presentationMode.wrappedValue.dismiss() },
-                                trailing: Button(mode.doneButton) {
+                                trailing: Button(NSLocalizedString("CommonComplete", comment: "")) {
                                     viewModel.done()
                                     self.presentationMode.wrappedValue.dismiss()
                                     WidgetCenter.shared.reloadAllTimelines()
@@ -173,29 +164,6 @@ struct TimerEditView: View {
     }
 }
 
-private extension TimerEditView.Mode {
-    var title: String {
-        switch self {
-        case .add: return NSLocalizedString("TimerAddTitle", comment: "")
-        case .edit(_): return NSLocalizedString("TimerEditTitle", comment: "")
-        }
-    }
-
-    var doneButton: String {
-        switch self {
-        case .add: return NSLocalizedString("CommonAdd", comment: "")
-        case .edit(_): return NSLocalizedString("CommonComplete", comment: "")
-        }
-    }
-    
-    var isEdit: Bool {
-        switch self {
-        case .add: return false
-        case .edit(_): return true
-        }
-    }
-}
-
 extension TimerEditViewModel.NotificationSelection {
     var title: String {
         switch self {
@@ -210,8 +178,7 @@ extension TimerEditViewModel.NotificationSelection {
 struct TimerEditView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            TimerEditView(mode: .add)
-            TimerEditView(mode: .edit(timer: IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, divideStamina: 10, duration: 10, notification: .never), since: Date())))
+            TimerEditView(timer: IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, divideStamina: 10, duration: 10, notification: .never), since: Date()))
         }
     }
 }
