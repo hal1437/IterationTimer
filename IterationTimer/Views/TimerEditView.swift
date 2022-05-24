@@ -52,7 +52,7 @@ struct TimerEditView: View {
                         HStack {
                             Text("TimerEditCurrentValue")
                             Spacer()
-                            StaminaPicker(max: Int(viewModel.input.maxValue)!, text: $viewModel.input.currentValue)
+                            NumberPicker(max: Int(viewModel.input.maxValue)!, text: $viewModel.input.currentValue)
                                 .focused($focusedField, equals: .currentValue)
                         }
 
