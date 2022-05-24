@@ -48,9 +48,14 @@ struct TimerEditView: View {
                 TimerCard(drawable: IterationTimerDrawable(timer: viewModel.timer, date: Date())).padding()
                     .background(Color(UIColor.systemGroupedBackground))
                 Form {
-                    Section(header: Text("TimerEditTimerSection")) {
-                        TextField("name", text: $viewModel.input.name)
-                            .focused($focusedField, equals: .timerName)
+                    Section(header: Text("TimerEditStaminaSection")) {
+                        HStack {
+                            Text("TimerEditCurrentValue")
+                            Spacer()
+                            StaminaPicker(max: Int(viewModel.input.maxValue)!, text: $viewModel.input.currentValue)
+                                .focused($focusedField, equals: .currentValue)
+                        }
+
                         StaminaQuickAccess(text: "クエスト1", count: -30) {
                             print("クエスト1")
                         }
@@ -59,22 +64,6 @@ struct TimerEditView: View {
                         }
                     }
                     Section(header: Text("TimerEditStaminaSection")) {
-                        HStack {
-                            Text("TimerEditCurrentValue")
-                                .frame(width: 100, alignment: .leading)
-                            TextField("0", text: $viewModel.input.currentValue)
-                                .keyboardType(.numberPad)
-                                .focused($focusedField, equals: .currentValue)
-                            Spacer()
-
-                            Button(action: viewModel.divideButtonTapped) {
-                                HStack {
-                                    Image(systemName: "minus.circle")
-                                    Text("\(viewModel.input.divideValue)")
-                                }
-                            }
-                            .buttonStyle(.bordered)
-                        }
                         
                         HStack {
                             Text("TimerEditMaxValue")
