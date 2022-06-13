@@ -22,7 +22,8 @@
 "TimerEditCurrentValue"="現在値";
 "TimerEditMaxValue"="最大値";
 "TimerEditDuration"="1単位の時間";
-"TimerEditNotificationSection"="通知設定";
+"TimerEditTimerSetting"="タイマー設定";
+"TimerEditNotification"="通知設定";
 "TimerEditNotification"="通知";
 "TimerEditNotificationOn"="通知する値";
 "TimerEditNotificationCompleteBefore"="事前に通知する秒数";

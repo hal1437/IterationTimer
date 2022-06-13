@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUIX
 import IterationTimerCore
 import IterationTimerUI
 import IterationTimerModel
@@ -63,33 +62,12 @@ struct TimerEditView: View {
                             print("クエスト2")
                         }
                     }
-                    Section(header: Text("TimerEditStaminaSection")) {
-                        
-                        HStack {
-                            Text("TimerEditMaxValue")
-                                .frame(width: 100, alignment: .leading)
-                            TextField("0", text: $viewModel.input.maxValue)
-                                .keyboardType(.numberPad)
-                                .focused($focusedField, equals: .maxValue)
-                        }
-
-                        HStack {
-                            Text("TimerEditDuration")
-                                .frame(width: 100, alignment: .leading)
-                            TextField("0", text: $viewModel.input.duration)
-                                .keyboardType(.numberPad)
-                                .focused($focusedField, equals: .duration)
-                        }
-                        HStack {
-                            Text("分割値")
-                                .frame(width: 100, alignment: .leading)
-                            TextField("0", text: $viewModel.input.divideValue)
-                                .keyboardType(.numberPad)
-                                .focused($focusedField, equals: .divideValue)
-                        }
+                    
+                    Section {
+                        NavigationLink("TimerEditTimerSetting", destination: TimerSettingView(timer: timer))
                     }
                     
-                    Section(header: Text("TimerEditNotificationSection")) {
+                    Section {
                         Picker("TimerEditNotification", selection: $viewModel.input.notification.type) {
                             ForEach(TimerEditViewModel.NotificationSelection.allCases, id: \.self) {
                                 Text($0.title)
@@ -168,7 +146,6 @@ extension TimerEditViewModel.NotificationSelection {
         }
     }
 }
-
 
 struct TimerEditView_Previews: PreviewProvider {
     static var previews: some View {
