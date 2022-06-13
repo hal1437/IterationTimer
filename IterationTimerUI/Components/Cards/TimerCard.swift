@@ -37,7 +37,7 @@ public struct TimerCard: View {
             }
         }
         .padding(8)
-        .background(Color(.systemGray6))
+        .background(Color.secondarySystemBackground)
         .cornerRadius(10)
         .shadow(radius: 5)
     }
@@ -47,16 +47,13 @@ struct TimerCard_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             TimerCard(drawable: Drawable())
-                .frame(width: nil, height: nil, alignment: .center)
-                .padding()
-                .previewLayout(.sizeThatFits)
             
             TimerCard(drawable: Drawable())
-                .frame(width: nil, height: nil, alignment: .center)
-                .padding()
-                .previewLayout(.sizeThatFits)
                 .environment(\.colorScheme, .dark)
         }
+        .frame(width: nil, height: nil, alignment: .center)
+        .padding()
+        .previewLayout(.sizeThatFits)
     }
 }
 
