@@ -117,7 +117,7 @@ struct TimerEditView: View {
                 }
             }
             .navigationBarTitle(NSLocalizedString("TimerEditTitle", comment: ""), displayMode: .inline)
-            .navigationBarItems(leading: Button("CommonCancel") { self.presentationMode.wrappedValue.dismiss() },
+            .navigationBarItems(leading: Button(LocalizedStringKey("CommonCancel")) { self.presentationMode.wrappedValue.dismiss() },
                                 trailing: Button(NSLocalizedString("CommonComplete", comment: "")) {
                                     viewModel.done()
                                     self.presentationMode.wrappedValue.dismiss()
