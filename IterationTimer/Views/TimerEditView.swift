@@ -27,7 +27,6 @@ struct TimerEditView: View {
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var viewModel: TimerEditViewModel
     @State private var showingDeleteAlert = false
-    @FocusState private var focusedField: Field?
     private var timer: IterationTimer
     
     public init(timer: IterationTimer) {
@@ -52,7 +51,6 @@ struct TimerEditView: View {
                             Text("TimerEditCurrentValue")
                             Spacer()
                             NumberPicker(max: Int(viewModel.input.maxValue)!, text: $viewModel.input.currentValue)
-                                .focused($focusedField, equals: .currentValue)
                         }
 
                         StaminaQuickAccess(text: "クエスト1", count: -30) {
@@ -84,7 +82,6 @@ struct TimerEditView: View {
                                 TextField("0", text: $viewModel.input.notification.on)
                                     .keyboardType(.numberPad)
                                     .multilineTextAlignment(.trailing)
-                                    .focused($focusedField, equals: .duration)
                             }
                         case .completion:
                             HStack {
@@ -94,7 +91,6 @@ struct TimerEditView: View {
                                 TextField("0", text: $viewModel.input.notification.completion)
                                     .keyboardType(.numberPad)
                                     .multilineTextAlignment(.trailing)
-                                    .focused($focusedField, equals: .duration)
                             }
                         }
                     }
@@ -125,14 +121,6 @@ struct TimerEditView: View {
                                 }
                                 .disabled(!viewModel.isEnabled)
             )
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button("CommonClose") {
-                        focusedField = nil
-                    }
-                }
-            }
         }
     }
 }
