@@ -11,6 +11,10 @@ import IterationTimerModel
 import NotificationCenter
 
 class TimerEditViewModel: ObservableObject {
+    struct Inputs {
+        var currentStamina = 10
+        var settings = IterationTimerSettings.default
+    }
     
     struct NotificationSetting {
         var type = NotificationSelection.never
@@ -22,25 +26,31 @@ class TimerEditViewModel: ObservableObject {
         case never, on, completion
     }
     
-    @Published var timer = IterationTimer.default
+    @Published var input: Inputs = Inputs()
     @Published var isEnableNotification = false
     
+    var currentTimer = IterationTimer.default
+    
     private let storeReview: StoreReviewable
-
     private var cancellables: Set<AnyCancellable> = []
     private var repository: IterationTimerRepositoryProtocol
     private var oldTimer: IterationTimer?
 
     init(repository: IterationTimerRepositoryProtocol, timer: IterationTimer, storeReview: StoreReviewable) {
         self.repository = repository
-        self.timer = timer
         self.storeReview = storeReview
 
         UNUserNotificationCenter.current().getNotificationSettings {
             self.isEnableNotification = $0.authorizationStatus != .denied
         }
         
-        $timer
+        let currentTimer = $input.map { IterationTimer(currentStamina: $0.currentStamina, settings: $0.settings, since: Date()) }
+                
+        currentTimer
+            .assign(to: \.currentTimer, on: self)
+            .store(in: &cancellables)
+
+        currentTimer
             .map(\.settings.notification)
             .filter { $0 != .never }
             .receive(on: DispatchQueue.main)
@@ -49,7 +59,7 @@ class TimerEditViewModel: ObservableObject {
                 center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                     if !granted {
                         DispatchQueue.main.async {
-                            self.timer.settings.notification = .never
+                            self.input.settings.notification = .never
                         }
                     }
                 }
@@ -57,22 +67,23 @@ class TimerEditViewModel: ObservableObject {
             .store(in: &cancellables)
 
         self.oldTimer = timer
+        self.input = .init(currentStamina: timer.currentStamina(date: Date()), settings: timer.settings)
     }
 
     func done() {
-        repository.updateTimer(id: timer.id, timer: timer)
+        repository.updateTimer(id: currentTimer.id, timer: currentTimer)
         oldTimer?.unregisterNotification()
         
-        if timer.settings.notification != .never {
-            timer.registerNotification()
+        if currentTimer.settings.notification != .never {
+            currentTimer.registerNotification()
         } else {
-            timer.unregisterNotification()
+            currentTimer.unregisterNotification()
         }
         storeReview.requestReviewIfNeeded()
     }
 
     func delete() {
-        repository.deleteTimer(id: timer.id)
+        repository.deleteTimer(id: currentTimer.id)
     }
     
 //    func divideButtonTapped() {

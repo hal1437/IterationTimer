@@ -35,14 +35,14 @@ struct TimerEditView: View {
     var body: some View {
         NavigationView {
             VStack(alignment: .center, spacing: 0) {
-                TimerCard(drawable: IterationTimerDrawable(timer: viewModel.timer, date: Date())).padding()
+                TimerCard(drawable: IterationTimerDrawable(timer: viewModel.currentTimer, date: Date())).padding()
                     .background(Color(UIColor.systemGroupedBackground))
                 Form {
                     Section(header: Text("TimerEditStaminaSection")) {
                         HStack {
                             Text("TimerEditCurrentValue")
                             Spacer()
-//                            NumberPicker(max: 1000, text: $viewModel.input.currentValue).disabled(true)
+                            NumberPicker(max: viewModel.currentTimer.settings.maxStamina, number: $viewModel.input.currentStamina)
                         }
 
                         StaminaQuickAccess(text: "クエスト1", count: -30) {
@@ -54,7 +54,7 @@ struct TimerEditView: View {
                     }
                     
                     Section {
-                        NavigationLink("TimerEditTimerSetting", destination: TimerSettingView(settings: $viewModel.timer.settings)
+                        NavigationLink("TimerEditTimerSetting", destination: TimerSettingView(settings: $viewModel.input.settings)
                             )
                     }
                     
