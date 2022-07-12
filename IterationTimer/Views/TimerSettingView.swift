@@ -11,19 +11,8 @@ import IterationTimerUI
 import IterationTimerModel
 
 struct TimerSettingView: View {
-    @State var num = "10"
-    @State var isVisible = true
-    @State var maxValue = "10"
-    @State var duration = TimeInterval(10)
-    @State var divideValue = "10"
-
     @Environment(\.editMode) var editMode
-    private let timer: IterationTimer
-    
-
-    init(timer: IterationTimer) {
-        self.timer = timer
-    }
+    @Binding var settings: IterationTimerSettings
 
     var body: some View {
         Form {
@@ -33,44 +22,23 @@ struct TimerSettingView: View {
                         Text("TimerEditMaxValue")
                             .frame(width: 100, alignment: .leading)
                         Spacer()
-                        NumberPicker(max: 100, text: $maxValue)
+                        NumberPicker(max: 100, text: $settings.maxStamina)
                     }
 
                     HStack {
                         Text("TimerEditDuration")
                             .frame(width: 100, alignment: .leading)
                         Spacer()
-                        DurationPicker(duration: $duration)
+                        DurationPicker(duration: $settings.duration)
                     }
                     HStack {
                         Text("分割値")
                             .frame(width: 100, alignment: .leading)
                         Spacer()
-                        NumberPicker(max: 100, text: $divideValue)
+                        NumberPicker(max: 100, text: $settings.divideStamina)
                     }
                 }
             }
-
-            Section(header: Text("TimerEditStaminaSection")) {
-                HStack {
-                    Text("TimerEditMaxValue")
-                        .frame(width: 100, alignment: .leading)
-                    TextField("0", text: $maxValue)
-                        .keyboardType(.numberPad)
-                }
-
-                HStack {
-                    Text("TimerEditDuration")
-                        .frame(width: 100, alignment: .leading)
-                }
-                HStack {
-                    Text("分割値")
-                        .frame(width: 100, alignment: .leading)
-                    TextField("0", text: $divideValue)
-                        .keyboardType(.numberPad)
-                }
-            }
-
         }
         .toolbar {
             EditButton()
@@ -81,6 +49,6 @@ struct TimerSettingView: View {
 
 struct TimerSettingView_Previews: PreviewProvider {
     static var previews: some View {
-        TimerSettingView(timer: IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, divideStamina: 10, duration: 10, notification: .never), since: Date()))
+        TimerSettingView(settings: .init(get: { .default }, set: { _ in }))
     }
 }

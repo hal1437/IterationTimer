@@ -12,14 +12,6 @@ import IterationTimerModel
 import WidgetKit
 
 struct TimerEditView: View {
-    enum Field: CaseIterable, Hashable {
-        case timerName
-        case currentValue
-        case maxValue
-        case divideValue
-        case duration
-    }
-
     public enum NotificationSelection: CaseIterable {
         case never, on, completion
     }
@@ -50,7 +42,7 @@ struct TimerEditView: View {
                         HStack {
                             Text("TimerEditCurrentValue")
                             Spacer()
-                            NumberPicker(max: Int(viewModel.input.maxValue)!, text: $viewModel.input.currentValue)
+//                            NumberPicker(max: Int(viewModel.input.maxValue)!, text: $viewModel.input.currentValue)
                         }
 
                         StaminaQuickAccess(text: "クエスト1", count: -30) {
@@ -62,39 +54,40 @@ struct TimerEditView: View {
                     }
                     
                     Section {
-                        NavigationLink("TimerEditTimerSetting", destination: TimerSettingView(timer: timer))
+                        NavigationLink("TimerEditTimerSetting", destination: TimerSettingView(settings: $viewModel.timer.settings)
+                            )
                     }
                     
-                    Section {
-                        Picker("TimerEditNotification", selection: $viewModel.input.notification.type) {
-                            ForEach(TimerEditViewModel.NotificationSelection.allCases, id: \.self) {
-                                Text($0.title)
-                            }
-                        }
-
-                        switch viewModel.input.notification.type {
-                        case .never: EmptyView()
-                        case .on:
-                            HStack {
-                                Text("TimerEditNotificationOn")
-                                    .frame(width: 100, alignment: .leading)
-                                Spacer()
-                                TextField("0", text: $viewModel.input.notification.on)
-                                    .keyboardType(.numberPad)
-                                    .multilineTextAlignment(.trailing)
-                            }
-                        case .completion:
-                            HStack {
-                                Text("TimerEditNotificationCompleteBefore")
-                                    .frame(width: 100, alignment: .leading)
-                                Spacer()
-                                TextField("0", text: $viewModel.input.notification.completion)
-                                    .keyboardType(.numberPad)
-                                    .multilineTextAlignment(.trailing)
-                            }
-                        }
-                    }
-                    .disabled(!viewModel.isEnableNotification)
+//                    Section {
+//                        Picker("TimerEditNotification", selection: $viewModel.timer.settings.notification) {
+//                            ForEach(TimerEditViewModel.NotificationSelection.allCases, id: \.self) {
+//                                Text($0.title)
+//                            }
+//                        }
+//
+//                        switch $viewModel.timer.settings.notification {
+//                        case .never: EmptyView()
+//                        case .on:
+//                            HStack {
+//                                Text("TimerEditNotificationOn")
+//                                    .frame(width: 100, alignment: .leading)
+//                                Spacer()
+////                                TextField("0", text: $viewModel.input.notification.on)
+////                                    .keyboardType(.numberPad)
+////                                    .multilineTextAlignment(.trailing)
+//                            }
+//                        case .completion:
+//                            HStack {
+//                                Text("TimerEditNotificationCompleteBefore")
+//                                    .frame(width: 100, alignment: .leading)
+//                                Spacer()
+////                                TextField("0", text: $viewModel.input.notification.completion)
+////                                    .keyboardType(.numberPad)
+////                                    .multilineTextAlignment(.trailing)
+//                            }
+//                        }
+//                    }
+//                    .disabled(!viewModel.isEnableNotification)
 
                     Section {
                         Button("TimerEditDeleteButton", role: .destructive) {
@@ -119,7 +112,6 @@ struct TimerEditView: View {
                                     self.presentationMode.wrappedValue.dismiss()
                                     WidgetCenter.shared.reloadAllTimelines()
                                 }
-                                .disabled(!viewModel.isEnabled)
             )
         }
     }

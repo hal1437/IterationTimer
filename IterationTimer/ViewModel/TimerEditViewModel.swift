@@ -12,16 +12,6 @@ import NotificationCenter
 
 class TimerEditViewModel: ObservableObject {
     
-    struct Inputs {
-        var category = TimerCategory.game
-        var name = ""
-        var currentValue = "10"
-        var maxValue = "10"
-        var divideValue = "10"
-        var duration = "10"
-        var notification = NotificationSetting()
-    }
-    
     struct NotificationSetting {
         var type = NotificationSelection.never
         var on = "0"
@@ -32,18 +22,8 @@ class TimerEditViewModel: ObservableObject {
         case never, on, completion
     }
     
-    @Published var input: Inputs = Inputs()
+    @Published var timer = IterationTimer.default
     @Published var isEnableNotification = false
-
-    var isEnabled = false
-    var timer = IterationTimer(currentStamina: 10,
-                               settings: try! .init(title: "",
-                                                    category: .game,
-                                                    maxStamina: 10,
-                                                    divideStamina: 0,
-                                                    duration: 10,
-                                                    notification: .never),
-                               since: Date())
     
     private let storeReview: StoreReviewable
 
@@ -60,21 +40,8 @@ class TimerEditViewModel: ObservableObject {
             self.isEnableNotification = $0.authorizationStatus != .denied
         }
         
-        let newTimer = $input.map(IterationTimer.init)
-        
-        newTimer
-            .filter { $0 != nil }.map { $0! }
-            .assign(to: \.timer, on: self)
-            .store(in: &cancellables)
-
-        newTimer
-            .map { $0 != nil }
-            .assign(to: \.isEnabled, on: self)
-            .store(in: &cancellables)
-
-        newTimer
-            .map(\.?.settings.notification)
-            .filter { $0 != nil }.map { $0! }
+        $timer
+            .map(\.settings.notification)
             .filter { $0 != .never }
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [unowned self] _ in
@@ -82,7 +49,7 @@ class TimerEditViewModel: ObservableObject {
                 center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                     if !granted {
                         DispatchQueue.main.async {
-                            self.input.notification.type = .never
+                            self.timer.settings.notification = .never
                         }
                     }
                 }
@@ -90,7 +57,6 @@ class TimerEditViewModel: ObservableObject {
             .store(in: &cancellables)
 
         self.oldTimer = timer
-        self.input = .init(timer: timer)
     }
 
     func done() {
@@ -109,48 +75,16 @@ class TimerEditViewModel: ObservableObject {
         repository.deleteTimer(id: timer.id)
     }
     
-    func divideButtonTapped() {
-        guard let currentValue = Int(input.currentValue),
-              let divideValue = Int(input.divideValue) else { return }
-        
-        let resultValue = currentValue - divideValue
-        
-        if resultValue < 0 { return }
-        
-        input.currentValue = String(resultValue)
-    }
-}
-
-private extension TimerEditViewModel.Inputs {
-    init(timer: IterationTimer) {
-        self.category = timer.settings.category
-        self.name = timer.settings.title
-        self.currentValue = "\(timer.currentStamina(date: Date()))"
-        self.maxValue = "\(timer.settings.maxStamina)"
-        self.divideValue = "\(Int(timer.settings.divideStamina))"
-        self.duration = "\(Int(timer.settings.duration))"
-        self.notification = .init(trigger: timer.settings.notification)
-    }
-}
-
-
-private extension IterationTimer {
-    init?(input: TimerEditViewModel.Inputs) {
-        guard let currentStamina = Int(input.currentValue),
-              let maxStamina = Int(input.maxValue),
-              let divideStamina = Int(input.divideValue),
-              let duration = TimeInterval(input.duration),
-              let trigger = NotificationTrigger(settings: input.notification),
-              let setting = try? IterationTimerSettings(title: input.name,
-                                                        category: input.category,
-                                                        maxStamina: maxStamina,
-                                                        divideStamina: divideStamina,
-                                                        duration: duration,
-                                                        notification: trigger) else { return nil }
-        self = .init(currentStamina: currentStamina,
-                     settings: setting,
-                     since: Date())
-    }
+//    func divideButtonTapped() {
+//        guard let currentValue = Int(input.currentValue),
+//              let divideValue = Int(input.divideValue) else { return }
+//
+//        let resultValue = currentValue - divideValue
+//
+//        if resultValue < 0 { return }
+//
+//        input.currentValue = String(resultValue)
+//    }
 }
 
 private extension TimerEditViewModel.NotificationSetting {

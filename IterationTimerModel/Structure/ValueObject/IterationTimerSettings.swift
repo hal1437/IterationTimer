@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct IterationTimerSettings: Codable {
+public struct IterationTimerSettings: Equatable, Codable {
     public var title: String
     public var category: TimerCategory
     public var maxStamina: Int

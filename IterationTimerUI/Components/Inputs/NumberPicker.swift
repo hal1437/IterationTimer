@@ -8,10 +8,10 @@
 import SwiftUI
 
 public struct NumberPicker: View {
-    @Binding public var text: String
+    @Binding public var text: Int
     let max: Int
 
-    public init(max: Int, text: Binding<String>) {
+    public init(max: Int, text: Binding<Int>) {
         self.max = max
         self._text = text
     }
@@ -19,8 +19,8 @@ public struct NumberPicker: View {
     public var body: some View {
         
         Picker("", selection: $text) {
-            ForEach((0 ... max).map { String($0) }, id:\.self) { i in
-                Text(i).tag(i)
+            ForEach((0 ... max), id:\.self) { i in
+                Text(String(i)).tag(i)
             }
         }
             .pickerStyle(MenuPickerStyle())
@@ -34,7 +34,7 @@ public struct NumberPicker: View {
 struct NumberPicker_Previews: PreviewProvider {
     static var previews: some View {
         Form {
-            NumberPicker(max: 100, text: Binding<String>(get: { "" }, set: { _ in }))
+            NumberPicker(max: 100, text: Binding<Int>(get: { 0 }, set: { _ in }))
         }
     }
 }
