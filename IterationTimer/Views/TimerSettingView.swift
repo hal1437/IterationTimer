@@ -22,20 +22,20 @@ struct TimerSettingView: View {
                         Text("TimerEditMaxValue")
                             .frame(width: 100, alignment: .leading)
                         Spacer()
-                        NumberPicker(max: 100, text: $settings.maxStamina)
+                        NumberPicker(max: 100, number: $settings.maxStamina)
                     }
 
                     HStack {
                         Text("TimerEditDuration")
                             .frame(width: 100, alignment: .leading)
                         Spacer()
-                        DurationPicker(duration: $settings.duration)
+                        DurationPicker(maxMinute: 60, duration: $settings.duration)
                     }
                     HStack {
                         Text("分割値")
-                            .frame(width: 100, alignment: .leading)
+                            .lineLimit(2)
                         Spacer()
-                        NumberPicker(max: 100, text: $settings.divideStamina)
+                        NumberPicker(max: 100, number: $settings.divideStamina)
                     }
                 }
             }

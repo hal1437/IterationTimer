@@ -24,7 +24,7 @@ public struct NumberInput: View {
 
 struct NumberInput_Previews: PreviewProvider {
     static var previews: some View {
-        NumberInput(text: Binding<String>(get: { "" }, set: { _ in }))
+        NumberInput(text: .constant(""))
             .previewLayout(.sizeThatFits)
     }
 }

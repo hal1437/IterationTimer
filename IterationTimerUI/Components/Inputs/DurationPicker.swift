@@ -10,10 +10,11 @@ import SwiftUI
 public struct DurationPicker: View {
     @Binding public var duration: TimeInterval
     
-    let timeSequence = (1...119).map { TimeInterval($0 * 30) }
+    let timeSequence: [TimeInterval]
     
-    public init(duration: Binding<TimeInterval>) {
+    public init(maxMinute: Int, duration: Binding<TimeInterval>) {
         self._duration = duration
+        self.timeSequence = (0..<maxMinute*2).map { TimeInterval(($0 + 1) * 30) }
     }
     
     public var body: some View {
@@ -41,7 +42,7 @@ public struct DurationPicker: View {
 struct DurationPicker_Previews: PreviewProvider {
     static var previews: some View {
         Form {
-            DurationPicker(duration: Binding<TimeInterval>(get: { 0 }, set: { _ in }))
+            DurationPicker(maxMinute: 60, duration: .constant(0))
         }
     }
 }
