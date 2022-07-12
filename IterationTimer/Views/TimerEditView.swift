@@ -42,7 +42,7 @@ struct TimerEditView: View {
                         HStack {
                             Text("TimerEditCurrentValue")
                             Spacer()
-//                            NumberPicker(max: Int(viewModel.input.maxValue)!, text: $viewModel.input.currentValue)
+//                            NumberPicker(max: 1000, text: $viewModel.input.currentValue).disabled(true)
                         }
 
                         StaminaQuickAccess(text: "クエスト1", count: -30) {
@@ -130,7 +130,7 @@ extension TimerEditViewModel.NotificationSelection {
 struct TimerEditView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            TimerEditView(timer: IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, divideStamina: 10, duration: 10, notification: .never), since: Date()))
+            TimerEditView(timer: .default)
         }
     }
 }
