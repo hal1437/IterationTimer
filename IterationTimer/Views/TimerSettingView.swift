@@ -21,7 +21,7 @@ struct TimerSettingView: View {
                     HStack {
                         Text("TimerEditMaxValue")
                         Spacer()
-                        NumberPicker(max: 500, number: $settings.maxStamina)
+                        NumberInput(/*max: 500, */number: $settings.maxStamina)
                     }
 
                     HStack {
@@ -32,7 +32,7 @@ struct TimerSettingView: View {
                     HStack {
                         Text("分割値")
                         Spacer()
-                        NumberPicker(max: 500, number: $settings.divideStamina)
+                        NumberInput(/*max: 500, */number: $settings.divideStamina)
                     }
                 }
             }

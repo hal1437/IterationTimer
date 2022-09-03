@@ -8,23 +8,32 @@
 import SwiftUI
 
 public struct NumberInput: View {
-    @Binding public var text: String
+    @Binding public var number: Int
 
-    public init(text: Binding<String>) {
-        self._text = text
+    public init(number: Binding<Int>) {
+        self._number = number
     }
     
     public var body: some View {
-        TextField("0", text: $text)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .frame(width: 100)
-            .keyboardType(.numberPad)
+        let text = Binding(get: {
+            String(number)
+        }, set: { str in
+            number = Int(str)!
+        })
+        
+        UIKitTextField("0", text: text, inputtable: InputtableOnlyNumber()) { textfield in
+            textfield.keyboardType = .numberPad
+            return textfield
+        }
+            .padding(4)
+            .foregroundColor(.link)
+            .frame(width: 100, height: 30)
     }
 }
 
 struct NumberInput_Previews: PreviewProvider {
     static var previews: some View {
-        NumberInput(text: .constant(""))
+        NumberInput(number: .constant(100))
             .previewLayout(.sizeThatFits)
     }
 }
