@@ -1,5 +1,5 @@
 //
-//  NumberInput.swift
+//  StaminaInput.swift
 //  IterationTimerUI
 //
 //  Created by hal1437 on 2021/05/04.
@@ -7,11 +7,13 @@
 
 import SwiftUI
 
-public struct NumberInput: View {
-    @Binding public var number: Int
+public struct StaminaInput: View {
+    @Binding var number: Int
+    var max: Int
 
-    public init(number: Binding<Int>) {
+    public init(max: Int, number: Binding<Int>) {
         self._number = number
+        self.max = max
     }
     
     public var body: some View {
@@ -21,19 +23,20 @@ public struct NumberInput: View {
             number = Int(str)!
         })
         
-        UIKitTextField("0", text: text, inputtable: InputtableOnlyNumber()) { textfield in
+        UIKitTextField("0", text: text, inputtable: InputtableOnlyStamina(max: max)) { textfield in
             textfield.keyboardType = .numberPad
+            textfield.textAlignment = .right
             return textfield
         }
             .padding(4)
             .foregroundColor(.link)
-            .frame(width: 100, height: 30)
     }
 }
 
 struct NumberInput_Previews: PreviewProvider {
     static var previews: some View {
-        NumberInput(number: .constant(100))
+        StaminaInput(max: 100, number: .constant(100))
+            .frame(width: 100, height: 40)
             .previewLayout(.sizeThatFits)
     }
 }

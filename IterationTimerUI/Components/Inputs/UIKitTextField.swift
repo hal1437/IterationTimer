@@ -68,12 +68,6 @@ extension UIKitTextField {
 
 struct UIKitTextField_Previews: PreviewProvider {
     static var previews: some View {
-        UIKitTextField("", text: .constant("1"), inputtable: TextFieldInputtable_())
-    }
-}
-
-fileprivate struct TextFieldInputtable_: TextFieldInputtable{
-    func isInputtable(newString: String) -> Bool {
-        return true
+        UIKitTextField("", text: .constant("1"))
     }
 }
