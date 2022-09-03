@@ -65,10 +65,10 @@ struct TimerEditView: View {
                 NumberPicker(max: viewModel.currentTimer.settings.maxStamina, number: $viewModel.input.currentStamina)
             }
             
-            StaminaQuickAccess(text: "クエスト1", count: -30) {
+            StaminaQuickAccessView(text: "クエスト1", count: -30) {
                 print("クエスト1")
             }
-            StaminaQuickAccess(text: "クエスト2", count: 60) {
+            StaminaQuickAccessView(text: "クエスト2", count: 60) {
                 print("クエスト2")
             }
         }
