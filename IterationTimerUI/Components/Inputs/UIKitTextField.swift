@@ -12,7 +12,6 @@ struct UIKitTextField: UIViewRepresentable {
     @Binding var text: String
     let placeholder: String
     let inputtable: TextFieldInputtable?
-    var textField: UITextField?
     let constructor: ((UITextField) -> UITextField)?
     
     init(_ placeholder: String, text: Binding<String>, inputtable: TextFieldInputtable? = nil, constructor: ((UITextField) -> UITextField)? = nil) {
@@ -34,31 +33,39 @@ struct UIKitTextField: UIViewRepresentable {
         }
     }
     
-    func updateUIView(_ uiView: UITextField, context: Context) {
-        uiView.text = text
-    }
+    func updateUIView(_ textField: UITextField, context: Context) {
+        textField.text = text
+        context.coordinator.inputtable = inputtable
+    }    
 }
 
 extension UIKitTextField {
     func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+        Coordinator(self, inputtable: inputtable)
     }
     
     // UITextFieldDelegateを実装
     final class Coordinator: NSObject, UITextFieldDelegate {
         var parent: UIKitTextField
+        var inputtable: TextFieldInputtable?
         
-        init(_ parent: UIKitTextField) {
+        init(_ parent: UIKitTextField, inputtable: TextFieldInputtable?) {
             self.parent = parent
+            self.inputtable = inputtable
             super.init()
         }
-        
+
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            if let inputtable = parent.inputtable,
+            if let inputtable = inputtable,
                let text = textField.text,
                let textRange = Range(range, in: text) {
                 let updatedText = text.replacingCharacters(in: textRange, with: string)
-                return inputtable.isInputtable(newString: updatedText)
+                if inputtable.isInputtable(newString: updatedText) {
+                    parent.text = updatedText
+                    return true
+                } else {
+                    return false
+                }
             } else {
                 return true
             }

@@ -11,11 +11,6 @@ import IterationTimerModel
 import NotificationCenter
 
 class TimerEditViewModel: ObservableObject {
-    struct Inputs {
-        var currentStamina = 10
-        var settings = IterationTimerSettings.default
-    }
-    
     struct NotificationSetting {
         var type = NotificationSelection.never
         var on = "0"
@@ -26,7 +21,8 @@ class TimerEditViewModel: ObservableObject {
         case never, on, completion
     }
     
-    @Published var input: Inputs = Inputs()
+    @Published var currentStamina = 10
+    @Published var settings = IterationTimerSettings.default
     @Published var isEnableNotification = false
     
     var currentTimer = IterationTimer.default
@@ -34,45 +30,48 @@ class TimerEditViewModel: ObservableObject {
     private let storeReview: StoreReviewable
     private var cancellables: Set<AnyCancellable> = []
     private var repository: IterationTimerRepositoryProtocol
-    private var oldTimer: IterationTimer?
+    private var oldTimer: IterationTimer
 
     init(repository: IterationTimerRepositoryProtocol, timer: IterationTimer, storeReview: StoreReviewable) {
         self.repository = repository
         self.storeReview = storeReview
+        self.oldTimer = timer
+        self.currentStamina = timer.currentStamina(date: Date())
+        self.settings = timer.settings
 
         UNUserNotificationCenter.current().getNotificationSettings {
             self.isEnableNotification = $0.authorizationStatus != .denied
         }
         
-        let currentTimer = $input.map { IterationTimer(currentStamina: $0.currentStamina, settings: $0.settings, since: Date()) }
-                
+        let currentTimer = $currentStamina.combineLatest($settings)
+            .map { currentStamina, settings in
+                IterationTimer(currentStamina: currentStamina, settings: settings, since: Date())
+            }
+        
         currentTimer
             .assign(to: \.currentTimer, on: self)
             .store(in: &cancellables)
 
-        currentTimer
-            .map(\.settings.notification)
-            .filter { $0 != .never }
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [unowned self] _ in
-                let center = UNUserNotificationCenter.current()
-                center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-                    if !granted {
-                        DispatchQueue.main.async {
-                            self.input.settings.notification = .never
-                        }
-                    }
-                }
-            })
-            .store(in: &cancellables)
-
-        self.oldTimer = timer
-        self.input = .init(currentStamina: timer.currentStamina(date: Date()), settings: timer.settings)
+//        currentTimer
+//            .map(\.settings.notification)
+//            .filter { $0 != .never }
+//            .receive(on: DispatchQueue.main)
+//            .sink(receiveValue: { [unowned self] _ in
+//                let center = UNUserNotificationCenter.current()
+//                center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+//                    if !granted {
+//                        DispatchQueue.main.async {
+//                            self.settings.notification = .never
+//                        }
+//                    }
+//                }
+//            })
+//            .store(in: &cancellables)
     }
 
     func done() {
         repository.updateTimer(id: currentTimer.id, timer: currentTimer)
-        oldTimer?.unregisterNotification()
+        oldTimer.unregisterNotification()
         
         if currentTimer.settings.notification != .never {
             currentTimer.registerNotification()

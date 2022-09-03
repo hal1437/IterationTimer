@@ -20,7 +20,9 @@ public struct StaminaInput: View {
         let text = Binding(get: {
             String(number)
         }, set: { str in
-            number = Int(str)!
+            if let num = Int(str) {
+                number = num
+            }
         })
         
         UIKitTextField("0", text: text, inputtable: InputtableOnlyStamina(max: max)) { textfield in

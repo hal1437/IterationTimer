@@ -19,10 +19,8 @@ struct TimerEditView: View {
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var viewModel: TimerEditViewModel
     @State private var showingDeleteAlert = false
-    private var timer: IterationTimer
     
     public init(timer: IterationTimer) {
-        self.timer = timer
         let dataStore = DataStoreSynchronizer(local: UserDefaults.appGroups,
                                               remote: NSUbiquitousKeyValueStore.default)
         let storeReview = StoreReviewModel(reviewer: SKStoreReview(),
@@ -62,8 +60,8 @@ struct TimerEditView: View {
             HStack {
                 Text("TimerEditCurrentValue")
                 Spacer()
-                NumberPicker(max: viewModel.currentTimer.settings.maxStamina, number: $viewModel.input.currentStamina)
-            }
+                StaminaInput(max: viewModel.settings.maxStamina, number: $viewModel.currentStamina)
+            }            
             
             StaminaQuickAccessView(text: "クエスト1", count: -30) {
                 print("クエスト1")
@@ -77,7 +75,7 @@ struct TimerEditView: View {
     @ViewBuilder
     private func TimerSettingSection() -> some View {
         Section {
-            NavigationLink("TimerEditTimerSetting", destination: TimerSettingView(settings: $viewModel.input.settings)
+            NavigationLink("TimerEditTimerSetting", destination: TimerSettingView(settings: $viewModel.settings)
             )
         }
     }
