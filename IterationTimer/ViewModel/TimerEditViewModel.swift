@@ -11,16 +11,6 @@ import IterationTimerModel
 import NotificationCenter
 
 class TimerEditViewModel: ObservableObject {
-    struct NotificationSetting {
-        var type = NotificationSelection.never
-        var on = "0"
-        var completion = "0"
-    }
-    
-    enum NotificationSelection: CaseIterable {
-        case never, on, completion
-    }
-    
     @Published var currentStamina = 10
     @Published var settings = IterationTimerSettings.default
     @Published var isEnableNotification = false
@@ -52,21 +42,21 @@ class TimerEditViewModel: ObservableObject {
             .assign(to: \.currentTimer, on: self)
             .store(in: &cancellables)
 
-//        currentTimer
-//            .map(\.settings.notification)
-//            .filter { $0 != .never }
-//            .receive(on: DispatchQueue.main)
-//            .sink(receiveValue: { [unowned self] _ in
-//                let center = UNUserNotificationCenter.current()
-//                center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-//                    if !granted {
-//                        DispatchQueue.main.async {
-//                            self.settings.notification = .never
-//                        }
-//                    }
-//                }
-//            })
-//            .store(in: &cancellables)
+        currentTimer
+            .map(\.settings.notification)
+            .filter { $0 != .never }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [unowned self] _ in
+                let center = UNUserNotificationCenter.current()
+                center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+                    if !granted {
+                        DispatchQueue.main.async {
+                            self.settings.notification = .never
+                        }
+                    }
+                }
+            })
+            .store(in: &cancellables)
     }
 
     func done() {
@@ -97,32 +87,32 @@ class TimerEditViewModel: ObservableObject {
 //    }
 }
 
-private extension TimerEditViewModel.NotificationSetting {
-    init(trigger: NotificationTrigger) {
-        switch trigger {
-        case .never:
-            self.type = .never
-        case .on(let stamina):
-            self.type = .on
-            self.on = "\(stamina)"
-        case .completion(let before):
-            self.type = .completion
-            self.completion = "\(Int(before))"
-        }
-    }
-}
-
-private extension NotificationTrigger {
-    init?(settings: TimerEditViewModel.NotificationSetting) {
-        switch settings.type {
-        case .never:
-            self = .never
-        case .on:
-            guard let on = Int(settings.on) else { return nil }
-            self = .on(stamina: on)
-        case .completion:
-            guard let completion = TimeInterval(settings.completion) else { return nil }
-            self = .completion(before: completion)
-        }
-    }
-}
+//private extension TimerEditViewModel.NotificationSetting {
+//    init(trigger: NotificationTrigger) {
+//        switch trigger {
+//        case .never:
+//            self.type = .never
+//        case .on(let stamina):
+//            self.type = .on
+//            self.on = "\(stamina)"
+//        case .completion(let before):
+//            self.type = .completion
+//            self.completion = "\(Int(before))"
+//        }
+//    }
+//}
+//
+//private extension NotificationTrigger {
+//    init?(settings: TimerEditViewModel.NotificationSetting) {
+//        switch settings.type {
+//        case .never:
+//            self = .never
+//        case .on:
+//            guard let on = Int(settings.on) else { return nil }
+//            self = .on(stamina: on)
+//        case .completion:
+//            guard let completion = TimeInterval(settings.completion) else { return nil }
+//            self = .completion(before: completion)
+//        }
+//    }
+//}

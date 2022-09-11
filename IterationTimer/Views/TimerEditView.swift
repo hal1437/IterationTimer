@@ -11,11 +11,7 @@ import IterationTimerUI
 import IterationTimerModel
 import WidgetKit
 
-struct TimerEditView: View {
-    public enum NotificationSelection: CaseIterable {
-        case never, on, completion
-    }
-    
+struct TimerEditView: View {    
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var viewModel: TimerEditViewModel
     @State private var showingDeleteAlert = false
@@ -61,7 +57,7 @@ struct TimerEditView: View {
                 Text("TimerEditCurrentValue")
                 Spacer()
                 StaminaInput(max: viewModel.settings.maxStamina, number: $viewModel.currentStamina)
-            }            
+            }
             
             StaminaQuickAccessView(text: "クエスト1", count: -30) {
                 print("クエスト1")
@@ -83,33 +79,7 @@ struct TimerEditView: View {
     @ViewBuilder
     private func NotificationSettingSection() -> some View {
         Section {
-//            Picker("TimerEditNotification", selection: $viewModel.timer.settings.notification) {
-//                ForEach(TimerEditViewModel.NotificationSelection.allCases, id: \.self) {
-//                    Text($0.title)
-//                }
-//            }
-//
-//            switch $viewModel.timer.settings.notification {
-//            case .never: EmptyView()
-//            case .on:
-//                HStack {
-//                    Text("TimerEditNotificationOn")
-//                        .frame(width: 100, alignment: .leading)
-//                    Spacer()
-//                                    TextField("0", text: $viewModel.input.notification.on)
-//                                        .keyboardType(.numberPad)
-//                                        .multilineTextAlignment(.trailing)
-//                }
-//            case .completion:
-//                HStack {
-//                    Text("TimerEditNotificationCompleteBefore")
-//                        .frame(width: 100, alignment: .leading)
-//                    Spacer()
-//                                    TextField("0", text: $viewModel.input.notification.completion)
-//                                        .keyboardType(.numberPad)
-//                                        .multilineTextAlignment(.trailing)
-//                }
-//            }
+            NotificationInput(max: viewModel.settings.maxStamina, notification: .constant(.never))
         }
         .disabled(!viewModel.isEnableNotification)
     }
@@ -132,16 +102,6 @@ struct TimerEditView: View {
         }
     }
 
-}
-
-extension TimerEditViewModel.NotificationSelection {
-    var title: String {
-        switch self {
-        case .never: return NSLocalizedString("TimerEditNotificationSelectionNever", comment: "")
-        case .on: return NSLocalizedString("TimerEditNotificationSelectionOn", comment: "")
-        case .completion: return NSLocalizedString("TimerEditNotificationSelectionCompletion", comment: "")
-        }
-    }
 }
 
 struct TimerEditView_Previews: PreviewProvider {
