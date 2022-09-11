@@ -42,21 +42,21 @@ class TimerEditViewModel: ObservableObject {
             .assign(to: \.currentTimer, on: self)
             .store(in: &cancellables)
 
-        currentTimer
-            .map(\.settings.notification)
-            .filter { $0 != .never }
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [unowned self] _ in
-                let center = UNUserNotificationCenter.current()
-                center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-                    if !granted {
-                        DispatchQueue.main.async {
-                            self.settings.notification = .never
-                        }
-                    }
-                }
-            })
-            .store(in: &cancellables)
+//        currentTimer
+//            .map(\.settings.notification)
+//            .filter { $0 != .never }
+//            .receive(on: DispatchQueue.main)
+//            .sink(receiveValue: { [unowned self] _ in
+//                let center = UNUserNotificationCenter.current()
+//                center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+//                    if !granted {
+//                        DispatchQueue.main.async {
+//                            self.settings.notification = .never
+//                        }
+//                    }
+//                }
+//            })
+//            .store(in: &cancellables)
     }
 
     func done() {

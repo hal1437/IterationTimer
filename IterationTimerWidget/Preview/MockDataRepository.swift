@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import IterationTimerCore
 import IterationTimerModel
 
 class EmptyMockTimerRepository: IterationTimerRepositoryProtocol {

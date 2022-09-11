@@ -6,29 +6,17 @@
 //
 
 import Foundation
+import IterationTimerCore
 
-public struct IterationTimer: Codable, Identifiable {
-    private (set) public var id: UUID
-    public var settings: IterationTimerSettings
-    
-    private var startTime: Date
-    private var endTime: Date
-
-    public init(currentStamina: Int, settings: IterationTimerSettings, since date: Date) {
-        self.id = UUID()
-        self.settings = settings
-        self.startTime = Date(timeInterval: TimeInterval(Double(-currentStamina) * settings.duration), since: date)
-        self.endTime = Date(timeInterval: TimeInterval(Double(settings.maxStamina) * settings.duration), since: startTime)
-    }
-    
+public extension IterationTimer {
     /// 現在のスタミナ
-    public func currentStamina(date: Date) -> Int {
+    func currentStamina(date: Date) -> Int {
         let currentStamina = Int(date.timeIntervalSince(startTime) / settings.duration)
         return currentStamina > settings.maxStamina ? settings.maxStamina : currentStamina
     }
 
     /// スタミナが1つ回復するまでの秒数
-    public func remainingOne(date: Date) -> TimeInterval {
+    func remainingOne(date: Date) -> TimeInterval {
         let delta = endTime.timeIntervalSince(startTime)
         let perTime = Int(delta) / settings.maxStamina
         let currentInterval = endTime.timeIntervalSince(date)
@@ -37,12 +25,12 @@ public struct IterationTimer: Codable, Identifiable {
     }
 
     /// スタミナが全て回復するまでの秒数
-    public func remainingFull(date: Date) -> TimeInterval {
+    func remainingFull(date: Date) -> TimeInterval {
         return endTime.timeIntervalSince(date)
     }
     
     /// 次の通知を行う時刻
-    public func nextNotifyDate() -> Date {
+    func nextNotifyDate() -> Date {
         switch self.settings.notification {
         case .never: return Date.init(timeIntervalSince1970: 0)
         case .on(let stamina): return startTime + TimeInterval(stamina * Int(settings.duration))
