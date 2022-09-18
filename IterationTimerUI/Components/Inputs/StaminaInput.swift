@@ -14,6 +14,9 @@ public struct StaminaInput: View {
     public init(max: Int, number: Binding<Int>) {
         self._number = number
         self.max = max
+        if number.wrappedValue > max {
+            number.wrappedValue = max
+        }
     }
     
     public var body: some View {

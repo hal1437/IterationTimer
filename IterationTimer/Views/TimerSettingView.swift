@@ -13,8 +13,7 @@ import IterationTimerModel
 struct TimerSettingView: View {
     @Environment(\.editMode) var editMode
     @Binding var settings: IterationTimerSettings
-    @ObservedObject var viewModel = TimerSettingViewModel()
-
+    
     var body: some View {
         Form {
             if editMode?.wrappedValue.isEditing == false {
@@ -22,18 +21,18 @@ struct TimerSettingView: View {
                     HStack {
                         Text("TimerEditMaxValue")
                         Spacer()
-                        StaminaInput(max: 9999, number: $viewModel.maxStamina)
+                        StaminaInput(max: 9999, number: $settings.maxStamina)
                     }
 
                     HStack {
                         Text("TimerEditDuration")
                         Spacer()
-                        DurationPicker(maxMinute: 60, duration: $viewModel.duration)
+                        DurationPicker(maxMinute: 60, duration: $settings.duration)
                     }
                     HStack {
                         Text("分割値")
                         Spacer()
-                        StaminaInput(max: settings.maxStamina, number: $viewModel.divideStamina)
+                        StaminaInput(max: settings.maxStamina, number: $settings.divideStamina)
                     }
                 }
             }
