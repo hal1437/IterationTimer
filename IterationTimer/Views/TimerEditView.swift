@@ -12,7 +12,7 @@ import IterationTimerModel
 import WidgetKit
 
 struct TimerEditView: View {    
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: TimerEditViewModel
     @State private var showingDeleteAlert = false
     
@@ -40,13 +40,13 @@ struct TimerEditView: View {
                 }
             }
             .navigationBarTitle(NSLocalizedString("TimerEditTitle", comment: ""), displayMode: .inline)
-            .navigationBarItems(leading: Button(LocalizedStringKey("CommonCancel")) { self.presentationMode.wrappedValue.dismiss() },
-                                trailing: Button(NSLocalizedString("CommonComplete", comment: "")) {
-                                    viewModel.done()
-                                    self.presentationMode.wrappedValue.dismiss()
-                                    WidgetCenter.shared.reloadAllTimelines()
-                                }
-            )
+            .navigationBarItems(leading: CancelButton {
+                self.dismiss()
+            }, trailing: CompleteButton {
+                viewModel.done()
+                self.dismiss()
+                WidgetCenter.shared.reloadAllTimelines()
+            })
         }
     }
     
@@ -94,7 +94,7 @@ struct TimerEditView: View {
                 ActionSheet(title: Text("TimerEditDeleteConfirm"), buttons: [
                     .destructive(Text("TimerEditDelete"), action: {
                         viewModel.delete()
-                        self.presentationMode.wrappedValue.dismiss()
+                        self.dismiss()
                     }),
                     .cancel()]
                 )

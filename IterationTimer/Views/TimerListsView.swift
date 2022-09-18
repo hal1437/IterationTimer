@@ -58,9 +58,11 @@ struct TimerListsView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-//        .sheet(isPresented: $viewModel.isTransitionAddTimer, onDismiss: viewModel.refreshTimers) {
-//            TimerEditView(mode: .add)
-//        }
+        .sheet(isPresented: $viewModel.isTransitionAddTimer, onDismiss: viewModel.refreshTimers) {
+            NavigationView {
+                TimerTitleInputView()
+            }
+        }
         .onAppear {
             WidgetCenter.shared.reloadAllTimelines()
         }
