@@ -30,7 +30,7 @@ struct TimerSettingView: View {
                         DurationPicker(maxMinute: 60, duration: $settings.duration)
                     }
                     HStack {
-                        Text("分割値")
+                        Text("TimerEditDivideValue")
                         Spacer()
                         StaminaInput(max: settings.maxStamina, number: $settings.divideStamina)
                     }

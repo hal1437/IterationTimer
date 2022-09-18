@@ -20,6 +20,7 @@
 "TimerEditTimerSection"="タイマー名";
 "TimerEditStaminaSection"="スタミナの変更";
 "TimerEditCurrentValue"="現在値";
+"TimerEditDivideValue"="分割値";
 "TimerEditMaxValue"="最大値";
 "TimerEditDuration"="1単位の時間";
 "TimerEditTimerSetting"="タイマー設定";
