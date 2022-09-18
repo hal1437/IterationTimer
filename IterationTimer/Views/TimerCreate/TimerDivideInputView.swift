@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TimerDivideInputView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.navigationReturner) private var navigationReturner
     @State var title = ""
     
     var body: some View {
@@ -17,7 +17,7 @@ struct TimerDivideInputView: View {
                             footer: NSLocalizedString("TimerDivideInputFooter", comment: ""),
                             input: TextField(NSLocalizedString("TimerDivideInputPalceholder", comment: ""),
                                              text: $title))
-            .navigationBarItems(trailing: NextButton (destination: TimerCreateConfirmView()))
+            .navigationBarItems(trailing: NextButton (destination: TimerCreateConfirmView().environment(\.navigationReturner, navigationReturner)))
     }
 }
 

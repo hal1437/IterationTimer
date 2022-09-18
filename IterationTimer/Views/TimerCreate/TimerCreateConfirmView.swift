@@ -9,7 +9,7 @@ import SwiftUI
 import IterationTimerUI
 
 struct TimerCreateConfirmView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.navigationReturner) var navigationReturner
 
     var body: some View {
         ZStack {
@@ -28,7 +28,7 @@ struct TimerCreateConfirmView: View {
         }
         .navigationTitle(NSLocalizedString("TimerCreateConfirmTitle", comment: ""))
         .navigationBarItems(trailing: CompleteButton {
-            self.dismiss()
+            self.navigationReturner?()
         })
     }
 }

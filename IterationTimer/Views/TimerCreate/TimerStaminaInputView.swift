@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TimerStaminaInputView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.navigationReturner) private var navigationReturner
     @State var title = ""
     
     var body: some View {
@@ -17,7 +17,7 @@ struct TimerStaminaInputView: View {
                             footer: NSLocalizedString("TimerStaminaInputFooter", comment: ""),
                             input: TextField(NSLocalizedString("TimerStaminaInputPalceholder", comment: ""),
                                              text: $title))
-            .navigationBarItems(trailing: NextButton (destination: TimerDurationInputView()))
+            .navigationBarItems(trailing: NextButton (destination: TimerDurationInputView().environment(\.navigationReturner, navigationReturner)))
     }
 }
 

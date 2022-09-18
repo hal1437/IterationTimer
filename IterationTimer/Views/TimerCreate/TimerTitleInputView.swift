@@ -19,7 +19,7 @@ struct TimerTitleInputView: View {
                                              text: $title))
             .navigationBarItems(leading: CancelButton {
                 self.dismiss()
-            }, trailing: NextButton (destination: TimerStaminaInputView()))
+            }, trailing: NextButton(destination: TimerStaminaInputView().environment(\.navigationReturner, dismiss)))
     }
 }
 
