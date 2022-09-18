@@ -21,7 +21,7 @@ struct TimerSettingView: View {
                     HStack {
                         Text("TimerEditMaxValue")
                         Spacer()
-                        StaminaInput(max: 9999, number: $settings.maxStamina)
+                        StaminaInput(max: Constants.TimerStaminaMaximum, number: $settings.maxStamina)
                     }
 
                     HStack {

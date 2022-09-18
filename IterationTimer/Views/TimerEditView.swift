@@ -56,15 +56,15 @@ struct TimerEditView: View {
             HStack {
                 Text("TimerEditCurrentValue")
                 Spacer()
-                StaminaInput(max: viewModel.settings.maxStamina, number: $viewModel.currentStamina)
+                StaminaInput(max: Constants.CurrentTimerStaminaMaximum, number: $viewModel.currentStamina)
             }
             
-            StaminaQuickAccessView(text: "クエスト1", count: -30) {
-                print("クエスト1")
-            }
-            StaminaQuickAccessView(text: "クエスト2", count: 60) {
-                print("クエスト2")
-            }
+//            StaminaQuickAccessView(text: "クエスト1", count: -30) {
+//                print("クエスト1")
+//            }
+//            StaminaQuickAccessView(text: "クエスト2", count: 60) {
+//                print("クエスト2")
+//            }
         }
     }
     
