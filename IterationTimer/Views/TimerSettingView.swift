@@ -27,7 +27,7 @@ struct TimerSettingView: View {
                     HStack {
                         Text("TimerEditDuration")
                         Spacer()
-                        DurationPicker(maxMinute: 60, duration: $settings.duration)
+                        DurationPicker(maxMinute: Constants.TimerDurationMinuteMaximum, duration: $settings.duration)
                     }
                     HStack {
                         Text("TimerEditDivideValue")

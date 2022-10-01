@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import IterationTimerCore
 
 public struct NotificationInput: View {
     public enum NotificationTrigger {
@@ -28,7 +29,7 @@ public struct NotificationInput: View {
     @Binding var notification: NotificationTrigger
     @State private var selection = NotificationSelection.never
     @State private var on = 0
-    @State private var completion = 0
+    @State private var completion = TimeInterval(0)
     private var max: Int
     
     public init(max: Int, notification: Binding<NotificationTrigger>) {
@@ -57,7 +58,7 @@ public struct NotificationInput: View {
                 Text("TimerEditNotificationCompleteBefore")
                     .frame(width: 100, alignment: .leading)
                 Spacer()
-                StaminaInput(max: max, number: $completion)
+                DurationPicker(maxMinute: 60, duration: $completion)
             }
         }
 

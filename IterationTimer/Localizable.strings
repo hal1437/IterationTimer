@@ -28,11 +28,11 @@
 "TimerEditNotification"="通知設定";
 "TimerEditNotification"="通知";
 "TimerEditNotificationOn"="通知する値";
-"TimerEditNotificationCompleteBefore"="事前に通知する秒数";
+"TimerEditNotificationCompleteBefore"="事前に通知する時間";
 "TimerEditNotificationSelectionNever"="通知しない";
 "TimerEditNotificationSelectionOn"="特定の値の時に通知";
 "TimerEditNotificationSelectionCompletion"="回復前に通知";
-"TimerEditNotificationCompleteBefore"="事前に通知する秒数";
+"TimerEditNotificationCompleteBefore"="事前に通知する時間";
 "TimerEditDeleteButton"="タイマーを削除する";
 "TimerEditDeleteConfirm"="データが削除されますがよろしいですか？";
 "TimerEditDelete"="削除する";

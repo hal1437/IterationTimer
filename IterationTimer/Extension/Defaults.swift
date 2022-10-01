@@ -17,6 +17,6 @@ extension IterationTimerSettings {
                                                        category: .game,
                                                        maxStamina: 10,
                                                        divideStamina: 0,
-                                                       duration: 10,
+                                                       duration: 3,
                                                        notification: .never)
 }

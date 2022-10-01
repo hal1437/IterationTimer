@@ -6,18 +6,19 @@
 //
 
 import SwiftUI
+import IterationTimerModel
 import IterationTimerUI
 
 struct TimerDurationInputView: View {
     @Environment(\.navigationReturner) private var navigationReturner
     @Environment(\.newTimerProperties) private var newTimerProperties
-    @State var duration = TimeInterval(60*3)
+    @State var duration = IterationTimer.default.settings.duration
     
     var body: some View {
         SingleInputTemplate(title: NSLocalizedString("TimerDurationInputTitle", comment: ""),
                             header: NSLocalizedString("TimerDurationInputHeader", comment: ""),
                             footer: NSLocalizedString("TimerDurationInputFooter", comment: ""),
-                            input: DurationPicker(maxMinute: 60, duration: $duration))
+                            input: DurationPicker(maxMinute: Constants.TimerDurationMinuteMaximum, duration: $duration))
             .navigationBarItems(trailing: nextButton())
     }
 
