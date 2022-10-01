@@ -16,11 +16,20 @@ struct TimerTitleInputView: View {
                             header: NSLocalizedString("TimerTitleInputHeader", comment: ""),
                             footer: NSLocalizedString("TimerTitleInputFooter", comment: ""),
                             input: TextField(NSLocalizedString("TimerTitleInputPalceholder", comment: ""),
-                                             text: $title))
+                                             text: $title)
+                                       .keyboardType(.default))
             .navigationBarItems(leading: CancelButton {
                 self.dismiss()
-            }, trailing: NextButton(destination: TimerStaminaInputView().environment(\.navigationReturner, dismiss)))
+            }, trailing: nextButton())
     }
+
+    @ViewBuilder
+    func nextButton() -> some View {
+        NextButton(destination: TimerStaminaInputView()
+                                    .environment(\.navigationReturner, dismiss))
+        .disabled(title.isEmpty)
+    }
+
 }
 
 struct TimerTitleInput_Previews: PreviewProvider {

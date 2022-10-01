@@ -9,15 +9,23 @@ import SwiftUI
 
 struct TimerStaminaInputView: View {
     @Environment(\.navigationReturner) private var navigationReturner
-    @State var title = ""
+    @State var text = ""
     
     var body: some View {
         SingleInputTemplate(title: NSLocalizedString("TimerStaminaInputTitle", comment: ""),
                             header: NSLocalizedString("TimerStaminaInputHeader", comment: ""),
                             footer: NSLocalizedString("TimerStaminaInputFooter", comment: ""),
                             input: TextField(NSLocalizedString("TimerStaminaInputPalceholder", comment: ""),
-                                             text: $title))
-            .navigationBarItems(trailing: NextButton (destination: TimerDurationInputView().environment(\.navigationReturner, navigationReturner)))
+                                             text: $text)
+                                       .keyboardType(.numberPad))
+            .navigationBarItems(trailing: nextButton())
+    }
+    
+    @ViewBuilder
+    func nextButton() -> some View {
+        NextButton(destination: TimerDurationInputView()
+                                    .environment(\.navigationReturner, navigationReturner))
+            .disabled(Int(text) == nil)
     }
 }
 
