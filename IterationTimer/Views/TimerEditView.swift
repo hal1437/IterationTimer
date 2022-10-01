@@ -29,7 +29,7 @@ struct TimerEditView: View {
     var body: some View {
         NavigationView {
             VStack(alignment: .center, spacing: 0) {
-                TimerCard(drawable: IterationTimerDrawable(timer: viewModel.currentTimer, date: Date())).padding()
+                TimerCard(drawable: IterationTimerDrawable(timer: viewModel.previewTimer, date: Date())).padding()
                     .background(Color(UIColor.systemGroupedBackground))
 
                 Form {
