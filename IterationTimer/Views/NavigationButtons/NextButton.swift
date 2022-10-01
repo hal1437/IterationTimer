@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct NextButton<Destination: View>: View {
-    var destination: Destination
+    var destination: () -> Destination
+    
+    init(destination: @autoclosure @escaping () -> Destination) {
+        self.destination = destination
+    }
     
     var body: some View {
         NavigationLink("CommonNext") {
-            destination
+            destination()
         }
     }
 }
