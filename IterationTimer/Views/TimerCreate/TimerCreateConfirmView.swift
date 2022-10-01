@@ -10,6 +10,7 @@ import IterationTimerUI
 
 struct TimerCreateConfirmView: View {
     @Environment(\.navigationReturner) var navigationReturner
+    @Environment(\.newTimerProperties) private var newTimerProperties
 
     var body: some View {
         ZStack {
@@ -20,7 +21,7 @@ struct TimerCreateConfirmView: View {
                 Text(NSLocalizedString("TimerCreateConfirmDescription", comment: ""))
                     .font(.body)
                     .foregroundColor(.primary)
-                TimerCard(drawable: IterationTimerDrawable(timer: .default, date: Date()))
+                TimerCard(drawable: drawable())
                     .background(Color(UIColor.systemGroupedBackground))
                 
                 Spacer()
@@ -30,6 +31,18 @@ struct TimerCreateConfirmView: View {
         .navigationBarItems(trailing: CompleteButton {
             self.navigationReturner?()
         })
+    }
+    
+    func drawable() -> IterationTimerDrawable {
+        IterationTimerDrawable(timer: .init(currentStamina: newTimerProperties!.stamina!,
+                                            settings: try! .init(title: newTimerProperties!.title!,
+                                                                 category: .game,
+                                                                 maxStamina: newTimerProperties!.stamina!,
+                                                                 divideStamina: newTimerProperties!.divide!,
+                                                                 duration: newTimerProperties!.duration!,
+                                                                 notification: .never),
+                                            since: Date()),
+                               date: Date())
     }
 }
 

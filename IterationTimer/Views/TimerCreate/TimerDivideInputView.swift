@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TimerDivideInputView: View {
     @Environment(\.navigationReturner) private var navigationReturner
+    @Environment(\.newTimerProperties) private var newTimerProperties
     @State var text = ""
     
     var body: some View {
@@ -21,11 +22,13 @@ struct TimerDivideInputView: View {
             .navigationBarItems(trailing: nextButton())
     }
 
-    @ViewBuilder
     func nextButton() -> some View {
-        NextButton(destination: TimerCreateConfirmView()
-                                    .environment(\.navigationReturner, navigationReturner))
-            .disabled(Int(text) == nil)
+        var properties = newTimerProperties!
+        properties.divide = Int(text)
+        return NextButton(destination: TimerCreateConfirmView()
+                                           .environment(\.navigationReturner, navigationReturner)
+                                           .environment(\.newTimerProperties, properties))
+                   .disabled(Int(text) == nil)
     }
 }
 

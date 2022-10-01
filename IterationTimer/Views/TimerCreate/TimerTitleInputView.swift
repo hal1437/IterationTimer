@@ -23,13 +23,14 @@ struct TimerTitleInputView: View {
             }, trailing: nextButton())
     }
 
-    @ViewBuilder
     func nextButton() -> some View {
-        NextButton(destination: TimerStaminaInputView()
-                                    .environment(\.navigationReturner, dismiss))
-        .disabled(title.isEmpty)
+        var properties = NewTimerProperties()
+        properties.title = title
+        return NextButton(destination: TimerStaminaInputView()
+                                           .environment(\.navigationReturner, dismiss)
+                                           .environment(\.newTimerProperties, properties))
+                   .disabled(title.isEmpty)
     }
-
 }
 
 struct TimerTitleInput_Previews: PreviewProvider {
