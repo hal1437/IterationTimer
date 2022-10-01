@@ -71,8 +71,7 @@ struct TimerEditView: View {
     @ViewBuilder
     private func TimerSettingSection() -> some View {
         Section {
-            NavigationLink("TimerEditTimerSetting", destination: TimerSettingView(settings: $viewModel.settings)
-            )
+            NavigationLink("TimerEditTimerSetting", destination: TimerSettingView(settings: $viewModel.settings))
         }
     }
     
