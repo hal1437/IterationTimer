@@ -10,9 +10,6 @@ packages:
   Firebase:
     url: https://github.com/firebase/firebase-ios-sdk.git
     majorVersion: 8.9.1
-  SwiftUIX:
-    url: https://github.com/SwiftUIX/SwiftUIX.git
-    majorVersion: 0.1.2
 
 settings:
   base:
@@ -52,8 +49,6 @@ targets:
         product: FirebaseAnalytics
       - package: Firebase
         product: FirebaseCrashlytics
-      - package: SwiftUIX
-        product: SwiftUIX
     entitlements:
       path: IterationTimer/IterationTimer.entitlements
       properties:
@@ -100,8 +95,6 @@ targets:
       gatherCoverageData: true
     dependencies:
       - target: IterationTimerCore
-      - package: SwiftUIX
-        product: SwiftUIX
 
   IterationTimerWidget:
     type: app-extension

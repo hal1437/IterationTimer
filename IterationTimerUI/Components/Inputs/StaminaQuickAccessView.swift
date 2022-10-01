@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUIX
 
 public struct StaminaQuickAccessView: View {
     let text: String
