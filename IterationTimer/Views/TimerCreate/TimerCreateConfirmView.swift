@@ -7,10 +7,12 @@
 
 import SwiftUI
 import IterationTimerUI
+import IterationTimerModel
 
 struct TimerCreateConfirmView: View {
     @Environment(\.navigationReturner) var navigationReturner
     @Environment(\.newTimerProperties) private var newTimerProperties
+    @ObservedObject var viewModel = TimerCreateConfirmViewModel(repository: IterationTimerRepository(dataStore: DataStoreSynchronizer(local: UserDefaults.appGroups, remote: NSUbiquitousKeyValueStore.default)))
 
     var body: some View {
         ZStack {
@@ -21,7 +23,7 @@ struct TimerCreateConfirmView: View {
                 Text(NSLocalizedString("TimerCreateConfirmDescription", comment: ""))
                     .font(.body)
                     .foregroundColor(.primary)
-                TimerCard(drawable: drawable())
+                TimerCard(drawable: IterationTimerDrawable(timer: timer(), date: Date()) )
                     .background(Color(UIColor.systemGroupedBackground))
                 
                 Spacer()
@@ -29,20 +31,24 @@ struct TimerCreateConfirmView: View {
         }
         .navigationTitle(NSLocalizedString("TimerCreateConfirmTitle", comment: ""))
         .navigationBarItems(trailing: CompleteButton {
-            self.navigationReturner?()
+            self.viewModel.addTimer(timer: timer())
         })
+        .onChange(of: viewModel.done) { done in
+            if done {
+                self.navigationReturner?()
+            }
+        }
     }
     
-    func drawable() -> IterationTimerDrawable {
-        IterationTimerDrawable(timer: .init(currentStamina: newTimerProperties!.stamina!,
+    func timer() -> IterationTimer {
+        .init(currentStamina: newTimerProperties!.stamina!,
                                             settings: try! .init(title: newTimerProperties!.title!,
                                                                  category: .game,
                                                                  maxStamina: newTimerProperties!.stamina!,
                                                                  divideStamina: newTimerProperties!.divide!,
                                                                  duration: newTimerProperties!.duration!,
                                                                  notification: .never),
-                                            since: Date()),
-                               date: Date())
+                                            since: Date())
     }
 }
 
