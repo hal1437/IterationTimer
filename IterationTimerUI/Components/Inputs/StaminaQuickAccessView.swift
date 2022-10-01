@@ -23,7 +23,7 @@ public struct StaminaQuickAccessView: View {
             Button(text, action: action)
             Spacer()
             Text(String(count))
-                .foregroundColor(.link)
+                .foregroundColor(Color(UIColor.link))
         }
     }
 }

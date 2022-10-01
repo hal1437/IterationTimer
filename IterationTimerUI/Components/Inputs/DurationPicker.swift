@@ -26,7 +26,7 @@ public struct DurationPicker: View {
             .pickerStyle(MenuPickerStyle())
             .font(.body)
             .padding(.horizontal, 4)
-            .background(.secondarySystemBackground)
+            .background(Color(UIColor.secondarySystemBackground))
             .cornerRadius(4)
     }
     

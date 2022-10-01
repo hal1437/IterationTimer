@@ -34,7 +34,7 @@ public struct StaminaInput: View {
             return textfield
         }
             .padding(4)
-            .foregroundColor(.link)
+            .foregroundColor(Color(UIColor.link))
     }
 }
 
