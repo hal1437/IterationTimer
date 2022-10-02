@@ -9,7 +9,7 @@ options:
 packages:
   Firebase:
     url: https://github.com/firebase/firebase-ios-sdk.git
-    majorVersion: 8.9.1
+    majorVersion: 9.6.0
 
 settings:
   base:
