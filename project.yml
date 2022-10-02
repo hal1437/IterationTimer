@@ -63,7 +63,12 @@ targets:
         basedOnDependencyAnalysis: false
     postbuildScripts:
       - name: Upload dSYM
-        script: ${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run
+        script: |
+                if [ -f "$(SRCROOT)/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" ]; then
+                    $(SRCROOT)/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run
+                else
+                    ${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run
+                endif
 
   IterationTimerCore:
     platform: iOS
