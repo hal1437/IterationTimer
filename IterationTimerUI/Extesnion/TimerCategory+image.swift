@@ -12,7 +12,14 @@ public extension TimerCategory {
     var image: UIImage {
         switch self {
         case .game:
-            return UIImage(systemName: "gamecontroller")!.withTintColor(.red, renderingMode: .alwaysOriginal)
+            return UIImage(systemName: "gamecontroller")!.withTintColor(.label)
+        }
+    }
+
+    var systemName: String {
+        switch self {
+        case .game:
+            return "gamecontroller"
         }
     }
 }

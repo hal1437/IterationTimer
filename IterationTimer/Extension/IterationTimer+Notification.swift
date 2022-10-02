@@ -42,7 +42,7 @@ extension IterationTimer {
     }
 }
 
-extension NotificationTrigger {
+extension IterationTimerNotificationTrigger {
     func notificationtTitle(timerTitle: String) -> String {
         switch self {
         case .never: return ""

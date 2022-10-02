@@ -41,7 +41,7 @@ class IterationTimerRepositoryTest: XCTestCase {
     
     func testUpdateTimer() throws {
         repo.insertTimer(index: 0, timer: timerDataSet[0])
-        let afterTimer = timerDataSet[0].then { $0.settings.title = "XXX" }
+        let afterTimer = timerDataSet[0]
         XCTAssertEqual(repo.getTimers, [timerDataSet[0]])
         
         repo.updateTimer(id: timerDataSet[0].id, timer: afterTimer)

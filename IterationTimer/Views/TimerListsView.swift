@@ -22,7 +22,7 @@ struct TimerListsView: View {
                         Text("TimerNotFound")
                             .minimumScaleFactor(0.5)
                             .font(.caption)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                     } else {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))]) {
@@ -33,7 +33,7 @@ struct TimerListsView: View {
                                             viewModel.transitonEditView(timer: timer)
                                         }
                                         .sheet(isPresented: $viewModel.isTransitionEditTimer[index], onDismiss: viewModel.refreshTimers) {
-                                            TimerEditView(mode: .edit(timer: timer))
+                                            TimerEditView(timer: timer)
                                         }
                                         .id(timer.id)
                                 }
@@ -59,7 +59,9 @@ struct TimerListsView: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $viewModel.isTransitionAddTimer, onDismiss: viewModel.refreshTimers) {
-            TimerEditView(mode: .add)
+            NavigationView {
+                TimerTitleInputView()
+            }
         }
         .onAppear {
             WidgetCenter.shared.reloadAllTimelines()

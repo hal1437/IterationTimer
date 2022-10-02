@@ -11,206 +11,102 @@ import IterationTimerUI
 import IterationTimerModel
 import WidgetKit
 
-struct TimerEditView: View {
-    enum Field: CaseIterable, Hashable {
-        case timerName
-        case currentValue
-        case maxValue
-        case divideValue
-        case duration
-    }
-    
-    enum Mode {
-        case add
-        case edit(timer: IterationTimer)
-    }
-    
-    public enum NotificationSelection: CaseIterable {
-        case never, on, completion
-    }
-    
-    @Environment(\.presentationMode) private var presentationMode
+struct TimerEditView: View {    
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: TimerEditViewModel
     @State private var showingDeleteAlert = false
-    @FocusState private var focusedField: Field?
-    private var mode: Mode
     
-    public init(mode: Mode) {
-        self.mode = mode
+    public init(timer: IterationTimer) {
         let dataStore = DataStoreSynchronizer(local: UserDefaults.appGroups,
                                               remote: NSUbiquitousKeyValueStore.default)
         let storeReview = StoreReviewModel(reviewer: SKStoreReview(),
                                            dataStore: dataStore)
         self.viewModel = TimerEditViewModel(repository: IterationTimerRepository(dataStore: dataStore),
-                                            mode: mode,
+                                            timer: timer,
                                             storeReview: storeReview)
     }
 
     var body: some View {
         NavigationView {
             VStack(alignment: .center, spacing: 0) {
-                TimerCard(drawable: IterationTimerDrawable(timer: viewModel.timer, date: Date())).padding()
+                TimerCard(drawable: IterationTimerDrawable(timer: viewModel.previewTimer, date: Date())).padding()
                     .background(Color(UIColor.systemGroupedBackground))
+
                 Form {
-                    Section(header: Text("TimerEditTimerSection")) {
-                        TextField("name", text: $viewModel.input.name)
-                            .focused($focusedField, equals: .timerName)
-                    }
-                    Section(header: Text("TimerEditStaminaSection")) {
-                        HStack {
-                            Text("TimerEditCurrentValue")
-                                .frame(width: 100, alignment: .leading)
-                            TextField("0", text: $viewModel.input.currentValue)
-                                .keyboardType(.numberPad)
-                                .focused($focusedField, equals: .currentValue)
-                            if mode.isEdit {
-                                Spacer()
-
-                                Button(action: viewModel.divideButtonTapped) {
-                                    HStack {
-                                        Image(systemName: "minus.circle")
-                                        Text("\(viewModel.input.divideValue)")
-                                    }
-                                }
-                                .buttonStyle(.bordered)
-                            }
-                        }
-                        
-                        HStack {
-                            Text("TimerEditMaxValue")
-                                .frame(width: 100, alignment: .leading)
-                            TextField("0", text: $viewModel.input.maxValue)
-                                .keyboardType(.numberPad)
-                                .focused($focusedField, equals: .maxValue)
-                        }
-
-                        HStack {
-                            Text("TimerEditDuration")
-                                .frame(width: 100, alignment: .leading)
-                            TextField("0", text: $viewModel.input.duration)
-                                .keyboardType(.numberPad)
-                                .focused($focusedField, equals: .duration)
-                        }
-                        HStack {
-                            Text("分割値")
-                                .frame(width: 100, alignment: .leading)
-                            TextField("0", text: $viewModel.input.divideValue)
-                                .keyboardType(.numberPad)
-                                .focused($focusedField, equals: .divideValue)
-                        }
-                    }
-                    
-                    Section(header: Text("TimerEditNotificationSection")) {
-                        Picker("TimerEditNotification", selection: $viewModel.input.notification.type) {
-                            ForEach(TimerEditViewModel.NotificationSelection.allCases, id: \.self) {
-                                Text($0.title)
-                            }
-                        }
-
-                        switch viewModel.input.notification.type {
-                        case .never: EmptyView()
-                        case .on:
-                            HStack {
-                                Text("TimerEditNotificationOn")
-                                    .frame(width: 100, alignment: .leading)
-                                Spacer()
-                                TextField("0", text: $viewModel.input.notification.on)
-                                    .keyboardType(.numberPad)
-                                    .multilineTextAlignment(.trailing)
-                                    .focused($focusedField, equals: .duration)
-                            }
-                        case .completion:
-                            HStack {
-                                Text("TimerEditNotificationCompleteBefore")
-                                    .frame(width: 100, alignment: .leading)
-                                Spacer()
-                                TextField("0", text: $viewModel.input.notification.completion)
-                                    .keyboardType(.numberPad)
-                                    .multilineTextAlignment(.trailing)
-                                    .focused($focusedField, equals: .duration)
-                            }
-                        }
-                    }
-                    .disabled(!viewModel.isEnableNotification)
-
-                    Section {
-                        if mode.isEdit {
-                            Button("TimerEditDeleteButton", role: .destructive) {
-                                self.showingDeleteAlert = true
-                            }
-                            .actionSheet(isPresented: $showingDeleteAlert) {
-                                ActionSheet(title: Text("TimerEditDeleteConfirm"), buttons: [
-                                    .destructive(Text("TimerEditDelete"), action: {
-                                          viewModel.delete()
-                                          self.presentationMode.wrappedValue.dismiss()
-                                    }),
-                                    .cancel()]
-                                )
-                            }
-                        }
-                    }
+                    StaminaSettingSection()
+                    TimerSettingSection()
+                    NotificationSettingSection()
+                    DeleteTmerSection()
                 }
             }
-            .navigationBarTitle(mode.title, displayMode: .inline)
-            .navigationBarItems(leading: Button("CommonCancel") { self.presentationMode.wrappedValue.dismiss() },
-                                trailing: Button(mode.doneButton) {
-                                    viewModel.done()
-                                    self.presentationMode.wrappedValue.dismiss()
-                                    WidgetCenter.shared.reloadAllTimelines()
-                                }
-                                .disabled(!viewModel.isEnabled)
-            )
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button("CommonClose") {
-                        focusedField = nil
-                    }
-                }
-            }
-        }
-    }
-}
-
-private extension TimerEditView.Mode {
-    var title: String {
-        switch self {
-        case .add: return NSLocalizedString("TimerAddTitle", comment: "")
-        case .edit(_): return NSLocalizedString("TimerEditTitle", comment: "")
-        }
-    }
-
-    var doneButton: String {
-        switch self {
-        case .add: return NSLocalizedString("CommonAdd", comment: "")
-        case .edit(_): return NSLocalizedString("CommonComplete", comment: "")
+            .navigationBarTitle(NSLocalizedString("TimerEditTitle", comment: ""), displayMode: .inline)
+            .navigationBarItems(leading: CancelButton {
+                self.dismiss()
+            }, trailing: CompleteButton {
+                viewModel.done()
+                self.dismiss()
+                WidgetCenter.shared.reloadAllTimelines()
+            })
         }
     }
     
-    var isEdit: Bool {
-        switch self {
-        case .add: return false
-        case .edit(_): return true
+    @ViewBuilder
+    fileprivate func StaminaSettingSection() -> some View {
+        Section(header: Text("TimerEditStaminaSection")) {
+            HStack {
+                Text("TimerEditCurrentValue")
+                Spacer()
+                StaminaInput(max: Constants.CurrentTimerStaminaMaximum, number: $viewModel.currentStamina)
+            }
+            
+//            StaminaQuickAccessView(text: "クエスト1", count: -30) {
+//                print("クエスト1")
+//            }
+//            StaminaQuickAccessView(text: "クエスト2", count: 60) {
+//                print("クエスト2")
+//            }
         }
     }
-}
-
-extension TimerEditViewModel.NotificationSelection {
-    var title: String {
-        switch self {
-        case .never: return NSLocalizedString("TimerEditNotificationSelectionNever", comment: "")
-        case .on: return NSLocalizedString("TimerEditNotificationSelectionOn", comment: "")
-        case .completion: return NSLocalizedString("TimerEditNotificationSelectionCompletion", comment: "")
+    
+    @ViewBuilder
+    private func TimerSettingSection() -> some View {
+        Section {
+            NavigationLink("TimerEditTimerSetting", destination: TimerSettingView(settings: $viewModel.settings))
         }
     }
-}
+    
+    @ViewBuilder
+    private func NotificationSettingSection() -> some View {
+        Section {
+            NotificationInput(max: viewModel.settings.maxStamina, notification: .constant(.never))
+        }
+        .disabled(!viewModel.isEnableNotification)
+    }
 
+    @ViewBuilder
+    fileprivate func DeleteTmerSection() -> some View {
+        Section {
+            Button("TimerEditDeleteButton", role: .destructive) {
+                self.showingDeleteAlert = true
+            }
+            .actionSheet(isPresented: $showingDeleteAlert) {
+                ActionSheet(title: Text("TimerEditDeleteConfirm"), buttons: [
+                    .destructive(Text("TimerEditDelete"), action: {
+                        viewModel.delete()
+                        self.dismiss()
+                    }),
+                    .cancel()]
+                )
+            }
+        }
+    }
+
+}
 
 struct TimerEditView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            TimerEditView(mode: .add)
-            TimerEditView(mode: .edit(timer: IterationTimer(currentStamina: 10, settings: try! .init(title: "NO NAME", category: .game, maxStamina: 10, divideStamina: 10, duration: 10, notification: .never), since: Date())))
+            TimerEditView(timer: .default)
         }
     }
 }
