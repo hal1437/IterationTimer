@@ -15,6 +15,12 @@ jobs:
     runs-on: macos-11
     steps:
     - uses: actions/checkout@v2
+    - name: Cache SwiftPM
+      id: siwftpm_cache_id
+      uses: actions/cache@v2
+      with:
+        path: SourcePackages
+        key: swiftpm-source-packages-${{ hashFiles('IterationTimer.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
     - name: Setup project
       run: bundle install
     - name: Install xcodegen
