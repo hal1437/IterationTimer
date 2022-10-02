@@ -66,8 +66,10 @@ targets:
         script: |
                 if [ -f $(SRCROOT)/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run ]; then
                     "$(SRCROOT)/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-                else
+                else if [ -f ${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run ];
                     "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+                else 
+                    echo "not found Crashlytics/run"
                 fi
         inputFiles:
           - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}
