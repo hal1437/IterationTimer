@@ -19,6 +19,10 @@ ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
 ENV["FASTLANE_XCODEBUILD_SETTINGS_RETRIES"] = "10"
 
 platform :ios do
+  before_all do |lane|
+    ensure_xcode_version
+  end
+
   lane :build do
     gym(
       scheme: "IterationTimer"
