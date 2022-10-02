@@ -19,21 +19,17 @@ ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
 ENV["FASTLANE_XCODEBUILD_SETTINGS_RETRIES"] = "10"
 
 platform :ios do
-  lane :build do
-    Dir.chdir("../") do
-      sh("xcodebuild", "-resolvePackageDependencies")
-    end
+  before_all do |lane|
+    ensure_xcode_version
+  end
 
+  lane :build do
     gym(
       scheme: "IterationTimer"
     )
   end
 
   lane :test do
-    Dir.chdir("../") do
-      sh("xcodebuild", "-resolvePackageDependencies")
-    end
-
     scan(
       project: "IterationTimer.xcodeproj",
       scheme: "IterationTimer"
