@@ -29,9 +29,9 @@ jobs:
         path: SourcePackages
         key: swiftpm-source-packages-${{ hashFiles('IterationTimer.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
     - name: Setup project
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+      run: |
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
     - name: Install xcodegen
       run: brew install xcodegen
     - name: Run xcodegen
