@@ -20,20 +20,12 @@ ENV["FASTLANE_XCODEBUILD_SETTINGS_RETRIES"] = "10"
 
 platform :ios do
   lane :build do
-    Dir.chdir("../") do
-      sh("xcodebuild", "-resolvePackageDependencies")
-    end
-
     gym(
       scheme: "IterationTimer"
     )
   end
 
   lane :test do
-    Dir.chdir("../") do
-      sh("xcodebuild", "-resolvePackageDependencies")
-    end
-
     scan(
       project: "IterationTimer.xcodeproj",
       scheme: "IterationTimer"
