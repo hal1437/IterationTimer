@@ -66,9 +66,9 @@ targets:
         script: |
                 if [ -f $(SRCROOT)/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run ]; then
                     "$(SRCROOT)/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-                else if [ -f ${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run ];
+                elif [ -f ${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run ]; then
                     "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-                else 
+                else
                     echo "not found Crashlytics/run"
                 fi
         inputFiles:
