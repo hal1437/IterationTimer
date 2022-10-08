@@ -33,7 +33,6 @@ struct MultipleTimer: View {
                         
                         Link(destination: URL(string: "com.hal1437.IterationTimer://?id=\(timer.id)")!, label: {
                             InstantTimer(drawable: InstantDrawable(timer: timer, date: Date()))
-                                .frame(width: nil, height: height, alignment: .center)
                         })
                     }
                     Spacer()
