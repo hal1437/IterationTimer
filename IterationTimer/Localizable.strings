@@ -15,6 +15,7 @@
 "CommonAdd"="追加";
 "CommonNext"="次へ";
 "CommonComplete"="完了";
+"TimerComplete"="回復済み";
 "TimerNotFound"="タイマーがありません\n右上の+から新しいタイマーを追加できます";
 "TimerAddTitle"="タイマーの追加";
 "TimerEditTitle"="タイマーの編集";
