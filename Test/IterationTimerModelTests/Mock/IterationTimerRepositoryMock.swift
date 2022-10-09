@@ -6,6 +6,7 @@
 //
 
 import Foundation
+@testable import IterationTimerModel
 
 struct IterationTimerRepositoryMock: IterationTimerRepositoryProtocol {
     let timers: [IterationTimer]
