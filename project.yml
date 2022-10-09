@@ -8,7 +8,7 @@ options:
 
 packages:
   Firebase:
-    url: https://github.com/firebase/firebase-ios-sdk.git
+    url: https://github.com/akaffenberger/firebase-ios-sdk-xcframeworks.git
     majorVersion: 9.6.0
 
 settings:
@@ -61,13 +61,23 @@ targets:
                 buildNumber=$(git rev-list HEAD --count)
                 /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" "${TEMP_DIR}/Preprocessed-Info.plist"
         basedOnDependencyAnalysis: false
+    preBuildScripts:
+      - name: Copy firebase xcframework resources
+        script: |
+                if [ -f $(SRCROOT)/SourcePackages/checkouts/firebase-ios-sdk-xcframeworks/.scripts/resources.sh ]; then
+                    sh "$(SRCROOT)/SourcePackages/checkouts/firebase-ios-sdk-xcframeworks/.scripts/resources.sh"
+                elif [ -f ${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk-xcframeworks/.scripts/resources.sh ]; then
+                    sh "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk-xcframeworks/.scripts/resources.sh"
+                else
+                    echo "not found firebase-ios-sdk-xcframeworks/.scripts/resources.sh"
+                fi                
     postbuildScripts:
       - name: Upload dSYM
         script: |
-                if [ -f $(SRCROOT)/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run ]; then
-                    "$(SRCROOT)/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-                elif [ -f ${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run ]; then
-                    "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+                if [ -f $(SRCROOT)/SourcePackages/checkouts/firebase-ios-sdk-xcframeworks/Crashlytics/run ]; then
+                    "$(SRCROOT)/SourcePackages/checkouts/firebase-ios-sdk-xcframeworks/Crashlytics/run"
+                elif [ -f ${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk-xcframeworks/Crashlytics/run ]; then
+                    "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk-xcframeworks/Crashlytics/run"
                 else
                     echo "not found Crashlytics/run"
                 fi
