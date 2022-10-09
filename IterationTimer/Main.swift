@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Firebase
-import WidgetKit
 
 @main
 struct Main: App {

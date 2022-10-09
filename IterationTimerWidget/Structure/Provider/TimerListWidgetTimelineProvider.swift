@@ -20,22 +20,19 @@ struct TimerListWidgetTimelineProvider: IntentTimelineProvider {
     }
 
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<IntentTimelineEntry>) -> ()) {
-        let currentDate = Date()
         let timers = repository.getTimers
-        guard !timers.isEmpty else {
-            let currentEntry = IntentTimelineEntry(date: currentDate, configuration: configuration, relevance: nil)
-            completion(Timeline(entries: [currentEntry], policy: .never))
-            return
-        }
+        let creator = WidgetUpdateTimeCreator(repository: repository)
+        let updateDates = creator.create(currentDate: Date())
         
-        let entries = (0 ..< 6)
-            .map { $0 * 15 }
-            .map { minuteOffset -> IntentTimelineEntry in
-                let entryDate = Calendar.current.date(byAdding: .minute, value: minuteOffset, to: currentDate)!
-                let total = timers.map { $0.relevance(date: entryDate).score }.reduce(0, +)
-                return IntentTimelineEntry(date: entryDate, configuration: configuration, relevance: .init(score: total))
-            }
+        let entries = updateDates.map { entryDate -> IntentTimelineEntry in
+            let total = timers.map { $0.relevance(date: entryDate).score }.reduce(0, +)
+            return IntentTimelineEntry(date: entryDate, configuration: configuration, relevance: .init(score: total))
+        }
 
-        completion(Timeline(entries: entries, policy: .atEnd))
+        if updateDates.count == 1 {
+            completion(Timeline(entries: entries, policy: .never))
+        } else {
+            completion(Timeline(entries: entries, policy: .atEnd))
+        }
     }
 }

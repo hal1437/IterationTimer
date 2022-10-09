@@ -67,7 +67,7 @@ struct RecentTimer: View {
                         Spacer()
 
                         if drawable.currentStamina >= drawable.maxStamina {
-                            Text("回復済み").font(.body)
+                            Text("TimerComplete").font(.body)
                         } else {
                             Text(drawable.remainingFull.toFormatString()).font(.body)
                         }

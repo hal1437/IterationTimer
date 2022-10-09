@@ -29,7 +29,7 @@ class MockTimerRepository: IterationTimerRepositoryProtocol {
                                                                   duration: 480,
                                                                   notification: .never),
                                              since: Date()),
-                                       .init(currentStamina: 200,
+                                       .init(currentStamina: 240,
                                              settings: try! .init(title: "Sample2",
                                                                   category: .game,
                                                                   maxStamina: 240,

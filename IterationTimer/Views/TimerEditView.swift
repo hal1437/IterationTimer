@@ -9,7 +9,6 @@ import SwiftUI
 import IterationTimerCore
 import IterationTimerUI
 import IterationTimerModel
-import WidgetKit
 
 struct TimerEditView: View {    
     @Environment(\.dismiss) private var dismiss
@@ -21,7 +20,7 @@ struct TimerEditView: View {
                                               remote: NSUbiquitousKeyValueStore.default)
         let storeReview = StoreReviewModel(reviewer: SKStoreReview(),
                                            dataStore: dataStore)
-        self.viewModel = TimerEditViewModel(repository: IterationTimerRepository(dataStore: dataStore),
+        self.viewModel = TimerEditViewModel(repository: WidgetUpdateIterationTimerRepository(dataStore: dataStore),
                                             timer: timer,
                                             storeReview: storeReview)
     }
@@ -45,7 +44,6 @@ struct TimerEditView: View {
             }, trailing: CompleteButton {
                 viewModel.done()
                 self.dismiss()
-                WidgetCenter.shared.reloadAllTimelines()
             })
         }
     }

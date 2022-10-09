@@ -25,11 +25,12 @@ public struct InstantTimer: View {
                     .renderingMode(.template)
                     .foregroundColor(Color(.label))
             }
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .trailing, spacing: 4) {
                 HStack {
                     Text(drawable.title)
                         .font(.caption)
                         .lineLimit(1)
+                        .layoutPriority(0)
 
                     Spacer()
 
@@ -37,15 +38,24 @@ public struct InstantTimer: View {
                         .font(.caption)
                         .lineLimit(1)
                         .allowsTightening(true)
+                        .layoutPriority(1)
                 }
 
                 CustomProgressView(progress: CGFloat(drawable.currentStamina) / CGFloat(drawable.maxStamina))
                 
-                Spacer(minLength: 0)
+                Spacer()
 
-                Text(drawable.currentStamina >= drawable.maxStamina ? "回復済み" : drawable.remainingFull.toFormatString())
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .font(.caption)
+                if drawable.currentStamina >= drawable.maxStamina {
+                    Text("TimerComplete")
+                        .font(.caption)
+                        .minimumScaleFactor(0.5)
+                        .layoutPriority(1)
+
+                } else {
+                    Text(Date() + drawable.remainingFull, style: .relative)
+                        .multilineTextAlignment(.trailing)
+                        .font(.caption)
+                }
             }
         }
         .padding(8)
@@ -89,5 +99,5 @@ private struct Drawable: InstantTimerDrawable {
     var title = "SampleTitleSampleTitle"
     var currentStamina = 100
     var maxStamina = 100
-    var remainingFull =  TimeInterval(60*60*20)
+    var remainingFull =  TimeInterval(60)
 }
