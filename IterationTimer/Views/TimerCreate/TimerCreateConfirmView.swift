@@ -12,7 +12,7 @@ import IterationTimerModel
 struct TimerCreateConfirmView: View {
     @Environment(\.navigationReturner) var navigationReturner
     @Environment(\.newTimerProperties) private var newTimerProperties
-    @ObservedObject var viewModel = TimerCreateConfirmViewModel(repository: IterationTimerRepository(dataStore: DataStoreSynchronizer(local: UserDefaults.appGroups, remote: NSUbiquitousKeyValueStore.default)))
+    @ObservedObject var viewModel = TimerCreateConfirmViewModel(repository: WidgetUpdateIterationTimerRepository(dataStore: DataStoreSynchronizer(local: UserDefaults.appGroups, remote: NSUbiquitousKeyValueStore.default)))
 
     var body: some View {
         ZStack {
