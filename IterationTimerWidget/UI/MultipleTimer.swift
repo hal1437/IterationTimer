@@ -29,8 +29,11 @@ struct MultipleTimer: View {
             GeometryReader { geometry in
                 LazyVGrid(columns: Array(repeating: GridItem(), count: family.contents.columns), spacing: spacing) {
                     ForEach(viewModel.timers.prefix(family.contents.rows * family.contents.columns)) { timer in
+                        let height = CGFloat((Int(geometry.size.height) - Int(spacing) * (family.contents.rows - 1)) / family.contents.rows)
+                        
                         Link(destination: URL(string: "com.hal1437.IterationTimer://?id=\(timer.id)")!, label: {
                             InstantTimer(drawable: InstantDrawable(timer: timer, date: Date()))
+                                .frame(width: nil, height: height, alignment: .center)
                         })
                     }
                     Spacer()
