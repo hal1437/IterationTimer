@@ -7,6 +7,7 @@
 */
 "TimerListWidgetName"="一覧";
 "TimerListWidgetDescription"="設定済みのタイマーの一覧を表示します。";
+"TimerComplete"="回復済み";
 "RecentTimerWidgetName"="最近";
 "RecentTimerWidgetDescription"="最も残り時間の少ないタイマーを表示します。";
 "WidgetTimerNotFound"="タイマーがありません";

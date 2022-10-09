@@ -46,7 +46,7 @@ public struct InstantTimer: View {
                 Spacer()
 
                 if drawable.currentStamina >= drawable.maxStamina {
-                    Text("回復済み")
+                    Text("TimerComplete")
                         .font(.caption)
                         .minimumScaleFactor(0.5)
                         .layoutPriority(1)
