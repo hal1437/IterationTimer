@@ -11,10 +11,10 @@
 IterationTimerはゲームのスタミナなど、一定時間ごとに回復する値の予測値を表示するためのアプリです。
 
 # 🧰 requirements
-- 💎 ruby 2.7.3
+- 💎 ruby 2.7.7
 - 🧵 bundler 2.1.4
-- ⚒️ Xcode 13
-- 🏭 xcodegen 2.18.0
+- ⚒️ Xcode 14
+- 🏭 xcodegen 2.28.0
 
 # 🚪 installation
 1. bundle install
