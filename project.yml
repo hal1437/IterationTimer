@@ -9,7 +9,7 @@ options:
 packages:
   Firebase:
     url: https://github.com/akaffenberger/firebase-ios-sdk-xcframeworks.git
-    majorVersion: 9.6.0
+    majorVersion: 11.3.0
 
 settings:
   base:
